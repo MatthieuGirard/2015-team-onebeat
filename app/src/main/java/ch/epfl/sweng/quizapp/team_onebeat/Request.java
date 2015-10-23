@@ -1,5 +1,6 @@
 package ch.epfl.sweng.quizapp.team_onebeat;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -34,23 +35,23 @@ public class Request {
 
     //______________________________________ FACTORY
 
-    public static Request existUser(){
-        return "";
+    public static Request existUser() throws JSONException{
+        return new Request(new JSONObject(""));
     }
 
-    public static Request subscribe(){
-        return "";
+    public static Request subscribe() throws JSONException{
+        return  new Request(new JSONObject(""));
     }
 
-    public static Request connect(){
-        return "";
+    public static Request connect() throws JSONException{
+        return  new Request(new JSONObject(""));
     }
 
 
     //______________________________________ ACCESSOR
 
     public JSONObject getMessage(){
-        return "";
+        return message;
     }
 
 

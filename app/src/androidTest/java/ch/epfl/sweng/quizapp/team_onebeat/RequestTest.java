@@ -1,5 +1,6 @@
 package ch.epfl.sweng.quizapp.team_onebeat;
 
+import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.json.JSONException;
@@ -14,20 +15,23 @@ import static org.junit.Assert.assertEquals;
 public class RequestTest {
 
 
+
+    private static final Context CONTEXT = new MainActivity();
+
     private static final String JSON_SUBSCRIBE= "{\n"
             + "  \"request\": \"subscribe\",\n"
-            + "  \"macAddress\": \" " + DeviceInformation.getInstance().macAddress() + " \",\n"
+            + "  \"macAddress\": \" " + DeviceInformation.getInstance().macAddress(CONTEXT) + " \",\n"
             + "  \"pseudo\": \" hugo \" [\n"
             + "}\n";
 
     private static final String JSON_CONNECT= "{\n"
             + "  \"request\": \"connect\",\n"
-            + "  \"macAddress\": \" " + DeviceInformation.getInstance().macAddress() + " \",\n"
+            + "  \"macAddress\": \" " + DeviceInformation.getInstance().macAddress(CONTEXT) + " \",\n"
             + "}\n";
 
     private static final String JSON_EXIST_USER= "{\n"
             + "  \"request\": \"exist_user\",\n"
-            + "  \"macAddress\": \" " + DeviceInformation.getInstance().macAddress() + " \",\n"
+            + "  \"macAddress\": \" " + DeviceInformation.getInstance().macAddress(CONTEXT) + " \",\n"
             + "}\n";
 
 

@@ -6,7 +6,7 @@ import android.net.wifi.WifiManager;
 
 /**
  * Created by hugo on 23.10.2015.
- * Singleton class device information
+ * Singleton class about device information
  * can provide information about the user phone
  */
 public class DeviceInformation {

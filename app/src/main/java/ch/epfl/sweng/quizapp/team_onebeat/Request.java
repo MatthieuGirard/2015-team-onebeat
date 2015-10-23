@@ -11,47 +11,76 @@ import org.json.JSONObject;
  * it's constructor is private, request are created by a static factory builder.
  *
  */
-public class Request {
+public final class Request {
 
 
-    //______________________________________ CONSTRUCTOR
+    public enum Type { EXIST_USER, SUBSCRIPTION, CONNECTION}
+
+    private final JSONObject message;
+    private final Type messageType;
 
 
-    private JSONObject message;
+    //______________________________________ PRIVATE CONSTRUCTOR
 
-
-    private Request(JSONObject message){
+    private Request(JSONObject message, Type type) throws JSONException {
         this.message = message;
+        this.messageType = type;
     }
 
 
+    //______________________________________ STATIC FACTORY
 
-    //______________________________________ MAC
 
-    private String macAddr() {
-    return "";
+    public static Request existUser( String macAddress ) throws JSONException{
+        String message = "{\n"
+                + "\"request\": \"" + Type.EXIST_USER.toString() +"\",\n"
+                + "\"macAddress\": \"" + macAddress + "\"\n"
+                + "}\n";
+        return new Request( new JSONObject(message), Type.EXIST_USER);
     }
 
-
-    //______________________________________ FACTORY
-
-    public static Request existUser() throws JSONException{
-        return new Request(new JSONObject(""));
+    public static Request subscribe(String macAddress, String pseudo) throws JSONException{
+        String message= "{\n"
+                + "\"request\": \"" + Type.SUBSCRIPTION.toString() +"\",\n"
+                + "\"macAddress\": \"" + macAddress + "\",\n"
+                + "\"pseudo\": \""+pseudo+"\"\n"
+                + "}\n";
+        return  new Request(new JSONObject(message), Type.SUBSCRIPTION);
     }
 
-    public static Request subscribe() throws JSONException{
-        return  new Request(new JSONObject(""));
+    public static Request connect(String macAddress) throws JSONException{
+
+        String message= "{\n"
+                + "\"request\": \"" + Type.CONNECTION.toString() +"\",\n"
+                + "\"macAddress\": \"" + macAddress + "\"\n"
+                + "}\n";
+
+
+        return  new Request(new JSONObject(message), Type.CONNECTION);
     }
 
-    public static Request connect() throws JSONException{
-        return  new Request(new JSONObject(""));
-    }
-
-
-    //______________________________________ ACCESSOR
+    //______________________________________ ACCESSORS
 
     public JSONObject getMessage(){
         return message;
+    }
+
+    //______________________________________ OVERRIDE METHODS
+
+    @Override
+    public boolean equals(Object that){
+
+        if(that instanceof Request){
+        return ((Request)that).messageType == this.messageType;
+        }
+
+        return false;
+
+    }
+
+    @Override
+    public int hashCode(){
+        return messageType.ordinal();
     }
 
 

@@ -8,6 +8,6 @@ import org.json.JSONObject;
  */
 public interface Parser<T> {
 
-    T parseFromJSON(JSONObject obj);
+    T parse(JSONObject obj);
 
 }

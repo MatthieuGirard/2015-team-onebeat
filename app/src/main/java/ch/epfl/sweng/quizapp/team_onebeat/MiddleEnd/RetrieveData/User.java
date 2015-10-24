@@ -5,4 +5,16 @@ package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData;
  * All information about the user
  */
 public final class User {
+
+    private String pseudo;
+
+    public User( String pseudo ){
+        this.pseudo = pseudo;
+    }
+
+    public String getPseudo(){
+        return pseudo;
+    }
+
+
 }

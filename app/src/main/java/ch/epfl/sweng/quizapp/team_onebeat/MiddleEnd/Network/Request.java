@@ -1,4 +1,4 @@
-package ch.epfl.sweng.quizapp.team_onebeat;
+package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,10 +14,10 @@ import org.json.JSONObject;
 public final class Request {
 
 
-    public enum Type { EXIST_USER, SUBSCRIPTION, CONNECTION}
-
     private final JSONObject message;
     private final Type messageType;
+
+    public enum Type { EXIST_USER, SUBSCRIPTION, CONNECTION}
 
 
     //______________________________________ PRIVATE CONSTRUCTOR

@@ -5,6 +5,8 @@ import android.test.ActivityInstrumentationTestCase2;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.epfl.sweng.quizapp.team_onebeat.NetworkManager.Request;
+
 
 public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> {
 

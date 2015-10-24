@@ -1,4 +1,4 @@
-package ch.epfl.sweng.quizapp.team_onebeat;
+package ch.epfl.sweng.quizapp.team_onebeat.Util;
 
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -9,18 +9,18 @@ import android.net.wifi.WifiManager;
  * Singleton class about device information
  * can provide information about the user phone
  */
-public class DeviceInformation {
+public final class Device {
 
-    private static final DeviceInformation oneInstance = new DeviceInformation();
+    private static final Device oneInstance = new Device();
 
-    private DeviceInformation() {
+    private Device() {
         if(oneInstance != null) {
             throw new IllegalStateException();
         }
     }
 
 
-    public static DeviceInformation getInstance() {
+    public static Device getInstance() {
         return oneInstance;
     }
 

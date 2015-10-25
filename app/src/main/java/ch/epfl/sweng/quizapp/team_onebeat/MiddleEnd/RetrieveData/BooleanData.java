@@ -9,7 +9,7 @@ package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData;
  * when the "DownloadedData" go in  Loaded State
  * the data notify observers.
  */
-public class BooleanData extends DownloadedData implements  Copy<BooleanData>{
+public class BooleanData {
 
 
     private boolean value;
@@ -25,5 +25,24 @@ public class BooleanData extends DownloadedData implements  Copy<BooleanData>{
     public boolean value(){
         return value;
     }
+
+    public static class Builder implements Buildable<BooleanData>{
+
+        @Override
+        public void copy(Buildable<BooleanData> that) {
+
+        }
+
+        @Override
+        public boolean isLoaded() {
+            return false;
+        }
+
+        @Override
+        public BooleanData build() {
+            return null;
+        }
+    }
+
 
 }

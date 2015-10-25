@@ -9,7 +9,7 @@ import java.util.Observable;
  * when the "DownloadedData" go in  Loaded State
  * the data notify observers.
  */
-public final class UserData extends DownloadedData{
+public final class UserData {
 
     private String pseudo;
 
@@ -20,6 +20,28 @@ public final class UserData extends DownloadedData{
     public String getPseudo(){
         return pseudo;
     }
+
+
+    public static class Builder implements Buildable<UserData>{
+
+        @Override
+        public void copy(Buildable<UserData> that) {
+
+        }
+        @Override
+        public boolean isLoaded() {
+            return false;
+        }
+
+        @Override
+        public UserData build() {
+            return null;
+        }
+
+
+    }
+
+
 
 
 }

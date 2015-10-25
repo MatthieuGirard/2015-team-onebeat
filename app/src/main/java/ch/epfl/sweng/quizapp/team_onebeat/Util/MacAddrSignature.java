@@ -5,8 +5,9 @@ import org.json.JSONObject;
 
 /**
  * Created by hugo on 24.10.2015.
- * create a signature used to identify someone
- * on the bdd. At this point, we use mac address.
+ *
+ * signature is used to identify someone on the bdd.
+ * At this point, we use mac address.
  *
  */
 public final class MacAddrSignature implements Signature {
@@ -17,9 +18,14 @@ public final class MacAddrSignature implements Signature {
     this.device = device;
     }
 
+
     @Override
-    public JSONObject auth() throws JSONException {
-        return new JSONObject("");
+    public JSONObject value() throws JSONException {
+
+        return new JSONObject("{\n"
+                            + "\"macAddress\": \"" + device.macAddress()+ "\"\n"
+                            + "}\n");
     }
+
 
 }

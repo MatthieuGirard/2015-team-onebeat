@@ -5,10 +5,10 @@ import org.json.JSONObject;
 
 /**
  * Created by hugo on 24.10.2015.
- * create a signature used to identify someone
- * on the bdd.
+ *
+ * signature is used to identify someone on the bdd.
  */
 public interface Signature {
 
-    JSONObject auth() throws JSONException;
+    JSONObject value() throws JSONException;
 }

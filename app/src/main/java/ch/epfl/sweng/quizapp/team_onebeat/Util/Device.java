@@ -6,26 +6,20 @@ import android.net.wifi.WifiManager;
 
 /**
  * Created by hugo on 23.10.2015.
+ *
  * Singleton class about device information
  * can provide information about the user phone
  */
 public final class Device {
 
-    private static final Device oneInstance = new Device();
+    private Context context;
 
-    private Device() {
-        if(oneInstance != null) {
-            throw new IllegalStateException();
-        }
+    public Device(Context context) {
+        this.context = context;
     }
 
 
-    public static Device getInstance() {
-        return oneInstance;
-    }
-
-
-    public String macAddress(Context context){
+    public String macAddress(){
         WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo info = manager.getConnectionInfo();
         return info.getMacAddress();

@@ -1,9 +1,11 @@
-package ch.epfl.sweng.quizapp.team_onebeat;
+package ch.epfl.sweng.quizapp.team_onebeat.FrontEnd;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import ch.epfl.sweng.quizapp.team_onebeat.R;
 
 public class MainActivity extends AppCompatActivity {
 

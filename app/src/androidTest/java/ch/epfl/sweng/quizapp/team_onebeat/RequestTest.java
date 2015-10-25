@@ -1,11 +1,15 @@
 package ch.epfl.sweng.quizapp.team_onebeat;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ch.epfl.sweng.quizapp.team_onebeat.NetworkManager.Request;
+import ch.epfl.sweng.quizapp.team_onebeat.FrontEnd.MainActivity;
+import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.Request;
+import ch.epfl.sweng.quizapp.team_onebeat.Util.Device;
+import ch.epfl.sweng.quizapp.team_onebeat.Util.MacAddrSignature;
 
 
 public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> {
@@ -16,15 +20,16 @@ public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> 
     }
 
     public void testSubscribeMessage() throws JSONException{
-        String macAddr = DeviceInformation.getInstance().macAddress(this.getActivity());
+
         String subscribe= "{\n"
                 + "\"request\": \"" + Request.Type.SUBSCRIPTION.toString() +"\",\n"
-                + "\"macAddress\": \"" + macAddr + "\",\n"
+                + "\"macAddress\": \"" + new Device(this.getActivity()).macAddress()+ "\",\n"
                 + "\"pseudo\": \"hugo\"\n"
                 + "}\n";
+        Log.d("qwer2", subscribe);
 
         assertTrue("request for subscription : malformed",
-                Request.subscribe(macAddr, "hugo")
+                Request.subscribe(new MacAddrSignature(new Device(this.getActivity())), "hugo")
                         .getMessage()
                         .toString()
                         .equals(new JSONObject(subscribe).toString()) );
@@ -33,15 +38,13 @@ public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> 
 
     public void testConnectMessage()throws JSONException{
 
-        String macAddr = DeviceInformation.getInstance().macAddress(this.getActivity());
-
         String connection = "{\n"
                 + "\"request\": \""+Request.Type.CONNECTION+"\",\n"
-                + "\"macAddress\": \"" + macAddr + "\"\n"
+                + "\"macAddress\": \"" + new Device(this.getActivity()).macAddress()+ "\"\n"
                 + "}\n";
 
         assertTrue("request for connection : malformed",
-                Request.connect(macAddr)
+                Request.connect(new MacAddrSignature(new Device(this.getActivity())))
                         .getMessage()
                         .toString()
                         .equals(new JSONObject(connection).toString()));
@@ -50,15 +53,13 @@ public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> 
 
     public void testExistUser() throws JSONException{
 
-        String macAddr = DeviceInformation.getInstance().macAddress(this.getActivity());
-
         String existUser= "{\n"
                 + "\"request\": \""+Request.Type.EXIST_USER+"\",\n"
-                + "\"macAddress\": \"" + macAddr + "\"\n"
+                + "\"macAddress\": \"" + new Device(this.getActivity()).macAddress()+ "\"\n"
                 + "}\n";
-
+        Log.d("qwer", existUser);
         assertTrue("request for testing if a user exist in the bdd : malformed",
-                Request.existUser(macAddr)
+                Request.existUser(new MacAddrSignature(new Device(this.getActivity())))
                         .getMessage()
                         .toString()
                         .equals(new JSONObject(existUser).toString()));

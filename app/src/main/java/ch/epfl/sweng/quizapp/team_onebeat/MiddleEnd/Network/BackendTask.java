@@ -9,12 +9,20 @@ import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.RetrieveBuildab
 /**
  * Created by hugo on 24.10.2015.
  *
- * BackendTask can provide an instance of a "parametredData" in a default state with
- * the expectation that the instance will be parametrized in the future.
+ * use case:
+ * get an instance of T when dealing with the backend.
+ * instead of bocking until T is ready, BackendTask return a RetrieveBuildable<T>.
+ * RetrieveBuildable<T> has an isLoaded() method to provide information :
+ * does the backend has loaded the builder ?
+ * RetrieveBuildable<T> has a build() method that return a T instance
+ * In this way GUI can send a builder in backendTask constructor
+ * and wait until isloaded() before build the instance.
  *
+ * how it work :
  * BackendTask retrieve data from the backend on a JSONOBJECT (async) with a request.
- * A parser translate JSON in a representative instance.
- * "onPostExecute" method set the parametredData with the values of the representative instance.
+ * A parser translate JSON in a representative instance RetrieveBuildable<T>
+ * and then,it copy the result in "loadInBuilder" passed in constructor.
+
  *
  */
 

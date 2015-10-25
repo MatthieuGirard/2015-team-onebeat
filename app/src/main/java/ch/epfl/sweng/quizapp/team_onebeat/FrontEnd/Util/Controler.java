@@ -21,5 +21,5 @@ package ch.epfl.sweng.quizapp.team_onebeat.FrontEnd.Util;
  *
  *
  */
-public class Controleur {
+public class Controler {
 }

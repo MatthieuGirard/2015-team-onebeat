@@ -36,6 +36,7 @@ public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends Asy
     private RetrieveBuildableData<E> loadInBuilder;
     private Parser<E> parser;
     private Request request;
+    private double timeThreshold = -1;
 
     public BackendTask(Request request, Parser<E> parser, RetrieveBuildableData<E> loadInBuilder){
 
@@ -45,7 +46,18 @@ public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends Asy
 
     }
 
-    // TODO : % loaded
+    public BackendTask(Request request,
+                       Parser<E> parser,
+                       RetrieveBuildableData<E> loadInBuilder,
+                       double timeThreshold /*ms*/){
+
+        this.parser = parser;
+        this.loadInBuilder = loadInBuilder;
+        this.request = request;
+        this.timeThreshold = timeThreshold;
+    }
+
+    // TODO : % already loaded
 
 
     @Override
@@ -55,6 +67,7 @@ public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends Asy
         // loadInBuilder.copy(T)
         // setLoaded to true
         // TODO : how to throw BuildableException when parser fail or data corrupted ?
+        // TODO : if threeshold > 0 and exceeded : stop and launch TimeExceededException
 
         return null;
     }

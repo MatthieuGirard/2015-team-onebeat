@@ -45,6 +45,8 @@ public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends Asy
 
     }
 
+    // TODO : % loaded
+
 
     @Override
     protected T doInBackground(Request... request) {

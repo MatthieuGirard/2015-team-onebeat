@@ -9,31 +9,19 @@ import java.util.List;
 import ch.epfl.sweng.quizapp.team_onebeat.Util.Signature;
 
 /**
- * Created by hugo on 23.10.2015.
- *
- * Request create message needed to communicate with the backend.
- * it's constructor is private, request are created by a static factory builder.
- *
+ * Created by hugo on 25.10.2015.
  */
-public final class Request {
+public class Request extends Message {
 
 
+    public enum Available { EXIST_USER, SUBSCRIPTION, CONNECTION}
+    private final Available selectedRequest;
 
-    private final JSONObject message;
-    private final Type messageType;
+    public static List<Message> historyTracker = new ArrayList<>();
 
-    public enum Type { EXIST_USER, SUBSCRIPTION, CONNECTION}
-
-
-    public static List<Request> requestHistoryTracker = new ArrayList<Request>();
-
-
-    //______________________________________ PRIVATE CONSTRUCTOR
-
-    private Request(JSONObject message, Type type) throws JSONException {
-        this.message = message;
-        this.messageType = type;
-        requestHistoryTracker.add(this);
+    private Request(JSONObject message, Available selectedRequest) throws JSONException {
+        super(message);
+        this.selectedRequest = selectedRequest;
     }
 
 
@@ -42,62 +30,38 @@ public final class Request {
 
     public static Request existUser( Signature signature ) throws JSONException{
         String message = "{\n"
-                + "\"request\": \"" + Type.EXIST_USER.toString() +"\",\n"
+                + "\"request\": \"" + Available.EXIST_USER.toString() +"\",\n"
                 + "\"macAddress\": \"" + signature.value().getString("macAddress") + "\"\n"
                 + "}\n";
 
-        return new Request( new JSONObject(message), Type.EXIST_USER);
+        return new Request( new JSONObject(message), Available.EXIST_USER);
     }
 
 
     public static Request subscribe(Signature signature, String pseudo) throws JSONException{
         String message= "{\n"
-                + "\"request\": \"" + Type.SUBSCRIPTION.toString() +"\",\n"
+                + "\"request\": \"" + Available.SUBSCRIPTION.toString() +"\",\n"
                 + "\"macAddress\": \"" + signature.value().getString("macAddress") + "\",\n"
                 + "\"pseudo\": \""+pseudo+"\"\n"
                 + "}\n";
-        return  new Request(new JSONObject(message), Type.SUBSCRIPTION);
+        return new Request(new JSONObject(message), Available.SUBSCRIPTION);
     }
 
     public static Request connect(Signature signature) throws JSONException{
 
         String message= "{\n"
-                + "\"request\": \"" + Type.CONNECTION.toString() +"\",\n"
+                + "\"request\": \"" + Available.CONNECTION.toString() +"\",\n"
                 + "\"macAddress\": \"" + signature.value().getString("macAddress") + "\"\n"
                 + "}\n";
 
 
-        return  new Request(new JSONObject(message), Type.CONNECTION);
-    }
-
-    //______________________________________ ACCESSORS
-
-    public JSONObject getMessage(){
-        return message;
-    }
-
-    public List<Request> historyTracker(){
-        return new ArrayList<>(requestHistoryTracker);
-    }
-
-    //______________________________________ OVERRIDE METHODS
-
-    @Override
-    public boolean equals(Object that){
-
-        if(that instanceof Request){
-            return ((Request)that).messageType == this.messageType;
-        }
-
-        return false;
-
+        return  new Request(new JSONObject(message), Available.CONNECTION);
     }
 
     @Override
-    public int hashCode(){
-        return messageType.ordinal();
+    public List<Message> historyTracker(){
+        return new ArrayList<>(messageTracker);
     }
 
 
 }
-

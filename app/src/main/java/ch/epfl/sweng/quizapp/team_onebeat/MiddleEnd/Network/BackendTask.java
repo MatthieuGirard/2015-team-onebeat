@@ -3,7 +3,6 @@ package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network;
 
 import android.os.AsyncTask;
 
-import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
 import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Parser.Parser;
 import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.RetrieveBuildableData;
 
@@ -19,15 +18,15 @@ import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.RetrieveBuildab
  *
  */
 
-public final class BackendTask<T extends RetrieveBuildableData<T>> extends AsyncTask<Request, Void, RetrieveBuildableData<T>> {
+// TODO : possible to have just have : <T extends RetrieveBuildableData<E>>
 
-    private RetrieveBuildableData<T> loadInBuilder;
-    private Parser<RetrieveBuildableData<T>> parser;
+public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends AsyncTask<Request, Void, T> {
+
+    private T loadInBuilder;
+    private Parser<T> parser;
     private Request request;
 
-    public BackendTask(Request request,
-                       Parser<RetrieveBuildableData<T>> parser,
-                       RetrieveBuildableData<T> loadInBuilder){
+    public BackendTask(Request request, Parser<T> parser, T loadInBuilder){
 
         this.parser = parser;
         this.loadInBuilder = loadInBuilder;

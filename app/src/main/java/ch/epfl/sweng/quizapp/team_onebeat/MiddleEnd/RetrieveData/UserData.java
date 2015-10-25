@@ -27,27 +27,18 @@ public final class UserData {
     }
 
 
-    public static class Builder implements RetrieveBuildableData<UserData>{
+    public static class Builder extends RetrieveBuildableData<UserData>{
+
 
         @Override
-        public void copy(UserData that) {
-
+        public void loadData(UserData that) {
+            // TODO
         }
-
-        @Override
-        public boolean isLoaded() {
-            return false;
-        }
-
-        @Override
-        public boolean isBuildable() {
-            return false;
-        }
-
 
         @Override
         public UserData build() throws BuildableException {
             if(!isBuildable()) throw new BuildableException();
+            // TODO
             return null;
         }
 

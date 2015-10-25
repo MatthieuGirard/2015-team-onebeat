@@ -19,11 +19,11 @@ public class Message {
 
 
 
+
     private final JSONObject message;
     public static List<Message> messageTracker = new ArrayList<>();
 
 
-    //______________________________________ PRIVATE CONSTRUCTOR
 
     public Message(JSONObject message) throws JSONException {
         this.message = message;
@@ -32,18 +32,18 @@ public class Message {
 
 
 
-    //______________________________________ ACCESSORS
-
     public JSONObject getMessage(){
         return message;
     }
+
 
 
     public List<Message> historyTracker(){
         return new ArrayList<>(messageTracker);
     }
 
-    //______________________________________ OVERRIDE METHODS
+
+
 
     @Override
     public boolean equals(Object that){

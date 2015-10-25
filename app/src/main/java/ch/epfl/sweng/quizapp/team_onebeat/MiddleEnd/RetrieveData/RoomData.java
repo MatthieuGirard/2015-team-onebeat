@@ -51,46 +51,37 @@ public class RoomData {
     }
 
 
-    public static class Builder implements RetrieveBuildableData<RoomData>{
+    public static class Builder extends RetrieveBuildableData<RoomData> {
 
         private int id = -1;
         private Date lastUpdate = null;
         private List<RetrieveBuildableData<MusicData>> relatedMusics = null;
         private Set<RetrieveBuildableData<UserData>> participants = null;
-        private boolean isLoaded = false;
         private String name = null;
 
+
         @Override
-        public void copy(RoomData that) {
+        public void loadData(RoomData that) {
             id = that.id;
             lastUpdate = that.lastUpdate;
             relatedMusics = new ArrayList<>(that.relatedMusics);
             participants = new HashSet<>(that.participants);
-            isLoaded = true;
             name = that.name;
-        }
-
-        @Override
-        public boolean isLoaded() {
-            return isLoaded;
-        }
-
-        @Override
-        public boolean isBuildable() {
-            // verify null
-            return false;
         }
 
         @Override
         public RoomData build() throws BuildableException {
             if(!isBuildable()) throw new BuildableException();
+            // TODO
             return null;
         }
 
         @Override
         public String toString(){
+            // TODO
             return "RoomData";
         }
+
 
     }
 

@@ -22,7 +22,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> 
     public void testSubscribeMessage() throws JSONException{
 
         String subscribe= "{\n"
-                + "\"request\": \"" + Request.Type.SUBSCRIPTION.toString() +"\",\n"
+                + "\"request\": \"" + Request.Available.SUBSCRIPTION.toString() +"\",\n"
                 + "\"macAddress\": \"" + new Device(this.getActivity()).macAddress()+ "\",\n"
                 + "\"pseudo\": \"hugo\"\n"
                 + "}\n";
@@ -39,7 +39,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> 
     public void testConnectMessage()throws JSONException{
 
         String connection = "{\n"
-                + "\"request\": \""+Request.Type.CONNECTION+"\",\n"
+                + "\"request\": \""+Request.Available.CONNECTION+"\",\n"
                 + "\"macAddress\": \"" + new Device(this.getActivity()).macAddress()+ "\"\n"
                 + "}\n";
 
@@ -54,7 +54,7 @@ public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> 
     public void testExistUser() throws JSONException{
 
         String existUser= "{\n"
-                + "\"request\": \""+Request.Type.EXIST_USER+"\",\n"
+                + "\"request\": \""+Request.Available.EXIST_USER+"\",\n"
                 + "\"macAddress\": \"" + new Device(this.getActivity()).macAddress()+ "\"\n"
                 + "}\n";
         Log.d("qwer", existUser);

@@ -1,11 +1,9 @@
 package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Parser;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
 
-import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.RetrieveBuildableData;
 import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.UserData;
 
 /**

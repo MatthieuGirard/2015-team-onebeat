@@ -25,27 +25,18 @@ public class BooleanData {
         return value;
     }
 
-    public static class Builder implements RetrieveBuildableData<BooleanData>{
+    public static class Builder extends RetrieveBuildableData<BooleanData>{
 
 
         @Override
-        public void copy(BooleanData that) {
-
+        public void loadData(BooleanData that) {
+            // TODO
+            this.loaded = true;
         }
 
         @Override
-        public boolean isLoaded() {
-            return false;
-        }
-
-        @Override
-        public boolean isBuildable() {
-            return false;
-        }
-
-        @Override
-        public BooleanData build() throws BuildableException{
-            if(!isBuildable()) throw new BuildableException();
+        public BooleanData build() throws BuildableException {
+            // TODO
             return null;
         }
 

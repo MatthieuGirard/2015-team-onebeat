@@ -1,6 +1,7 @@
 package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData;
 
 
+import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
 
 /**
  * Created by hugo on 25.10.2015.
@@ -26,10 +27,11 @@ public class BooleanData {
         return value;
     }
 
-    public static class Builder implements Buildable<BooleanData>{
+    public static class Builder implements RetrieveBuildableData<BooleanData>{
+
 
         @Override
-        public void copy(Buildable<BooleanData> that) {
+        public void copy(RetrieveBuildableData<BooleanData> that) {
 
         }
 
@@ -39,7 +41,13 @@ public class BooleanData {
         }
 
         @Override
-        public BooleanData build() {
+        public boolean isBuildable() {
+            return false;
+        }
+
+        @Override
+        public BooleanData build() throws BuildableException{
+            if(!isBuildable()) throw new BuildableException();
             return null;
         }
     }

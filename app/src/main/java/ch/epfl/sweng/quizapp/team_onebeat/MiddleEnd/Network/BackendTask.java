@@ -3,8 +3,9 @@ package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network;
 
 import android.os.AsyncTask;
 
+import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
 import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Parser.Parser;
-import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.Buildable;
+import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.RetrieveBuildableData;
 
 /**
  * Created by hugo on 24.10.2015.
@@ -18,17 +19,20 @@ import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.Buildable;
  *
  */
 
-public final class BackendTask<T extends Buildable<T>> extends AsyncTask<Request, Void, T> {
+public final class BackendTask<T extends RetrieveBuildableData<T>> extends AsyncTask<Request, Void, RetrieveBuildableData<T>> {
 
-    private Buildable<T> loadInBuilder;
-    private Parser<Buildable<T>> parser;
+    private RetrieveBuildableData<T> loadInBuilder;
+    private Parser<RetrieveBuildableData<T>> parser;
     private Request request;
 
-    public BackendTask(Request request, Parser<Buildable<T>> parser, Buildable<T> loadInBuilder){
+    public BackendTask(Request request,
+                       Parser<RetrieveBuildableData<T>> parser,
+                       RetrieveBuildableData<T> loadInBuilder){
 
         this.parser = parser;
         this.loadInBuilder = loadInBuilder;
         this.request = request;
+
     }
 
 
@@ -38,6 +42,8 @@ public final class BackendTask<T extends Buildable<T>> extends AsyncTask<Request
         // JSON => Buildable<T>
         // loadInBuilder.copy(Buildable<T>)
         // setLoaded to true
+        // TODO : how to throw BuildableException when parser fail or data corrupted ?
+
         return null;
     }
 

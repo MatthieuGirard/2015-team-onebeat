@@ -6,7 +6,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ch.epfl.sweng.quizapp.team_onebeat.FrontEnd.MainActivity;
+import ch.epfl.sweng.quizapp.team_onebeat.FrontEnd.Activities.MainActivity;
 import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.Request;
 import ch.epfl.sweng.quizapp.team_onebeat.Util.Device;
 import ch.epfl.sweng.quizapp.team_onebeat.Util.MacAddrSignature;

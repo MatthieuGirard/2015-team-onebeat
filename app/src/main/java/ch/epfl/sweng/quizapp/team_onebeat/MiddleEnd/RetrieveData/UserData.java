@@ -2,6 +2,8 @@ package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData;
 
 import java.util.Observable;
 
+import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
+
 /**
  * Created by hugo on 24.10.2015.
  *
@@ -22,22 +24,29 @@ public final class UserData {
     }
 
 
-    public static class Builder implements Buildable<UserData>{
+    public static class Builder implements RetrieveBuildableData<UserData>{
 
         @Override
-        public void copy(Buildable<UserData> that) {
+        public void copy(RetrieveBuildableData<UserData> that) {
 
         }
+
         @Override
         public boolean isLoaded() {
             return false;
         }
 
         @Override
-        public UserData build() {
-            return null;
+        public boolean isBuildable() {
+            return false;
         }
 
+
+        @Override
+        public UserData build() throws BuildableException {
+            if(!isBuildable()) throw new BuildableException();
+            return null;
+        }
 
     }
 

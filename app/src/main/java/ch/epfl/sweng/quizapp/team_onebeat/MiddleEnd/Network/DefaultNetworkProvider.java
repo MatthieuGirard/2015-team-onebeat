@@ -23,4 +23,5 @@ public final class DefaultNetworkProvider implements NetworkProvider {
         return (HttpURLConnection) url.openConnection();
     }
 
+
 }

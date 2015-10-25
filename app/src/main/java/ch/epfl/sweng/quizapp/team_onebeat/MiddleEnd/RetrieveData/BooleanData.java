@@ -48,6 +48,13 @@ public class BooleanData {
             if(!isBuildable()) throw new BuildableException();
             return null;
         }
+
+        @Override
+        public String toString(){
+            return "BooleanData";
+        }
+
+
     }
 
 

@@ -31,7 +31,7 @@ import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.RetrieveBuildab
 
 // TODO : possible to have just have : <T extends RetrieveBuildableData<E>> ?
 
-public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends AsyncTask<Request, Void, T> {
+public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends AsyncTask<Message, Void, T> {
 
     private RetrieveBuildableData<E> loadInBuilder;
     private Parser<E> parser;
@@ -49,7 +49,7 @@ public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends Asy
 
 
     @Override
-    protected T doInBackground(Request... request) {
+    protected T doInBackground(Message... request) {
         // reqest => JSON
         // JSON => T
         // loadInBuilder.copy(T)
@@ -58,6 +58,13 @@ public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends Asy
 
         return null;
     }
+
+
+    @Override
+    public String toString(){
+        return "retrieve request " + request + " for " + loadInBuilder ;
+    }
+
 
 
 }

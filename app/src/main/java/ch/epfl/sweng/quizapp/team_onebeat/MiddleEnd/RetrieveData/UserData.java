@@ -51,6 +51,10 @@ public final class UserData {
             return null;
         }
 
+        @Override
+        public String toString(){
+            return "UserData";
+        }
     }
 
 

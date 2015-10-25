@@ -14,4 +14,11 @@ package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData;
 
 
 public class RelatedRoomsData {
+
+
+    @Override
+    public String toString(){
+        return "RelatedRoomData";
+    }
+
 }

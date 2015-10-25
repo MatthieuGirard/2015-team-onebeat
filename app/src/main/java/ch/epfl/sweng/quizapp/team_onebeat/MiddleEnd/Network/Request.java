@@ -63,5 +63,9 @@ public class Request extends Message {
         return new ArrayList<>(messageTracker);
     }
 
+    @Override
+    public String toString(){
+        return selectedRequest.name();
+    }
 
 }

@@ -13,4 +13,11 @@ package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData;
  */
 
 public class MusicData {
+
+
+    @Override
+    public String toString(){
+        return "MusicData";
+    }
+
 }

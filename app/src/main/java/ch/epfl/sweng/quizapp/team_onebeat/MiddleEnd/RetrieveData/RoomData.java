@@ -86,6 +86,12 @@ public class RoomData {
             if(!isBuildable()) throw new BuildableException();
             return null;
         }
+
+        @Override
+        public String toString(){
+            return "RoomData";
+        }
+
     }
 
 

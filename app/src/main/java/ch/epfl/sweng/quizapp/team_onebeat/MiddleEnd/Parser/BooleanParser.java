@@ -11,7 +11,8 @@ import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.RetrieveBuildab
 /**
  * Created by hugo on 25.10.2015.
  *
- * Can parse a json response to a builder of BooleanData
+ * Can parse a json response to a builder of BooleanData.
+ * Boolean are encapsulate for modularity (information about backend transaction ?)
  */
 public class BooleanParser implements Parser<RetrieveBuildableData<BooleanData>>{ // TODO : ??
 

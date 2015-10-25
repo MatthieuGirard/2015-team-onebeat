@@ -12,14 +12,14 @@ import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
  * Created by hugo on 25.10.2015.
  *
  * use case :
- * retrieve music and participants related to a room
- * backendTask : create 2 new backendTask for relatedMusics and participants
- * and return the RetrieveBuildable[s]
+ * encapsulate music and participants related to a room from the backend
+ * how : create 2 new backendTask for relatedMusics and participants
+ * and return the RetrieveBuildable[s].
  *
  * information :
  * id : identifier of the room
  * lastUpdate : Date representing the last modification process executed by the endhost
- * when the instance was provided(end host : add/remove => update related date ).
+ * when the instance was provided(end host : add/remove => update related date).
  * List<RetrieveBuildable<MusicData>> related_musics : playlist of the room with a getBuildable()
  * than return only music with a buildable loaded instance.
  * Set<User> participants : related users
@@ -33,10 +33,12 @@ public class RoomData {
     private Date lastUpdate;
     private List<RetrieveBuildableData<MusicData>> relatedMusics;
     private Set<RetrieveBuildableData<UserData>> participants;
+    private String name;
 
 
     public RoomData(int id,
                     Date lastUpdate,
+                    String name,
                     List<RetrieveBuildableData<MusicData>> relatedMusics,
                     Set<RetrieveBuildableData<UserData>> participants ){
 
@@ -56,6 +58,7 @@ public class RoomData {
         private List<RetrieveBuildableData<MusicData>> relatedMusics = null;
         private Set<RetrieveBuildableData<UserData>> participants = null;
         private boolean isLoaded = false;
+        private String name = null;
 
         @Override
         public void copy(RoomData that) {
@@ -64,6 +67,7 @@ public class RoomData {
             relatedMusics = new ArrayList<>(that.relatedMusics);
             participants = new HashSet<>(that.participants);
             isLoaded = true;
+            name = that.name;
         }
 
         @Override

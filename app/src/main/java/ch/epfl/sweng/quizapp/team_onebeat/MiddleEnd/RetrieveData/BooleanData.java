@@ -7,10 +7,10 @@ import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
  * Created by hugo on 25.10.2015.
  *
  * use case :
- * retrieve a boolean from the backend
+ * encapsulate a boolean comming from the backend.
  *
- * Boolean are encapsulate for modularity (information about backend transaction ?)
- *
+ * how :
+ * with a backendTask
  */
 public class BooleanData {
 

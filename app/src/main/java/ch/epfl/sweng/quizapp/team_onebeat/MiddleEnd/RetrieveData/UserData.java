@@ -8,9 +8,11 @@ import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
  * Created by hugo on 24.10.2015.
  *
  * use case :
- * retrieve a User from the backend
+ * encapsulate a User coming from the backend
  *
- * User are encapsulate for modularity (information about backend transaction ?)
+ * how :
+ * with a backendTask
+ *
  */
 public final class UserData {
 

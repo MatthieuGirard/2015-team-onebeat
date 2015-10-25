@@ -9,32 +9,34 @@ import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.RetrieveBuildab
 /**
  * Created by hugo on 24.10.2015.
  *
- * use case:
+ * aim :
  * get an instance of T when dealing with the backend.
- * instead of bocking until T is ready, BackendTask return a RetrieveBuildable<T>.
+ *
+ * use case:
+ * BackendTask constructor take a RetrieveBuildable<T> :
  * RetrieveBuildable<T> has an isLoaded() method to provide information :
  * does the backend has loaded the builder ?
  * RetrieveBuildable<T> has a build() method that return a T instance
  * In this way GUI can send a builder in backendTask constructor
- * and wait until isloaded() before build the instance.
+ * and wait until isloaded() is true before build the instance.
  *
  * how it work :
  * BackendTask retrieve data from the backend on a JSONOBJECT (async) with a request.
- * A parser translate JSON in a representative instance RetrieveBuildable<T>
- * and then,it copy the result in "loadInBuilder" passed in constructor.
-
+ * A parser translate JSON in a representative instance of T
+ * and then, it indicate the value to "loadInBuilder" passed in constructor and set the
+ * isLoaded to true so that the GUI is ok to display instance.
  *
  */
 
-// TODO : possible to have just have : <T extends RetrieveBuildableData<E>>
+// TODO : possible to have just have : <T extends RetrieveBuildableData<E>> ?
 
 public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends AsyncTask<Request, Void, T> {
 
-    private T loadInBuilder;
-    private Parser<T> parser;
+    private RetrieveBuildableData<E> loadInBuilder;
+    private Parser<E> parser;
     private Request request;
 
-    public BackendTask(Request request, Parser<T> parser, T loadInBuilder){
+    public BackendTask(Request request, Parser<E> parser, RetrieveBuildableData<E> loadInBuilder){
 
         this.parser = parser;
         this.loadInBuilder = loadInBuilder;
@@ -46,8 +48,8 @@ public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends Asy
     @Override
     protected T doInBackground(Request... request) {
         // reqest => JSON
-        // JSON => Buildable<T>
-        // loadInBuilder.copy(Buildable<T>)
+        // JSON => T
+        // loadInBuilder.copy(T)
         // setLoaded to true
         // TODO : how to throw BuildableException when parser fail or data corrupted ?
 

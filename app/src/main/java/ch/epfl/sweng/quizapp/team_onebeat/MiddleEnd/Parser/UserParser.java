@@ -11,13 +11,13 @@ import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.UserData;
 /**
  * Created by hugo on 25.10.2015.
  *
- * Can parse a json response to a builder of BooleanData
+ * Can parse a json response to a builder of UserData
  */
-public class UserParser implements Parser<RetrieveBuildableData<UserData>> {
+public class UserParser implements Parser<UserData> {
 
 
     @Override
-    public  RetrieveBuildableData<UserData> parse(JSONObject obj) throws ParseException{
+    public  UserData parse(JSONObject obj) throws ParseException{
         return null;
     }
 }

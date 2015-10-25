@@ -7,9 +7,10 @@ import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
 /**
  * Created by hugo on 24.10.2015.
  *
- * encapsulate a user to an initial state
- * when the "DownloadedData" go in  Loaded State
- * the data notify observers.
+ * use case :
+ * retrieve a User from the backend
+ *
+ * User are encapsulate for modularity (information about backend transaction ?)
  */
 public final class UserData {
 
@@ -27,7 +28,7 @@ public final class UserData {
     public static class Builder implements RetrieveBuildableData<UserData>{
 
         @Override
-        public void copy(RetrieveBuildableData<UserData> that) {
+        public void copy(UserData that) {
 
         }
 

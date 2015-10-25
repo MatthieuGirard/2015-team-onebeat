@@ -6,9 +6,11 @@ import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
 /**
  * Created by hugo on 25.10.2015.
  *
- * encapsulate a boolean to an initial state
- * when the "DownloadedData" go in  Loaded State
- * the data notify observers.
+ * use case :
+ * retrieve a boolean from the backend
+ *
+ * Boolean are encapsulate for modularity (information about backend transaction ?)
+ *
  */
 public class BooleanData {
 
@@ -19,10 +21,6 @@ public class BooleanData {
         this.value = value;
     }
 
-    public void copy(BooleanData that){
-        this.value = that.value;
-    }
-
     public boolean value(){
         return value;
     }
@@ -31,7 +29,7 @@ public class BooleanData {
 
 
         @Override
-        public void copy(RetrieveBuildableData<BooleanData> that) {
+        public void copy(BooleanData that) {
 
         }
 

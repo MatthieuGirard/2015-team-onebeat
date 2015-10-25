@@ -7,7 +7,7 @@ import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
  */
 public interface RetrieveBuildableData<T> {
 
-    public void copy(RetrieveBuildableData<T> that);
+    public void copy(T that);
     public boolean isLoaded();
     public boolean isBuildable();
     public T build() throws BuildableException;

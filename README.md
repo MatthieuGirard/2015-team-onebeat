@@ -13,7 +13,9 @@ provide encapsultate information on request
 how : 
 
 Request(encapsulated JSON) can retrieve data from backend : Boolean/ User/ Rooms...
+
 The middle end instantly provide the data in pending mode (encapsulate). 
+
 When isLoaded() become true the data can be build by the class decorating the data 
 (DownloadData).
 
@@ -37,8 +39,11 @@ state of the application (AUTHENTIFICATION, WIFI, ...)
 2. with a controler for an activity : 
 
 observe activity event (click)
+
 observe machine state (wifi_on => wifi_off)
+
 and choose what operation execute on the view when event/state changing. 
+
 the controler decide what's is the request to make with the current state and 
 apply downloaded data to the view.
 

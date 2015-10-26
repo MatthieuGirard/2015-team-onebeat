@@ -12,11 +12,10 @@ provide encapsultate information on request
 
 how : 
 
-when request(encapsulated JSON) is asked to the middle end ,
-the middle end instantly provide Download data<T>: 
-it's an instance of the downloaded data T requested. 
-when isLoaded() become true the downloaded data of T can provide
-access to the information.
+Request(encapsulated JSON) can retrieve data from backend : Boolean/ User/ Rooms...
+The middle end instantly provide the data in pending mode (encapsulate). 
+When isLoaded() become true the data can be build by the class decorating the data 
+(DownloadData).
 
 
 # front end 
@@ -30,18 +29,18 @@ display information and manage view
 how :
 
 
-with differents machines states : 
+1. with differents machines states : 
 
 state of the application (AUTHENTIFICATION, WIFI, ...)
 
 
-with differents controler : 
+2. with a controler for an activity : 
 
 observe activity event (click)
 observe machine state (wifi_on => wifi_off)
-and choose what operation execute on the view. 
-the controler decide what's is the request to make with
-the current state and apply downloaded data to the view.
+and choose what operation execute on the view when event/state changing. 
+the controler decide what's is the request to make with the current state and 
+apply downloaded data to the view.
 
 
 

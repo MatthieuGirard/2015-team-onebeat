@@ -1,7 +1,5 @@
 package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData;
 
-import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
-
 /**
  * Created by hugo on 25.10.2015.
  *
@@ -14,6 +12,7 @@ import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
  *
  * DownloadData :
  * decorate data and provide isLoaded(); method to indicate when the data can be provide.
+ * see Network.DownloadData class for more info
  *
  */
 

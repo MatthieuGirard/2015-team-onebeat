@@ -6,9 +6,15 @@ import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.TimeExceededException;
 /**
  * Created by hugo on 26.10.2015.
  *
+ *  use case :
  *  it's a simply builder that's become buildable
  *  when load(Data t) has already parametrized the instance.
+ *  it's used to return immédiatly data that will be available
+ *  in the future.
  *
+ *  how :
+ *  using backendTask to make request and parametrize the
+ *  Download in a background thread.
  *
  */
 public class DownloadData<T> {

@@ -2,64 +2,71 @@
 
 
 
+# middle end 
 
-middle end :
 
+aim : 
 
-aim : provide encapsultate information on request
+provide encapsultate information on request
+
 
 how : 
-on a request we can make request ( class encapsulate a json message),
-the middle end instantly provide builder<Class> containing data currently downloaded from the endHost.
-when a builder has downloaded all the instance, isLoaded() become true and builder can use his
-build() => Class method.
+
+when request(encapsulated JSON) is asked to the middle end ,
+the middle end instantly provide Download data<T>: 
+it's an instance of the downloaded data T requested. 
+when isLoaded() become true the downloaded data of T can provide
+access to the information.
 
 
+# front end 
 
-front end : 
 
+aim : 
 
-aim : display information and manage view
+display information and manage view
 
 
 how :
 
 
-machine state : state of the application (AUTHENTIFICATION, WIFI, ...)
+with differents machines states : 
 
-controler : observe activity event and make action on it : setState(controlerState) 
-
-
-when a state of one machine observed evolve execute { 
-
-if it exists requests for the currents controlerStates of my machines
-
-ask middle end :  RetreieveDataBuildable on : requests
-
-update view whith when theRetreieveDataBuildable are ready and update state in a machine if necessary. 
+state of the application (AUTHENTIFICATION, WIFI, ...)
 
 
-}
+with differents controler : 
+
+observe activity event (click)
+observe machine state (wifi_on => wifi_off)
+and choose what operation execute on the view. 
+the controler decide what's is the request to make with
+the current state and apply downloaded data to the view.
 
 
 
-( read line )
+
+# fast understanding read line 
 
 
 PACKAGE : MIDDLE END 
 
 1 Util : signature, MacAddrSignature, Device
 
-2 RetrieveData : RelatedRoom, MusicData
+2 RetrieveData : BooleanData
 
-3 Parser : BooleanParser 
+3 Network : DownloadData 
 
-4 Network : Request, BackendTask
+4 RetrieveData : RoomData 
+
+5 Network : Request, BackendTask
 
 PACKAGE : FRONT END 
 
-5 MachineState : Authentification 
+6 MachineState : Authentification 
 
-6 Util : Controler
+7 Util : Controler
+
+
 
 

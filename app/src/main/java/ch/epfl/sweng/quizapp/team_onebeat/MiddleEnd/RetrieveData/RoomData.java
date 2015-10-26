@@ -22,7 +22,7 @@ import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.DownloadData;
  *
  * DownloadData :
  * decorate data and provide isLoaded(); method to indicate when the data can be provide.
- * see Network.DownloadData class
+ * see Network.DownloadData class for more info
  *
  *
  */

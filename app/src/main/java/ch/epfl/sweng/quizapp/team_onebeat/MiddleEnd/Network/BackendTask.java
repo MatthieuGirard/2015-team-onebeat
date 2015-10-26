@@ -3,6 +3,7 @@ package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network;
 
 import android.os.AsyncTask;
 
+import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.NotImplementedException;
 import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Parser.Parser;
 import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.RetrieveData;
 
@@ -68,8 +69,7 @@ public final class BackendTask<T extends RetrieveData> extends AsyncTask<Message
         // TODO : add % already loaded
         // TODO : how to throw BuildableException when parser fail or data corrupted ?
         // TODO : if threshold > 0 and exceeded : stop and launch TimeExceededException
-
-        return null;
+        throw new NotImplementedException();
     }
 
 

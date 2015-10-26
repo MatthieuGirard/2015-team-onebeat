@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 
+import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.NotImplementedException;
 import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.BooleanData;
 
 /**
@@ -18,7 +19,8 @@ public class BooleanParser implements Parser<BooleanData>{ // TODO : ??
 
     @Override
     public BooleanData parse(JSONObject obj) throws ParseException {
-        return null;
+
+        throw new NotImplementedException();
     }
 
 

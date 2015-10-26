@@ -20,7 +20,7 @@ import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.TimeExceededException;
 public class DownloadData<T> {
 
     private float alreadyDownloaded = 0;
-    boolean loaded = false;
+    private boolean loaded = false;
     private final float TIME_REFRESH_WHEN_BLOCKING = 30;
     private T instance = null;
 
@@ -46,8 +46,7 @@ public class DownloadData<T> {
     }
 
 
-    public T waitAndGet(float threshold)
-            throws BuildableException, TimeExceededException {
+    public T waitAndGet(float threshold) throws TimeExceededException {
 
         float totalTime = 0;
         while(!isLoaded()){

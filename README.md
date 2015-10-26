@@ -34,18 +34,22 @@ how :
 __I with differents machines states : 
 
 state of the application (AUTHENTIFICATION, WIFI, ...)
+The view can modify the state of one/some machine state
+(when click event on button => AUTENTIFICATION.setState(TryConnect) )
 
 
-__II with a controler for an activity : 
+__II with a controler for an activity :
 
-observe activity event (click)
+the controler only observe machine state, when a state is reached
+it look if it has work to do :
 
-observe machine state (wifi_on => wifi_off)
+AUTHENTIFICATION enter state : TryConnect
 
-and choose what operation execute on the view when event/state changing. 
+=> display a loading component on the managed activity
 
-the controler decide what's is the request to make with the current state and 
-apply downloaded data to the view.
+=> get boolean
+
+=> wait for data ready inside the downloadedData and make stuff on machine state if success/fail
 
 
 

@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.NotImplementedException;
 import ch.epfl.sweng.quizapp.team_onebeat.Util.Signature;
 
 /**
@@ -51,8 +52,7 @@ public class Message {
         if(that instanceof Message){
             return ((Message)that).message.toString() == this.message.toString();
         }
-
-        return false;
+        throw new NotImplementedException();
 
     }
 

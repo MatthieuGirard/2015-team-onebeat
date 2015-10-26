@@ -4,7 +4,7 @@ package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network;
 import android.os.AsyncTask;
 
 import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Parser.Parser;
-import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.RetrieveBuildableData;
+import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.RetrieveData;
 
 /**
  * Created by hugo on 24.10.2015.
@@ -31,33 +31,32 @@ import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.RetrieveBuildab
 
 // TODO : possible to have just have : <T extends RetrieveBuildableData<E>> ?
 
-public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends AsyncTask<Message, Void, T> {
+public final class BackendTask<T extends RetrieveData> extends AsyncTask<Message, Void, T> {
 
-    private RetrieveBuildableData<E> loadInBuilder;
-    private Parser<E> parser;
+    private DownloadData<T> downloadData = new DownloadData<>();
+    private Parser<T> parser;
     private Request request;
     private double timeThreshold = -1;
 
-    public BackendTask(Request request, Parser<E> parser, RetrieveBuildableData<E> loadInBuilder){
+    public BackendTask(Request request, Parser<T> parser){
 
         this.parser = parser;
-        this.loadInBuilder = loadInBuilder;
         this.request = request;
 
     }
 
     public BackendTask(Request request,
-                       Parser<E> parser,
-                       RetrieveBuildableData<E> loadInBuilder,
+                       Parser<T> parser,
                        double timeThreshold /*ms*/){
 
         this.parser = parser;
-        this.loadInBuilder = loadInBuilder;
         this.request = request;
         this.timeThreshold = timeThreshold;
     }
 
-    // TODO : % already loaded
+    public DownloadData<T> getDownloadedDataData(){
+        return downloadData;
+    }
 
 
     @Override
@@ -66,8 +65,9 @@ public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends Asy
         // JSON => T
         // loadInBuilder.copy(T)
         // setLoaded to true
+        // TODO : add % already loaded
         // TODO : how to throw BuildableException when parser fail or data corrupted ?
-        // TODO : if threeshold > 0 and exceeded : stop and launch TimeExceededException
+        // TODO : if threshold > 0 and exceeded : stop and launch TimeExceededException
 
         return null;
     }
@@ -75,7 +75,7 @@ public final class BackendTask<E,T extends RetrieveBuildableData<E>> extends Asy
 
     @Override
     public String toString(){
-        return "retrieve request " + request + " for " + loadInBuilder ;
+        return "retrieve data for request " + request  ;
     }
 
 

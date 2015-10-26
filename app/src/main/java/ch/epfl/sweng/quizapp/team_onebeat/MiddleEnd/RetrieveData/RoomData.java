@@ -1,46 +1,47 @@
 package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
+import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.DownloadData;
 
 /**
  * Created by hugo on 25.10.2015.
  *
  * use case :
  * encapsulate music and participants related to a room from the backend
- * how : create 2 new backendTask for relatedMusics and participants
- * and return the RetrieveBuildable[s].
  *
  * information :
  * id : identifier of the room
  * lastUpdate : Date representing the last modification process executed by the endhost
  * when the instance was provided(end host : add/remove => update related date).
- * List<RetrieveBuildable<MusicData>> related_musics : playlist of the room with a getBuildable()
+ * List<DownloadData<MusicData>> related_musics : playlist of the room with a getBuildable()
  * than return only music with a buildable loaded instance.
- * Set<User> participants : related users
+ * Set<DownloadData<User>> participants : related users
+ *
+ * DownloadData :
+ * decorate data and provide isLoaded(); method to indicate when the data can be provide.
+ * see Network.DownloadData class
  *
  *
  */
-public class RoomData {
+
+public class RoomData implements RetrieveData{
 
     private int id;
 
     private Date lastUpdate;
-    private List<RetrieveBuildableData<MusicData>> relatedMusics;
-    private Set<RetrieveBuildableData<UserData>> participants;
+    private List<DownloadData<MusicData>> relatedMusics;
+    private Set<DownloadData<UserData>> participants;
     private String name;
 
 
     public RoomData(int id,
                     Date lastUpdate,
                     String name,
-                    List<RetrieveBuildableData<MusicData>> relatedMusics,
-                    Set<RetrieveBuildableData<UserData>> participants ){
+                    List<DownloadData<MusicData>> relatedMusics,
+                    Set<DownloadData<UserData>> participants ){
 
         this.id = id;
         this.lastUpdate = lastUpdate;
@@ -51,39 +52,7 @@ public class RoomData {
     }
 
 
-    public static class Builder extends RetrieveBuildableData<RoomData> {
 
-        private int id = -1;
-        private Date lastUpdate = null;
-        private List<RetrieveBuildableData<MusicData>> relatedMusics = null;
-        private Set<RetrieveBuildableData<UserData>> participants = null;
-        private String name = null;
-
-
-        @Override
-        public void loadData(RoomData that) {
-            id = that.id;
-            lastUpdate = that.lastUpdate;
-            relatedMusics = new ArrayList<>(that.relatedMusics);
-            participants = new HashSet<>(that.participants);
-            name = that.name;
-        }
-
-        @Override
-        public RoomData build() throws BuildableException {
-            if(!isBuildable()) throw new BuildableException();
-            // TODO
-            return null;
-        }
-
-        @Override
-        public String toString(){
-            // TODO
-            return "RoomData";
-        }
-
-
-    }
 
 
 

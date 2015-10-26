@@ -7,7 +7,7 @@
 
 aim : 
 
-provide encapsultate information on request
+provide encapsulate information on request
 
 
 how : 
@@ -31,12 +31,12 @@ display information and manage view
 how :
 
 
-1. with differents machines states : 
+__I with differents machines states : 
 
 state of the application (AUTHENTIFICATION, WIFI, ...)
 
 
-2. with a controler for an activity : 
+__II with a controler for an activity : 
 
 observe activity event (click)
 

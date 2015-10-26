@@ -40,14 +40,17 @@ The view can modify the state of one/some machine state
 
 __II with a controler for an activity :
 
-the controler only observe machine state, when a stateis reached
+the controler only observe machine state, when a state is reached
 it look if it has work to do :
 
-AUTHENTIFICATION(machine state) enter state : TryConnect
-
-=> get boolean for success auth
+AUTHENTIFICATION enter state : TryConnect
 
 => display a loading component on the managed activity
+
+=> get boolean
+
+=> wait for data ready inside the downloadedData and make stuff on machine state if success/fail
+
 
 
 

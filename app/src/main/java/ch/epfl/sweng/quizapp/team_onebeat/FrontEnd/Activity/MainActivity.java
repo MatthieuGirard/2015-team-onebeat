@@ -1,4 +1,4 @@
-package ch.epfl.sweng.quizapp.team_onebeat.FrontEnd.Activities;
+package ch.epfl.sweng.quizapp.team_onebeat.FrontEnd.Activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

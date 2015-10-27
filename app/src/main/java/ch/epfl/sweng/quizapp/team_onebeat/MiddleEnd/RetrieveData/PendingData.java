@@ -1,7 +1,14 @@
-package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network;
+package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData;
+
+import android.os.AsyncTask;
 
 import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
+import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.NotImplementedException;
 import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.TimeExceededException;
+import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.Message;
+import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.NetworkProvider;
+import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.Request;
+import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Parser.Parser;
 
 /**
  * Created by hugo on 26.10.2015.
@@ -17,23 +24,39 @@ import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.TimeExceededException;
  *  Download in a background thread.
  *
  */
-public class DownloadData<T> {
+public class PendingData<T>  extends AsyncTask<Message, Void, T> {
+
+
+    private final float TIME_REFRESH_WHEN_BLOCKING = 30;
+
 
     private float alreadyDownloaded = 0;
     private boolean loaded = false;
-    private final float TIME_REFRESH_WHEN_BLOCKING = 30;
     private T instance = null;
 
 
+    public PendingData(String serveurUrl,
+                       NetworkProvider networkProvider,
+                       Request request,
+                       Parser<T> parser
+                       ){
 
-    public void setLoad(float alreadyDownloaded){
-        this.alreadyDownloaded = alreadyDownloaded;
+        throw new NotImplementedException();
+
     }
 
-    public void loadData(T that){
-        this.instance = instance;
-    }
 
+
+    @Override
+    protected T doInBackground(Message... params) {
+        // request => JSON
+        // JSON => T
+        // TODO : add % already loaded
+        // TODO : how to throw BuildableException when parser fail or data corrupted ?
+        // TODO : if threshold > 0 and exceeded : stop and launch TimeExceededException
+        // setLoaded to true
+        throw new NotImplementedException();
+    }
 
 
 
@@ -41,7 +64,10 @@ public class DownloadData<T> {
         return loaded;
     }
 
-    public T get() throws BuildableException {
+
+
+    public T getInstance() throws BuildableException {
+        if(instance == null) throw new BuildableException();
         return instance;
     }
 

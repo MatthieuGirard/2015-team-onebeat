@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.DownloadData;
-
 /**
  * Created by hugo on 25.10.2015.
  *
@@ -32,16 +30,16 @@ public class RoomData implements RetrieveData{
     private int id;
 
     private Date lastUpdate;
-    private List<DownloadData<MusicData>> relatedMusics;
-    private Set<DownloadData<UserData>> participants;
+    private List<PendingData<MusicData>> relatedMusics;
+    private Set<PendingData<UserData>> participants;
     private String name;
 
 
     public RoomData(int id,
                     Date lastUpdate,
                     String name,
-                    List<DownloadData<MusicData>> relatedMusics,
-                    Set<DownloadData<UserData>> participants ){
+                    List<PendingData<MusicData>> relatedMusics,
+                    Set<PendingData<UserData>> participants ){
 
         this.id = id;
         this.lastUpdate = lastUpdate;

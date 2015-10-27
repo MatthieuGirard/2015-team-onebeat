@@ -30,7 +30,7 @@ public class StateBoard {
 
 
     public enum BoardType {CONNECTION, DISPLAY}
-    public enum Writer {CONTROLER}
+    public enum Writer {CONTROLER, UNIT_TEST}
 
     private static Map<BoardType, State> boards = new HashMap<>();
 

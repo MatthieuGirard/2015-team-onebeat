@@ -55,7 +55,7 @@ public final class BackendTask<T extends RetrieveData> extends AsyncTask<Message
         this.timeThreshold = timeThreshold;
     }
 
-    public DownloadData<T> getDownloadedDataData(){
+    public DownloadData<T> getPendingData(){
         return downloadData;
     }
 

@@ -2,7 +2,7 @@ package ch.epfl.sweng.quizapp.team_onebeat;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import ch.epfl.sweng.quizapp.team_onebeat.FrontEnd.Activities.MainActivity;
+import ch.epfl.sweng.quizapp.team_onebeat.FrontEnd.Activity.MainActivity;
 import ch.epfl.sweng.quizapp.team_onebeat.Util.Device;
 
 /**

@@ -20,29 +20,33 @@ the aim is to display information and manage view.
 Many static BoardState give information about the current state of an app :
 activity/authentification...
 When an event occurs on the view the activity has just to update the current
-state on one of the static boardState.
+state of one of the static boardState. The activity didn't modify his display,
+it only provide method to modify his display.
 it's possible for an observer to subscribe to a boardState, and get notified
 when the currentState has changed.
 It's the case of the controler that encapsulate an activity and when the board
 state change his currentState get notified, make request for pendingData,
-wait for data loaded and parametrize the view.
+wait for data loaded and parametrize the activity.
 
-exemple :
+exemple  :
 
-BOARDState.AUTHENTIFICATION enter state : TryConnect  =>  notifyObserver();
+activity : buttonConnect clicked{
 
-ControlerMainActivity : isNotified
+BOARDState.AUTHENTIFICATION enter state : TryConnect(  BoardState =>  notifyObserver(); )
 
-=> display a loading component on the main activity
+}
 
-=> get boolean
+ControlerMainActivity : isNotified by boardState
 
-=> if(boolean == false) not connected : retry ?  else :
+=> display a loading gif on the activity
 
-=> undisplay the loading component on the main activity
+=> get boolean for success connection
 
-=> BOARDState.Display enter state : MY_ROOM_ACTIVITY
+=> if(boolean == false) not connected : retry  else :
 
+=> undisplay the loading gif on the main activity
+
+=> BOARDState.Display enter state : MY_ROOM_ACTIVITY(  BoardState =>  notifyObserver(); )
 
 
 

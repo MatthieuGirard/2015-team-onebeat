@@ -10,7 +10,12 @@ import ch.epfl.sweng.quizapp.team_onebeat.Util.Signature;
 
 /**
  * Created by hugo on 25.10.2015.
+ *
+ * Request create message needed to communicate with the backend.
+ * it's constructor is private, request are created by a static factory builder.
  */
+
+
 public class Request extends Message {
 
 

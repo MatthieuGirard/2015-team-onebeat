@@ -5,51 +5,44 @@
 # middle end 
 
 
-aim : 
-
-provide encapsulate information on request
-
-
-how : 
-
-Request(encapsulated JSON) can retrieve data from backend : Boolean/ User/ Rooms...
-
-The middle end instantly provide the data in pending mode (encapsulate). 
-
-When isLoaded() become true the data can be build by the class decorating the data 
+the aim of the package is to provide encapsulated information on request.
+A Request(encapsulated JSON) can retrieve data from backend : Boolean/ User/ Rooms/...
+in pending mode (encapsulated in PendingData<T>).
+The class asking for pendingData need to wait until isLoaded() become true
+to extract the data T from the PendingData<T> instance.
 (PendingData).
 
 
 # front end 
 
 
-aim : 
+the aim is to display information and manage view.
+Many static BoardState give information about the current state of an app :
+activity/authentification...
+When an event occurs on the view the activity has just to update the current
+state on one of the static boardState.
+it's possible for an observer to subscribe to a boardState, and get notified
+when the currentState has changed.
+It's the case of the controler that encapsulate an activity and when the board
+state change his currentState get notified, make request for pendingData,
+wait for data loaded and parametrize the view.
 
-display information and manage view
+exemple :
 
+BOARDState.AUTHENTIFICATION enter state : TryConnect  =>  notifyObserver();
 
-how :
+ControlerMainActivity : isNotified
 
-
-__I with differents machines states : 
-
-state of the application (AUTHENTIFICATION, WIFI, ...)
-The view can modify the state of one/some machine state
-(when click event on button => AUTENTIFICATION.setState(TryConnect) )
-
-
-__II with a controler for an activity :
-
-the controler can subscribe machine state, when a state is reached
-it look if it has work to do :
-
-AUTHENTIFICATION enter state : TryConnect
-
-=> display a loading component on the managed activity
+=> display a loading component on the main activity
 
 => get boolean
 
-=> wait for data ready inside the downloadedData and make stuff on machine state if success/fail
+=> if(boolean == false) not connected : retry ?  else :
+
+=> undisplay the loading component on the main activity
+
+=> BOARDState.Display enter state : MY_ROOM_ACTIVITY
+
 
 
 

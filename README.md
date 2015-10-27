@@ -58,13 +58,13 @@ PACKAGE : MIDDLE END
 
 1 Util : signature, MacAddrSignature, Device
 
-2 RetrieveData : BooleanData
+2 RetrieveData : PendingData
 
 3 Network : DownloadData 
 
 4 RetrieveData : RoomData 
 
-5 Network : Request, BackendTask
+5 Network : Request, PendingDataProvider
 
 PACKAGE : FRONT END 
 

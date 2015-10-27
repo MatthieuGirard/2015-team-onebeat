@@ -17,7 +17,7 @@ Request(encapsulated JSON) can retrieve data from backend : Boolean/ User/ Rooms
 The middle end instantly provide the data in pending mode (encapsulate). 
 
 When isLoaded() become true the data can be build by the class decorating the data 
-(DownloadData).
+(PendingData).
 
 
 # front end 
@@ -40,7 +40,7 @@ The view can modify the state of one/some machine state
 
 __II with a controler for an activity :
 
-the controler only observe machine state, when a state is reached
+the controler can subscribe machine state, when a state is reached
 it look if it has work to do :
 
 AUTHENTIFICATION enter state : TryConnect

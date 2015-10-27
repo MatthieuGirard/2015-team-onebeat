@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.PendingData;
+
 /**
  * Created by hugo on 25.10.2015.
  *
@@ -14,13 +16,13 @@ import java.util.Set;
  * id : identifier of the room
  * lastUpdate : Date representing the last modification process executed by the endhost
  * when the instance was provided(end host : add/remove => update related date).
- * List<DownloadData<MusicData>> related_musics : playlist of the room with a getBuildable()
+ * List<PendingData<MusicData>> related_musics : playlist of the room with a getBuildable()
  * than return only music with a buildable loaded instance.
- * Set<DownloadData<User>> participants : related users
+ * Set<PendingData<User>> participants : related users
  *
- * DownloadData :
- * decorate data and provide isLoaded(); method to indicate when the data can be provide.
- * see Network.DownloadData class for more info
+ * PendingData :
+ * decorate data and provide isLoaded() method to indicate when the data can be build.
+ * see Network.PendingData class for more info
  *
  *
  */

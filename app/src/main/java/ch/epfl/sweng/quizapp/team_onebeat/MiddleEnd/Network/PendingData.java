@@ -1,4 +1,4 @@
-package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData;
+package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network;
 
 import android.os.AsyncTask;
 
@@ -15,13 +15,13 @@ import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Parser.Parser;
  *
  *  use case :
  *  it's a simply builder that's become buildable
- *  when load(Data t) has already parametrized the instance.
- *  it's used to return immédiatly data that will be available
+ *  when the data is downloaded.
+ *  it's used to return immediatly data that will be available
  *  in the future.
  *
  *  how :
- *  using backendTask to make request and parametrize the
- *  Download in a background thread.
+ *  extending from async task to make request and parametrize the
+ *  Downloaded data in a T instance.
  *
  */
 public class PendingData<T>  extends AsyncTask<Message, Void, T> {

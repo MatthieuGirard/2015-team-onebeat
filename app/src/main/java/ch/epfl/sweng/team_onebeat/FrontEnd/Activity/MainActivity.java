@@ -5,6 +5,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import ch.epfl.sweng.team_onebeat.Exceptions.DisplayNotImplementedException;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.StaticMachine;
+import ch.epfl.sweng.team_onebeat.R;
+
+/*
+    display the authentification with spotify
+
+ */
+
+
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -36,6 +47,35 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+    public void display(StaticMachine.ConnectionState state) throws DisplayNotImplementedException {
+
+            switch(  StaticMachine.ConnectionState.values()[ state.ordinal() ]  ){
+
+                case OFF :
+                    // TODO : display spotify field for connection
+                    /* when the user click to connect update connection state :
+                    StaticMachine.update(StaticMachine.Type.CONNECTION,
+                            State.Factory.provide(StaticMachine.ConnectionState.TRY_CONNECT);
+                    */
+                    break;
+
+
+                case TRY_CONNECT:
+                    // TODO : pending mode (loading component or blank layout)
+
+                    break;
+
+                case CONNECTED:
+                    break;
+                default: throw new DisplayNotImplementedException();
+
+
+            }
+        }
+
 
 
 

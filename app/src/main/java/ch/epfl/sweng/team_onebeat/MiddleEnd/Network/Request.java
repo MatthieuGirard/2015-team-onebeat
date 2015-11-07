@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.quizapp.team_onebeat.Util.Signature;
 
 /**
  * Created by hugo on 25.10.2015.
@@ -30,42 +29,46 @@ public class Request extends Message {
     }
 
 
-    //______________________________________ STATIC FACTORY
+    public static class Factory {
 
 
-    public static Request existUser( Signature signature ) throws JSONException{
+    public static Request existUser( int signature ) throws JSONException{
         String message = "{\n"
                 + "\"request\": \"" + Available.EXIST_USER.toString() +"\",\n"
-                + "\"macAddress\": \"" + signature.value().getString("macAddress") + "\"\n"
+                + "\"signature\": \"" + signature + "\"\n"
                 + "}\n";
 
         return new Request( new JSONObject(message), Available.EXIST_USER);
     }
 
 
-    public static Request subscribe(Signature signature, String pseudo) throws JSONException{
+    public static Request subscribe(int signature, String pseudo) throws JSONException{
         String message= "{\n"
                 + "\"request\": \"" + Available.SUBSCRIPTION.toString() +"\",\n"
-                + "\"macAddress\": \"" + signature.value().getString("macAddress") + "\",\n"
+                + "\"signature\": \"" + signature + "\",\n"
                 + "\"pseudo\": \""+pseudo+"\"\n"
                 + "}\n";
         return new Request(new JSONObject(message), Available.SUBSCRIPTION);
     }
 
-    public static Request connect(Signature signature) throws JSONException{
+    public static Request connect(int signature) throws JSONException{
 
         String message= "{\n"
                 + "\"request\": \"" + Available.CONNECTION.toString() +"\",\n"
-                + "\"macAddress\": \"" + signature.value().getString("macAddress") + "\"\n"
+                + "\"macAddress\": \"" + signature + "\"\n"
                 + "}\n";
 
 
         return  new Request(new JSONObject(message), Available.CONNECTION);
     }
 
-    @Override
+
+
+    }
+
+
     public List<Message> historyTracker(){
-        return new ArrayList<>(messageTracker);
+        return new ArrayList<>(historyTracker);
     }
 
     @Override

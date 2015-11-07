@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.PendingData;
+import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.PendingData;
 
 /**
  * Created by hugo on 25.10.2015.

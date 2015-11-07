@@ -4,8 +4,8 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 
-import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.NotImplementedException;
-import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.RetrieveData.BooleanData;
+import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
+import ch.epfl.sweng.team_onebeat.MiddleEnd.RetrieveData.BooleanData;
 
 /**
  * Created by hugo on 25.10.2015.

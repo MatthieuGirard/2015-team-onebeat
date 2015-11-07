@@ -1,19 +1,15 @@
-package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network;
+package ch.epfl.sweng.team_onebeat.MiddleEnd.Network;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
 
-import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.NotImplementedException;
-import ch.epfl.sweng.quizapp.team_onebeat.Util.Signature;
 
 /**
  * Created by hugo on 23.10.2015.
  *
- * Message encapsulate a JSON Message, a static history tracker is made
- * to keep track of all Messages instantiate
+ * Message encapsulates a JSON Message
  *
  */
 public class Message {
@@ -22,25 +18,16 @@ public class Message {
 
 
     private final JSONObject message;
-    public static List<Message> messageTracker = new ArrayList<>();
-
 
 
     public Message(JSONObject message) throws JSONException {
         this.message = message;
-        messageTracker.add(this);
     }
 
 
 
     public JSONObject getMessage(){
         return message;
-    }
-
-
-
-    public List<Message> historyTracker(){
-        return new ArrayList<>(messageTracker);
     }
 
 

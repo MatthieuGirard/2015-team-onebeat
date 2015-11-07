@@ -1,9 +1,5 @@
 package ch.epfl.sweng.team_onebeat.MiddleEnd.RetrieveData;
 
-import java.util.Observable;
-
-import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
-
 /**
  * Created by hugo on 24.10.2015.
  *

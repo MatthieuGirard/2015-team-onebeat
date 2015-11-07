@@ -15,42 +15,28 @@ import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
 /**
  * Created by hugo on 26.10.2015.
  *
- * StateBoard contains different board (CONNECTION, DISPLAY [,..])
- * and keep track about the current state on each board.
- *
- * Observer can watch a board to obtain a callback when his current state change.
- *
+ * provide setter to update the currentState of the application.
+ * can notify observers when the current state is modified
  *
  *
  */
 
 
-public class MachineState {
-
-    // history by type
-    private static Map<WorkType, LinkedList<State>> historyTracker = new HashMap<>();
-
-    // available board
-    public enum WorkType {CONNECTION, ACTIVITY}
+public class MachineState extends Observable{
 
 
-    // CONNECTION
-    public enum ConnectionState {INITIAL, SIGNATURE_AVAILABLE, SIGNATURE_EXISTING,
-        TRY_CONNECT, TRY_SUBSCRIBE, CONNECTED
-    }
-
-    // ACTIVITY
-    public enum ActivityState {MAIN_ACTIVITY}
+    // tracker
+    private LinkedList<State> historyTracker = new LinkedList<>();
 
 
 
 
-    private WorkType type;
+    private StaticMachine.Type type;
 
     private State currentState;
 
 
-    public MachineState( WorkType type, State initialState ){
+    public MachineState( StaticMachine.Type type, State initialState ){
 
         this.type = type;
         this.currentState = initialState;
@@ -61,13 +47,21 @@ public class MachineState {
 
     public void setState(State state){
 
-        historyTracker.get(this.type).add(state);
+        historyTracker.push(state);
 
         currentState = state;
         this.notifyAll();
 
     }
 
+
+    public StaticMachine.Type getType(){
+        return type;
+    }
+
+    public State getState(){
+        return currentState;
+    }
 
 
     @Override
@@ -94,26 +88,13 @@ public class MachineState {
 
 
 
-    public static List<State> getHistory(WorkType type){
-        if(historyTracker.keySet().contains(type)){
-            return new ArrayList(historyTracker.get(type));
-        }
-        else {
-            return new ArrayList();
-        }
+    public List<State> getHistory(){
 
+        return new LinkedList<>(historyTracker);
 
     }
 
-    public static Map<WorkType,State> snapshot(){
-        Map<WorkType, State> snap = new HashMap<>();
 
-        for(WorkType workType : historyTracker.keySet()){
-            snap.put(workType, historyTracker.get(workType).peek());
-        }
-
-        return snap;
-    }
 
 
 

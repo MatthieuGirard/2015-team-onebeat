@@ -9,9 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+*/
 
-public class MainActivity extends AppCompatActivity {
+import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 
+public class MainActivity2 /* extends AppCompatActivity  */ {
+/*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,26 +61,23 @@ public class MainActivity extends AppCompatActivity {
 // Copyright (c) 2014 Spotify. All rights reserved.
 
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
+    /*
+    import com.spotify.sdk.android.authentication.AuthenticationClient;
+    import com.spotify.sdk.android.authentication.AuthenticationRequest;
+    import com.spotify.sdk.android.authentication.AuthenticationResponse;
+    import com.spotify.sdk.android.player.Config;
+    import com.spotify.sdk.android.player.ConnectionStateCallback;
+    import com.spotify.sdk.android.player.Player;
+    import com.spotify.sdk.android.player.PlayerNotificationCallback;
+    import com.spotify.sdk.android.player.PlayerState;
+    import com.spotify.sdk.android.player.Spotify;
 
-import com.spotify.sdk.android.authentication.AuthenticationClient;
-import com.spotify.sdk.android.authentication.AuthenticationRequest;
-import com.spotify.sdk.android.authentication.AuthenticationResponse;
-import com.spotify.sdk.android.player.Config;
-import com.spotify.sdk.android.player.ConnectionStateCallback;
-import com.spotify.sdk.android.player.Player;
-import com.spotify.sdk.android.player.PlayerNotificationCallback;
-import com.spotify.sdk.android.player.PlayerState;
-import com.spotify.sdk.android.player.Spotify;
-
-// TODO : no activity
-
-public class MainActivity extends Activity implements
-        PlayerNotificationCallback, ConnectionStateCallback {
-
+    // TODO : no activity
+    */
+    public class MainActivity
+/* extends Activity implements
+        PlayerNotificationCallback, ConnectionStateCallback */ {
+/*
     // Replace with your client ID
     private static final String CLIENT_ID = "d4a2f6a48e794a8a9197badc911662e5";
     // Replace with your redirect URI
@@ -87,6 +88,7 @@ public class MainActivity extends Activity implements
     private static final int REQUEST_CODE = 1337;
 
     private Player mPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +102,7 @@ public class MainActivity extends Activity implements
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -177,5 +180,7 @@ public class MainActivity extends Activity implements
         // VERY IMPORTANT! This must always be called or else you will leak resources
         Spotify.destroyPlayer(this);
         super.onDestroy();
+    }
+*/
     }
 }

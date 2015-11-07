@@ -1,28 +1,21 @@
-package ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network;
+package ch.epfl.sweng.team_onebeat.MiddleEnd.Network;
 
 import android.os.AsyncTask;
 
-import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.BuildableException;
-import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.NotImplementedException;
-import ch.epfl.sweng.quizapp.team_onebeat.Exceptions.TimeExceededException;
-import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.Message;
-import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.NetworkProvider;
-import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.Request;
-import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Parser.Parser;
+import ch.epfl.sweng.team_onebeat.Exceptions.BuildableException;
+import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
+import ch.epfl.sweng.team_onebeat.Exceptions.TimeExceededException;
+import ch.epfl.sweng.team_onebeat.MiddleEnd.Parser.Parser;
 
 /**
  * Created by hugo on 26.10.2015.
  *
- *  use case :
- *  it's a simply builder that's become buildable
- *  when the data is downloaded.
- *  it's used to return immediatly data that will be available
- *  in the future.
+ *  data in pending mode (currently coming from backend)
+ *  serveurUrl + networkProvider + request => JSONMessage(the response)
+ *  parser<T> : response => T
  *
- *  how :
- *  extending from async task to make request and parametrize the
- *  Downloaded data in a T instance.
- *
+ *  the class load in a backgorund thread the request and put
+ *  isLoaded to true when the "T instance" as been retrieve
  */
 public class PendingData<T>  extends AsyncTask<Message, Void, T> {
 

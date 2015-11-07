@@ -50,7 +50,8 @@ public class MachineState extends Observable{
         historyTracker.push(state);
 
         currentState = state;
-        this.notifyAll();
+        this.setChanged();
+        this.notifyObservers();
 
     }
 

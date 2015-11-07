@@ -1,5 +1,7 @@
 package ch.epfl.sweng.team_onebeat.FrontEnd.Controler;
 
+import java.util.Observer;
+
 /**
  * Created by hugo on 07.11.15.
  *
@@ -47,20 +49,15 @@ public class StaticMachine {
 
 
 
-
-    public static void update(StaticMachine.Type type, State state) {
-
+    public static MachineState get(StaticMachine.Type type){
         switch (type) {
             case CONNECTION:
-                connectionMachine.setState(state);
-                break;
+                return connectionMachine;
             case ACTIVITY:
-                activityMachine.setState(state);
-                break;
+                return activityMachine;
             default:
                 throw new IllegalArgumentException();
         }
-
     }
 
 

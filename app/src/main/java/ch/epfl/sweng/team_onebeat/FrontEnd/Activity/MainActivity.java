@@ -1,13 +1,12 @@
 package ch.epfl.sweng.team_onebeat.FrontEnd.Activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import ch.epfl.sweng.team_onebeat.Exceptions.DisplayNotImplementedException;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.StaticMachine;
-import ch.epfl.sweng.team_onebeat.R;
+
 
 /*
     display the authentification with spotify

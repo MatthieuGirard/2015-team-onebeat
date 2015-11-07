@@ -3,21 +3,24 @@ package ch.epfl.sweng.team_onebeat.MiddleEnd.Network;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
- * Created by hugo on 23.10.2015.
+ * Created by hugo on 25.10.2015.
  *
- * Message encapsulates a JSON Message
- *
+ * Request create message needed to communicate with the backend.
+ * it's constructor is private, request are created by a static factory builder.
  */
+
+
 public class Message {
 
 
 
+    private JSONObject message;
 
-    private final JSONObject message;
 
 
     public Message(JSONObject message) throws JSONException {
@@ -26,34 +29,29 @@ public class Message {
 
 
 
-    public JSONObject getMessage(){
-        return message;
-    }
-
-
-
-
-    @Override
-    public boolean equals(Object that){
-
-        if(that instanceof Message){
-            return ((Message)that).message.toString() == this.message.toString();
-        }
-        throw new NotImplementedException();
-
-    }
-
-    @Override
-    public int hashCode(){
-        return message.toString().hashCode();
-    }
-
-
     @Override
     public String toString(){
         return message.toString();
     }
 
 
-}
+    @Override
+    public boolean equals( Object that ){
 
+        if( !(that instanceof Message) ) {
+            return false;
+        }
+
+        return that.toString() == this.toString();
+
+    }
+
+
+    @Override
+    public int hashCode(){
+        return this.toString().hashCode();
+    }
+
+
+
+}

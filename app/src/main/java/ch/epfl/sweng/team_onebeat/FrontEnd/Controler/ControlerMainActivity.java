@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import java.net.CookieHandler;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -21,6 +22,7 @@ public class ControlerMainActivity implements Observer {
 
 
     private MainActivity activity;
+    LinkedList<Thread> pool = new LinkedList<>();
 
 
     public ControlerMainActivity(MainActivity activity)
@@ -29,10 +31,22 @@ public class ControlerMainActivity implements Observer {
     }
 
 
+    private void emptyPool(){
+
+        for(Thread d : pool){
+            d.interrupt(); // TODO verify
+        }
+
+        pool.clear();
+
+    }
+
     // machine state is updated
     @Override
     public void update(Observable observable, Object data) {
 
+        // each call to update invalidate previous threads
+        emptyPool();
 
         if(observable instanceof MachineState){
             Log.d("mainAct", "controler is updated because a machineState has changed his state");

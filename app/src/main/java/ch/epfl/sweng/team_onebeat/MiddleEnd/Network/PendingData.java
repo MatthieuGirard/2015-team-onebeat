@@ -20,23 +20,30 @@ import ch.epfl.sweng.team_onebeat.MiddleEnd.Parser.Parser;
 public class PendingData<T>  extends AsyncTask<Message, Void, T> {
 
 
+
     private final float TIME_REFRESH_WHEN_BLOCKING = 30;
 
 
+
     private float alreadyDownloaded = 0;
+
     private boolean loaded = false;
+
     private T instance = null;
+
+
 
 
     public PendingData(String serveurUrl,
                        NetworkProvider networkProvider,
-                       Request request,
+                       Message request,
                        Parser<T> parser
                        ){
 
         throw new NotImplementedException();
 
     }
+
 
 
 
@@ -87,5 +94,6 @@ public class PendingData<T>  extends AsyncTask<Message, Void, T> {
     public String toString(){
         return "download data";
     }
+
 
 }

@@ -1,5 +1,7 @@
 package ch.epfl.sweng.team_onebeat.FrontEnd.Controler;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,6 +50,7 @@ public class MachineState extends Observable{
     public void setState(State state){
 
         historyTracker.push(state);
+        Log.d("#MachineState", state.toString());
 
         currentState = state;
         this.setChanged();

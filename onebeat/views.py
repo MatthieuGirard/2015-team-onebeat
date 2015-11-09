@@ -8,8 +8,8 @@ def existUser(request):
 	return JsonResponse({'bool':'true'})
 
 def addUser(request):
-	received_json_data=json.loads(request.body.decode('utf-8'))
-	userId=received_json_data['userId']
-	name=received_json_data['name']
+	#received_json_data=json.loads(request.body.decode('utf-8'))
+	userId=request.POST.get['userId']
+	name=request.POST.get['name']
 	User.objects.create(userId=userId,name=name)
 	return JsonResponse({'added':'true', 'user':name})

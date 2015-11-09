@@ -7,5 +7,5 @@ def existUser(request):
 	return JsonResponse({'bool':'true'})
 
 def addUser(request):
-	User.objects.create(userId=12345,name="test")
-	return JsonResponse({'added':'true', 'userId':User.objects.get(userId=12345)})
+	User.objects.create(userId=12345,name='test')
+	return JsonResponse({'added':'true', 'user':'test'})

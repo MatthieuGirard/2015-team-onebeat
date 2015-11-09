@@ -18,3 +18,9 @@ def addUser(request):
 	name=received_json_data['name']
 	User.objects.create(userId=userId,name=name)
 	return JsonResponse({'added':'true', 'user':name})
+
+def getUser(request):
+	received_json_data=json.loads(request.GET['request'])
+	userId=received_json_data['userId']
+	user = User.objects.filter(userId=userId)
+	return JsonResponse({'userId':userId, 'user':name})

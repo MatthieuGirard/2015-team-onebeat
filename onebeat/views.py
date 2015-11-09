@@ -23,4 +23,4 @@ def getUser(request):
 	received_json_data=json.loads(request.GET['request'])
 	userId=received_json_data['userId']
 	user = User.objects.filter(userId=userId)
-	return JsonResponse({'userId':userId, 'user':name})
+	return JsonResponse({'userId':userId, 'user':user.name})

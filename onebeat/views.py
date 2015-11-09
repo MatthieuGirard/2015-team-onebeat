@@ -22,5 +22,5 @@ def addUser(request):
 def getUser(request):
 	received_json_data=json.loads(request.GET['request'])
 	userId=received_json_data['userId']
-	user = User.objects.get(userId=userId).
+	user = User.objects.get(userId=userId)
 	return JsonResponse({'userId':userId, 'user':user.name})

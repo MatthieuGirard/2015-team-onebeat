@@ -5,7 +5,10 @@ from .models import User
 
 # Create your views here.
 def existUser(request):
-	return JsonResponse({'bool':'true'})
+	userId=request.POST.get('userId',None)
+	if (User.objects.filter(userId=userId).exists())
+		return JsonResponse({'bool':'true'})
+	else return JsonResponse({'bool':'false'})
 
 def addUser(request):
 	#received_json_data=json.loads(request.body.decode('utf-8'))

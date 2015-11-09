@@ -1,6 +1,6 @@
 from django.db import models
 
-class Users(models.Model):
+class User(models.Model):
 	userId = models.IntegerField()
 	userId.primary_key = True
 	name = models.CharField(max_length=50)

@@ -9,7 +9,7 @@ def existUser(request):
 
 def addUser(request):
 	received_json_data=json.loads(request.body)
-	userId=received_json_data['userId']
-	name=received_json_data['name']
+	userId=request['userId']
+	name=request['name']
 	User.objects.create(userId=userId,name=name)
 	return JsonResponse({'added':'true', 'user':name})

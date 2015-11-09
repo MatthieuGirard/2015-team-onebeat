@@ -12,7 +12,7 @@ def existUser(request):
 		return JsonResponse({'bool':'false'})
 
 def addUser(request):
-	received_json_data=json.loads(request.POST.get('request'))
+	received_json_data=json.loads(request.POST.get('request').decode('utf-8'))
 	userId=received_json_data['userId']
 	name=received_json_data['name']
 	#userId=request.POST.get('userId',None)

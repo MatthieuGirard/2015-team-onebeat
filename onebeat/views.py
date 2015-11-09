@@ -14,7 +14,7 @@ def existUser(request):
 def addUser(request):
 	received_json_data=json.loads(request.POST['request'])
 	userId=received_json_data['userId']
-	ame=received_json_data['name']
+	name=received_json_data['name']
 	#userId=request.POST.get('userId',None)
 	#name=request.POST.get('name',None)
 	User.objects.create(userId=userId,name=name)

@@ -2,6 +2,17 @@ package ch.epfl.sweng.team_onebeat.MiddleEnd.Network;
 
 import android.os.AsyncTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.ParseException;
+
+import ch.epfl.sweng.team_onebeat.Exceptions.BackendCommunicationException;
 import ch.epfl.sweng.team_onebeat.Exceptions.BuildableException;
 import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
 import ch.epfl.sweng.team_onebeat.Exceptions.TimeExceededException;
@@ -15,85 +26,207 @@ import ch.epfl.sweng.team_onebeat.MiddleEnd.Parser.Parser;
  *  parser<T> : response => T
  *
  *  the class load in a backgorund thread the request and put
- *  isLoaded to true when the "T instance" as been retrieve
+ *  the downloadState to LOADED when the "T instance" as been retrieve
  */
-public class PendingData<T>  extends AsyncTask<Message, Void, T> {
+public class PendingData<T> {
 
 
 
     private final float TIME_REFRESH_WHEN_BLOCKING = 30;
+    private final static int HTTP_SUCCESS_START = 200;
+    private final static int HTTP_SUCCESS_END = 299;
+
+    public enum DownloadState {PENDING, LOADED, ERROR }
 
 
-
-    private float alreadyDownloaded = 0;
-
-    private boolean loaded = false;
+    private DownloadState downloadState;
 
     private T instance = null;
 
+    private Thread download;
 
 
 
-    public PendingData(String serveurUrl,
+    // to simulate downloads in test
+
+    public PendingData(T instance, final int threshold){
+
+    this.instance = instance;
+    this.downloadState = DownloadState.PENDING;
+
+    download = new Thread(new Runnable() {
+
+        @Override
+        public void run() {
+
+            try {
+                wait(threshold);
+                downloadState = DownloadState.LOADED;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    });
+
+
+    }
+
+
+    // real constructor
+
+    public PendingData(URL url,
                        NetworkProvider networkProvider,
                        Message request,
                        Parser<T> parser
                        ){
 
-        throw new NotImplementedException();
+
+        this.downloadState = DownloadState.PENDING;
+
+        this.download = new Thread(new Download(url,networkProvider, request,parser));
+        this.download.run();
 
     }
 
 
 
 
-    @Override
-    protected T doInBackground(Message... params) {
-        // request => JSON
-        // JSON => T
-        // TODO : add % already loaded
-        // TODO : how to throw BuildableException when parser fail or data corrupted ?
-        // TODO : if threshold > 0 and exceeded : stop and launch TimeExceededException
-        // setLoaded to true
-        throw new NotImplementedException();
+    public DownloadState downloadState() {
+        return downloadState;
     }
 
 
 
-    public boolean isLoaded() {
-        return loaded;
+    public void blockAtMost(int threshold){
+
+        float totalTime = 0;
+
+
+        while(downloadState() == DownloadState.PENDING){
+
+
+            if(totalTime > threshold){
+                download.interrupt();
+                downloadState = DownloadState.ERROR;
+            }
+
+            try {
+                wait((long) TIME_REFRESH_WHEN_BLOCKING);
+            } catch (InterruptedException e)         {
+            }
+
+
+            totalTime += TIME_REFRESH_WHEN_BLOCKING;
+
+        }
+
+
     }
 
 
-
-    public T getInstance() throws BuildableException {
+    public T get() throws BuildableException {
         if(instance == null) throw new BuildableException();
         return instance;
     }
 
-
-    public T waitAndGet(float threshold) throws TimeExceededException {
-
-        float totalTime = 0;
-        while(!isLoaded()){
-            if(totalTime > threshold){
-                throw new TimeExceededException();
-            }
-            try {
-                wait((long) TIME_REFRESH_WHEN_BLOCKING);
-            } catch (InterruptedException e)         {
-                assert false : "builder doesn't has to be interupted";
-            }
-            totalTime += TIME_REFRESH_WHEN_BLOCKING;
-        }
-    return  instance;
-    }
 
 
     @Override
     public String toString(){
         return "download data";
     }
+
+
+
+
+
+
+
+
+
+
+
+
+    private class Download implements Runnable {
+
+
+        private URL url;
+        private NetworkProvider networkProvider;
+        private Message request;
+        private Parser<T> parser;
+
+
+        public Download(URL url, NetworkProvider networkProvider, Message request, Parser parser){
+            this.url = url;
+            this.networkProvider = networkProvider;
+            this.request = request;
+            this.parser = parser;
+        }
+
+
+        private String fetchContent(HttpURLConnection conn) throws IOException {
+            StringBuilder out = new StringBuilder();
+            BufferedReader reader = null;
+
+            try {
+
+                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    out.append(line);
+                }
+
+                return out.toString();
+
+            } finally {
+                if (reader != null) {
+                    reader.close();
+                }
+            }
+
+        }
+
+
+        @Override
+        public void run() {
+
+            NetworkProvider networkProvider = new DefaultNetworkProvider();
+
+            try {
+
+                HttpURLConnection conn = networkProvider.getConnection(url);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                conn.connect();
+
+                int response = conn.getResponseCode();
+                if (response < HTTP_SUCCESS_START || response > HTTP_SUCCESS_END) {
+                    downloadState = DownloadState.ERROR;
+                }
+                else {
+
+                    // instance is ready
+                    downloadState = DownloadState.LOADED;
+                    instance = parser.parse(new JSONObject(fetchContent(conn)));
+
+                }
+
+
+            } catch (IOException e) {
+                downloadState = DownloadState.ERROR;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                downloadState = DownloadState.ERROR;
+            }
+        }
+
+    }
+
+
 
 
 }

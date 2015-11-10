@@ -1,15 +1,8 @@
-package ch.epfl.sweng.quizapp.team_onebeat;
+package ch.epfl.sweng.team_onebeat;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import ch.epfl.sweng.quizapp.team_onebeat.FrontEnd.Activity.MainActivity;
-import ch.epfl.sweng.quizapp.team_onebeat.MiddleEnd.Network.Request;
-import ch.epfl.sweng.quizapp.team_onebeat.Util.Device;
-import ch.epfl.sweng.quizapp.team_onebeat.Util.MacAddrSignature;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Activity.MainActivity;
 
 
 public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> {
@@ -19,10 +12,17 @@ public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> 
         super(MainActivity.class);
     }
 
+
+
+/*
+    public RequestTest() {
+        super(MainActivity.class);
+    }
+
     public void testSubscribeMessage() throws JSONException{
 
         String subscribe= "{\n"
-                + "\"request\": \"" + Request.Available.SUBSCRIPTION.toString() +"\",\n"
+                + "\"request\": \"" + Message .SUBSCRIPTION.toString() +"\",\n"
                 + "\"macAddress\": \"" + new Device(this.getActivity()).macAddress()+ "\",\n"
                 + "\"pseudo\": \"hugo\"\n"
                 + "}\n";
@@ -67,5 +67,6 @@ public class RequestTest extends ActivityInstrumentationTestCase2<MainActivity> 
     }
 
 
+*/
 
 }

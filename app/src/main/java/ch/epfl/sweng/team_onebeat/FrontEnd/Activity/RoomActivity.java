@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import ch.epfl.sweng.team_onebeat.Exceptions.DisplayNotImplementedException;
+import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.StaticMachine;
 import ch.epfl.sweng.team_onebeat.R;
 
@@ -33,7 +33,7 @@ public class RoomActivity extends AppCompatActivity {
 
 
 
-    public void display(StaticMachine.RoomState state) throws DisplayNotImplementedException {
+    public void display(StaticMachine.RoomState state)  {
 
         switch( state ){
             case INITIAL :
@@ -64,7 +64,7 @@ public class RoomActivity extends AppCompatActivity {
                         */
                 break;
 
-            default: throw new DisplayNotImplementedException();
+            default: throw new NotImplementedException();
 
 
         }

@@ -1,40 +1,12 @@
 package ch.epfl.sweng.team_onebeat.MiddleEnd.Network;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by hugo on 07.11.15.
  */
 public class MessageFactory {
-
-
-    private static LinkedList<Message> historyTracker = new LinkedList<>();
-
-
-
-    public List<Message> historyTracker(){
-        return new ArrayList<>(historyTracker);
-    }
-
-
-    private static Message trackAndReturn(Message message){
-        historyTracker.push(message);
-        Log.d("#Message", message.toString());
-
-        return message;
-    }
-
-
-    public static LinkedList<Message> historyTacker(){
-        return new LinkedList<>(historyTracker);
-    }
 
 
     public static class Frontend {
@@ -45,7 +17,7 @@ public class MessageFactory {
                     + "\"request\": \" exist-user \",\n"
                     + "\"signature\": \"" + signature + "\"\n"
                     + "}\n";
-            return trackAndReturn(new Message( new JSONObject(message) ));
+            return new Message( new JSONObject(message));
         }
 
 
@@ -58,7 +30,7 @@ public class MessageFactory {
                     + "\"signature\": \"" + signature + "\",\n"
                     + "\"pseudo\": \""+pseudo+"\"\n"
                     + "}\n";
-            return trackAndReturn(new Message(new JSONObject(message)));
+            return new Message(new JSONObject(message));
         }
 
 
@@ -73,7 +45,21 @@ public class MessageFactory {
                     + "}\n";
 
 
-            return trackAndReturn(new Message(new JSONObject(message)));
+            return new Message(new JSONObject(message));
+        }
+
+
+        public static Message spotifyConnect(String login, int password) throws JSONException{
+
+            // TODO
+            String message= "{\n"
+                    + "\"request\": \"spotify-connect\",\n"
+                    + "\"login\": \"" + login + "\"\n"
+                    + "\"password\": \"" + password + "\"\n"
+                    + "}\n";
+
+
+            return new Message(new JSONObject(message));
         }
 
 
@@ -94,7 +80,7 @@ public class MessageFactory {
             String message = "{\n"
                     + "\"boolean\": \" " + bool + " \",\n"
                     + "}\n";
-            return trackAndReturn(new Message( new JSONObject(message) ));
+            return new Message( new JSONObject(message) );
         }
 
 

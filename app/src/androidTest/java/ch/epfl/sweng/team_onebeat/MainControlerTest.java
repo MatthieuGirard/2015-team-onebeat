@@ -1,83 +1,155 @@
 package ch.epfl.sweng.team_onebeat;
 
-import android.test.ActivityInstrumentationTestCase2;
+import android.support.test.runner.AndroidJUnit4;
+import android.test.suitebuilder.annotation.LargeTest;
+
 
 import org.json.JSONException;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
-import java.util.LinkedList;
-
-import ch.epfl.sweng.team_onebeat.FrontEnd.Activity.MainActivity;
+import ch.epfl.sweng.team_onebeat.Exceptions.BackendCommunicationException;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.Controler;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.ControlerMainActivity;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.MachineState;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.State;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.StaticMachine;
 import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.Message;
 import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.MessageFactory;
-import ch.epfl.sweng.team_onebeat.Util.BackendSimulator;
+import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.PendingData;
+import ch.epfl.sweng.team_onebeat.MiddleEnd.Parser.Parser;
+import ch.epfl.sweng.team_onebeat.MiddleEnd.RetrieveData.BooleanData;
+
+import static junit.framework.Assert.assertEquals;
+
 
 /**
  * Created by hugo on 07.11.15.
  */
-public class MainControlerTest extends ActivityInstrumentationTestCase2<MainActivity>  {
+@RunWith(AndroidJUnit4.class)
+@LargeTest
+public class MainControlerTest  {
 
 
 
     private ControlerMainActivity controler;
 
 
-    public MainControlerTest(Class<MainActivity> activityClass) {
-        super(activityClass);
+    @Before
+    public void start() {
+        controler = Mockito.mock(ControlerMainActivity.class);
     }
+
+
+    private <T> void paramBackendDataResponse(PendingData<T> pendingData) {
+
+        try {
+            Mockito.doReturn(pendingData).when(controler).pendingData(
+                    Controler.BackendService.SPOTIFY_CONNECTION, //useless
+                    Mockito.any(Message.class),
+                    Mockito.any(Parser.class)
+            );
+        } catch (BackendCommunicationException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    @Test
+    public void enterTryConnect() throws JSONException {
+
+        StaticMachine.get(StaticMachine.Type.CONNECTION).setState(
+                State.Factory.provide(StaticMachine.ConnectionState.TRY_CONNECT)
+        );
+
+
+        assertEquals(
+                "a request to spotify need to be sent",
+                controler.requestTracker().pop(),
+                MessageFactory.Frontend.spotifyConnect("hugo",1234)
+        );
+
+    }
+
+
+    @Test
+    public void spotifyConnectSuccess() throws JSONException, InterruptedException {
+
+        StaticMachine.get(StaticMachine.Type.CONNECTION).setState(
+                State.Factory.provide(StaticMachine.ConnectionState.TRY_CONNECT)
+        );
+
+        // backend return true when a request for authentification is made
+        // ( controler retrieve a pending data<Boolean> true after 1000ms)
+        paramBackendDataResponse(new PendingData<BooleanData>(new BooleanData(true), 1000));
+
+        assertEquals(
+                "a request to spotify need to be sent",
+                controler.requestTracker().pop(),
+                MessageFactory.Frontend.spotifyConnect("hugo", 1234)
+        );
+
+        // always in try state (1000ms delay)
+        assertEquals(
+                "the spotify answer take 1s in the test and connection is made before",
+                StaticMachine.get(StaticMachine.Type.CONNECTION).getState(),
+                State.Factory.provide(StaticMachine.ConnectionState.TRY_CONNECT)
+        );
+
+        wait(1500);
+
+        // spotify say connected : machine state go to CONNECTED
+        assertEquals(
+                "after receive spotify answer machine : CONNECTION need to go in CONNECTED state",
+                StaticMachine.get(StaticMachine.Type.CONNECTION).getState(),
+                State.Factory.provide(StaticMachine.ConnectionState.CONNECTED)
+        );
+
+
+    }
+
 
 
 
     @Test
-    public void firstConnection(){
+    public void spotifyConnectFailure() throws JSONException, InterruptedException {
 
+        StaticMachine.get(StaticMachine.Type.CONNECTION).setState(
+                State.Factory.provide(StaticMachine.ConnectionState.TRY_CONNECT)
+        );
 
-        MachineState machine = StaticMachine.get(StaticMachine.Type.CONNECTION);
-
-
-
-        this.getActivity().findViewById(R.id.button).performClick();
+        // backend return true when a request for authentification is made
+        // ( controler retrieve a pending data<Boolean> true after 1000ms)
+        paramBackendDataResponse(new PendingData<BooleanData>(new BooleanData(false), 1000));
 
         assertEquals(
-                "after clicking on button, connection state need to be in try_connect state",
+                "a request to spotify need to be sent",
+                controler.requestTracker().pop(),
+                MessageFactory.Frontend.spotifyConnect("hugo", 1234)
+        );
+
+        // always in try state (1000ms delay)
+        assertEquals(
+                "the spotify answer take 1s in the test and connection is made before",
                 StaticMachine.get(StaticMachine.Type.CONNECTION).getState(),
-                StaticMachine.ConnectionState.TRY_CONNECT
+                State.Factory.provide(StaticMachine.ConnectionState.TRY_CONNECT)
+        );
+
+        wait(1500);
+
+        // spotify say connected : machine state go to CONNECTED
+        assertEquals(
+                "after receive spotify answer machine : CONNECTION need to go in OFF state",
+                StaticMachine.get(StaticMachine.Type.CONNECTION).getState(),
+                State.Factory.provide(StaticMachine.ConnectionState.OFF)
         );
 
 
-
-        LinkedList<Message> history = MessageFactory.historyTacker();
-        try {
-
-            assertEquals(
-                    " message : 3 in try_connect mode is a connect request",
-                    history.pop(),
-                    MessageFactory.Frontend.connect(1234));
-
-            assertEquals(
-                    " message : 2 in try_connect mode is a subscribe request",
-                    history.pop(),
-                    MessageFactory.Frontend.subscribe(1234,"hugo"));
-
-            assertEquals(
-                    "message : 3 in try_connect mode is a exist-user request",
-                    history.pop(),
-                    MessageFactory.Frontend.existUser(1234));
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        machine.setState(State.Factory.provide(StaticMachine.ConnectionState.CONNECTED));
-
-        // TODO : verify RoomActivity is started
-
     }
+
 
 
 

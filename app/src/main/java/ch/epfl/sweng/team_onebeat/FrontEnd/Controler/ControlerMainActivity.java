@@ -3,21 +3,27 @@ package ch.epfl.sweng.team_onebeat.FrontEnd.Controler;
 import android.content.Intent;
 import android.util.Log;
 
-import java.net.CookieHandler;
+import org.json.JSONException;
+
+import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.Observable;
-import java.util.Observer;
 
-import ch.epfl.sweng.team_onebeat.Exceptions.DisplayNotImplementedException;
+import ch.epfl.sweng.team_onebeat.Exceptions.BackendCommunicationException;
+import ch.epfl.sweng.team_onebeat.Exceptions.BuildableException;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Activity.MainActivity;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Activity.RoomActivity;
+import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.MessageFactory;
+import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.PendingData;
+import ch.epfl.sweng.team_onebeat.MiddleEnd.Parser.BooleanParser;
+import ch.epfl.sweng.team_onebeat.MiddleEnd.RetrieveData.BooleanData;
 
 /*
 observe machine state and when a state is modified, execute related code, ex :
 request stuff to the backend/spotify, set the view, modify state.
  */
 
-public class ControlerMainActivity implements Observer {
+public class ControlerMainActivity extends Controler {
 
 
 
@@ -25,8 +31,8 @@ public class ControlerMainActivity implements Observer {
     LinkedList<Thread> pool = new LinkedList<>();
 
 
-    public ControlerMainActivity(MainActivity activity)
-    {
+    public ControlerMainActivity(MainActivity activity)  {
+        super();
         this.activity = activity;
     }
 
@@ -34,12 +40,74 @@ public class ControlerMainActivity implements Observer {
     private void emptyPool(){
 
         for(Thread d : pool){
-            d.interrupt(); // TODO verify
+            d.interrupt();
         }
 
         pool.clear();
 
     }
+
+
+
+    private void tryConnectTask(){
+
+        // make running in background
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+
+
+                    // get a data in pending mode
+
+                    PendingData<BooleanData> pData = null;
+
+                    pData = pendingData(
+                            BackendService.SPOTIFY_CONNECTION,
+                            MessageFactory.Frontend.spotifyConnect("someone", 1234),
+                            new BooleanParser()
+                    );
+
+
+                    // block until the data is ready || timer > 2000 ms
+                    pData.blockAtMost(2000);
+
+                    // suppose spotify return boolean about user connection
+                    // TODO : spotifyUser
+                    if(pData.downloadState() == PendingData.DownloadState.LOADED) {
+
+                        BooleanData boolData = pData.get();
+
+                        // if user connected
+                        if (boolData.value() == true) {
+                            StaticMachine.get(StaticMachine.Type.CONNECTION)
+                                    .setState(State.Factory.provide(StaticMachine.ConnectionState.CONNECTED));
+                        } else { // else go back to off connected state
+                            StaticMachine.get(StaticMachine.Type.CONNECTION)
+                                    .setState(State.Factory.provide(StaticMachine.ConnectionState.OFF));
+                        }
+
+                    }
+
+
+
+            } catch (BackendCommunicationException | BuildableException | JSONException e1) {
+                e1.printStackTrace();
+            }
+
+
+
+
+            }
+        });
+
+        pool.add(t);
+        t.start();
+    }
+
+
 
     // machine state is updated
     @Override
@@ -49,68 +117,37 @@ public class ControlerMainActivity implements Observer {
         emptyPool();
 
         if(observable instanceof MachineState){
-            Log.d("mainAct", "controler is updated because a machineState has changed his state");
+
+            Log.d("#controler", "one machine state observed has changed : ");
 
             MachineState ms = (MachineState) observable;
 
             if(ms.getType() == StaticMachine.Type.CONNECTION){
 
-                try {
+
                     switch(  StaticMachine.ConnectionState.values()[ ms.getState().value() ]  ){
-                        case OFF :
+
+                        case OFF : Log.d("#controler", "connectionState is off, apply commande");
+
                             activity.display(StaticMachine.ConnectionState.OFF);
                             break;
-                        case TRY_CONNECT:
 
-                            Log.d("mainAct", "controler see the machine state in : try_connect state : " +
-                                    "apply the try_connect code to control view");
+
+                        case TRY_CONNECT: Log.d("#controler", "connectionState is try_connect, apply commande");
 
                             // put display in pending
-                            activity.display(StaticMachine.ConnectionState.TRY_CONNECT);
-
-                            // TODO : create request with the activity text field
-                            // TODO : get a pendingData<SpotifyUser>
-                            // TODO : make a thread :
-                            // run until data ready
-                            // put Machine state : connection to CONNECTED
-
-                            // TODO : delete (wait 2s)
-                            Thread t = new Thread(
-                                    new Runnable(){
-
-                                        @Override
-                                        public void run() {
-
-                                            try{
-                                                Thread.sleep(1000);
-                                                //put machine state to connected
-                                                StaticMachine.get(StaticMachine.Type.CONNECTION)
-                                                        .setState(State.Factory.provide(StaticMachine.ConnectionState.CONNECTED));
-
-                                            }catch(InterruptedException e){}
-
-
-                                        }
-                                    }
-                            );
-
-                            t.start();
-
-
-                            //-----------------------
+                            activity.display(StaticMachine.ConnectionState.TRY_CONNECT); //loadingView
+                            tryConnectTask();
                             break;
-                        case CONNECTED:
-                            Log.d("mainAct", "controler see the machine state in : connected state : " +
-                                    "apply the connected code to control view");
 
-                           Intent intent2 = new Intent(activity, RoomActivity.class);
-                           activity.startActivity(intent2);
+
+                        case CONNECTED:  Log.d("#controler", "connectionState is connected, apply commande");
+
+                            Intent intent2 = new Intent(activity, RoomActivity.class);
+                            activity.startActivity(intent2);
                             break;
 
                     }
-                } catch (DisplayNotImplementedException e) {
-                    e.printStackTrace();
-                }
 
 
 
@@ -120,6 +157,7 @@ public class ControlerMainActivity implements Observer {
 
 
     }
+
 
 
 

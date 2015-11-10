@@ -1,6 +1,5 @@
 package ch.epfl.sweng.team_onebeat.FrontEnd.Activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import ch.epfl.sweng.team_onebeat.Exceptions.DisplayNotImplementedException;
+import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.ControlerMainActivity;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.State;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.StaticMachine;
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void display(StaticMachine.ConnectionState state) throws DisplayNotImplementedException {
+    public void display(StaticMachine.ConnectionState state)  {
 
             switch(  StaticMachine.ConnectionState.values()[ state.ordinal() ]  ){
 
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
                 case CONNECTED: // nothing to display : controler will change to RoomActivity
                     break;
-                default: throw new DisplayNotImplementedException();
+                default: throw new NotImplementedException();
 
 
             }

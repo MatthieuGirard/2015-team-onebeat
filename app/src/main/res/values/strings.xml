@@ -1,0 +1,10 @@
+<resources>
+<<<<<<< HEAD
+    <string name="app_name">SpotifyTestApp</string>
+=======
+    <string name="app_name">team-onebeat</string>
+
+    <string name="hello_world">Hello world!</string>
+>>>>>>> hugo
+    <string name="action_settings">Settings</string>
+</resources>

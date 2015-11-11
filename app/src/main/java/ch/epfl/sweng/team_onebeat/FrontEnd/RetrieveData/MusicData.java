@@ -1,4 +1,4 @@
-package ch.epfl.sweng.team_onebeat.MiddleEnd.RetrieveData;
+package ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData;
 
 /**
  * Created by hugo on 25.10.2015.
@@ -10,7 +10,7 @@ package ch.epfl.sweng.team_onebeat.MiddleEnd.RetrieveData;
  *
  */
 
-public class MusicData implements RetrieveData {
+public class MusicData  {
 
 
 

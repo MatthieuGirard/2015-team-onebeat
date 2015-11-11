@@ -1,6 +1,4 @@
-package ch.epfl.sweng.team_onebeat.MiddleEnd.Network;
-
-import android.os.AsyncTask;
+package ch.epfl.sweng.team_onebeat.FrontEnd.Network;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,11 +10,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
 
-import ch.epfl.sweng.team_onebeat.Exceptions.BackendCommunicationException;
 import ch.epfl.sweng.team_onebeat.Exceptions.BuildableException;
-import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
-import ch.epfl.sweng.team_onebeat.Exceptions.TimeExceededException;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Parser.Parser;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.Parser;
 
 /**
  * Created by hugo on 26.10.2015.

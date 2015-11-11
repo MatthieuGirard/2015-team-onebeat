@@ -32,6 +32,9 @@ public class State {
             return new State(state.name(), state.ordinal());
         }
 
+        public static State provide( StaticMachine.PlaylistManagerState state) {
+            return new State(state.name(), state.ordinal());
+        }
     }
 
 

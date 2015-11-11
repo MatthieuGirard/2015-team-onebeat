@@ -1,6 +1,5 @@
-package ch.epfl.sweng.team_onebeat.MiddleEnd.Parser;
+package ch.epfl.sweng.team_onebeat.FrontEnd.Parser;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;

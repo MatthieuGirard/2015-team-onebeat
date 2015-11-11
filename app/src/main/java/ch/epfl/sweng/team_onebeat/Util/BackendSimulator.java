@@ -1,13 +1,12 @@
 package ch.epfl.sweng.team_onebeat.Util;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.Message;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.MessageFactory;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Network.Message;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Network.MessageFactory;
 
 /**
  * Created by hugo on 07.11.15.

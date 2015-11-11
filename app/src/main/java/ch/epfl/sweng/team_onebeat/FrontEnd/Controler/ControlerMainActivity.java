@@ -5,22 +5,20 @@ import android.util.Log;
 
 import org.json.JSONException;
 
-import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.Observable;
 
 import ch.epfl.sweng.team_onebeat.Exceptions.BackendCommunicationException;
 import ch.epfl.sweng.team_onebeat.Exceptions.BuildableException;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Activity.MainActivity;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Activity.RoomActivity;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.MessageFactory;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.PendingData;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Parser.BooleanParser;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.RetrieveData.BooleanData;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Activity.PlaylistManagerActivity;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Network.MessageFactory;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Network.PendingData;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.BooleanParser;
+import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.BooleanData;
 
 /*
-observe machine state and when a state is modified, execute related code, ex :
-request stuff to the backend/spotify, set the view, modify state.
+controler of the main activity : authentification
  */
 
 public class ControlerMainActivity extends Controler {
@@ -143,7 +141,7 @@ public class ControlerMainActivity extends Controler {
 
                         case CONNECTED:  Log.d("#controler", "connectionState is connected, apply commande");
 
-                            Intent intent2 = new Intent(activity, RoomActivity.class);
+                            Intent intent2 = new Intent(activity, PlaylistManagerActivity.class);
                             activity.startActivity(intent2);
                             break;
 

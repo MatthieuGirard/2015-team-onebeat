@@ -1,25 +1,18 @@
 package ch.epfl.sweng.team_onebeat.FrontEnd.Controler;
 
-import android.util.Log;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Observer;
 
 import ch.epfl.sweng.team_onebeat.Exceptions.BackendCommunicationException;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.DefaultNetworkProvider;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.Message;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.NetworkProvider;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.PendingData;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Parser.Parser;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Network.DefaultNetworkProvider;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Network.Message;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Network.NetworkProvider;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Network.PendingData;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.Parser;
 
 /**
  * Created by hugo on 08.11.15.

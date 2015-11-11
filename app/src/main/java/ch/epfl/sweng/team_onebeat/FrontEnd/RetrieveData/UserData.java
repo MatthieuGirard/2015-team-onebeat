@@ -1,4 +1,4 @@
-package ch.epfl.sweng.team_onebeat.MiddleEnd.RetrieveData;
+package ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData;
 
 /**
  * Created by hugo on 24.10.2015.
@@ -7,7 +7,7 @@ package ch.epfl.sweng.team_onebeat.MiddleEnd.RetrieveData;
  * encapsulate a User coming from the backend
  *
  */
-public final class UserData implements RetrieveData{
+public final class UserData {
 
     private String pseudo;
 

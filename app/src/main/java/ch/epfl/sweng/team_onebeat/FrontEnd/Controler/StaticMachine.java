@@ -1,7 +1,5 @@
 package ch.epfl.sweng.team_onebeat.FrontEnd.Controler;
 
-import java.util.Observer;
-
 /**
  * Created by hugo on 07.11.15.
  *
@@ -18,20 +16,23 @@ public class StaticMachine {
 
 
     // available machines:
-    public enum Type {CONNECTION, ACTIVITY, ROOM}
+    public enum Type {CONNECTION, ACTIVITY, PLAYLIST_MANAGER}
 
 
 
 
 
-    // state for machine : CONNECTION
+    // states for CONNECTION
     public enum ConnectionState {OFF, TRY_CONNECT, CONNECTED}
 
 
-    // state for machine : ACTIVITY
+    // states for ACTIVITY
     public enum ActivityState {MAIN_ACTIVITY, ROOM_ACTIVITY}
 
-    public enum RoomState { INITIAL, PENDING, PERSONAL, SEARCH }
+    // state for ROOM :
+    public enum PlaylistManagerState { INITIAL,  SEARCH, NEW_PLAYLIST,
+        UNSUBSCRIBE_PLAYLIST, GO_PLAYLIST, DISPLAYING }
+
 
 
 
@@ -47,6 +48,12 @@ public class StaticMachine {
             State.Factory.provide(ActivityState.MAIN_ACTIVITY));
 
 
+    private static MachineState playListManagerMachine
+            = new MachineState(
+            Type.PLAYLIST_MANAGER,
+            State.Factory.provide(PlaylistManagerState.INITIAL));
+
+
 
 
     public static MachineState get(StaticMachine.Type type){
@@ -55,6 +62,8 @@ public class StaticMachine {
                 return connectionMachine;
             case ACTIVITY:
                 return activityMachine;
+            case PLAYLIST_MANAGER:
+                return playListManagerMachine;
             default:
                 throw new IllegalArgumentException();
         }

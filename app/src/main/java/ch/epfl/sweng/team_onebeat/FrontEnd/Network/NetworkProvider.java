@@ -1,4 +1,4 @@
-package ch.epfl.sweng.team_onebeat.MiddleEnd.Network;
+package ch.epfl.sweng.team_onebeat.FrontEnd.Network;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

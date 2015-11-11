@@ -1,10 +1,7 @@
-package ch.epfl.sweng.team_onebeat.MiddleEnd.Network;
+package ch.epfl.sweng.team_onebeat.FrontEnd.Network;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**

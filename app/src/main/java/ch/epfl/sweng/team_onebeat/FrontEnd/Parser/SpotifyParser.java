@@ -1,11 +1,11 @@
-package ch.epfl.sweng.team_onebeat.MiddleEnd.Parser;
+package ch.epfl.sweng.team_onebeat.FrontEnd.Parser;
 
 import org.json.JSONObject;
 
 import java.text.ParseException;
 
 import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.RetrieveData.SpotifyUser;
+import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.SpotifyUser;
 
 /**
  * Created by hugo on 08.11.15.

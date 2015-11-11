@@ -13,14 +13,13 @@ import org.mockito.Mockito;
 import ch.epfl.sweng.team_onebeat.Exceptions.BackendCommunicationException;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.Controler;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.ControlerMainActivity;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.MachineState;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.State;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.StaticMachine;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.Message;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.MessageFactory;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Network.PendingData;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.Parser.Parser;
-import ch.epfl.sweng.team_onebeat.MiddleEnd.RetrieveData.BooleanData;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Network.Message;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Network.MessageFactory;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Network.PendingData;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.Parser;
+import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.BooleanData;
 
 import static junit.framework.Assert.assertEquals;
 

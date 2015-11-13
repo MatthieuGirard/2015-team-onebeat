@@ -23,6 +23,7 @@ public class IdentifyUser {
      * @return The master account of provided by the user.
      */
     public String getAccount(Context context) {
+        /*
         AccountManager manager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
 
         Account[] accounts = manager.getAccounts();
@@ -37,6 +38,10 @@ public class IdentifyUser {
                 return masterAccount;
             }
         }
+
+*/
         return null;
+
     }
+
 }

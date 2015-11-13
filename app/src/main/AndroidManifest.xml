@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FrontEnd.Activity.RoomActivity"
+            android:name=".FrontEnd.Activity.PlaylistManagerActivity"
             android:label="@string/title_activity_room"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>

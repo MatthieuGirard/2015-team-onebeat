@@ -15,7 +15,9 @@
         android:layout_alignParentStart="true"
         android:hint="Search an artist"
         android:layout_toLeftOf="@+id/goButton"
-        android:layout_toStartOf="@+id/goButton" />
+        android:layout_toStartOf="@+id/goButton"
+        android:inputType="text"
+        android:imeOptions="actionGo"/>
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -28,13 +30,23 @@
         android:layout_alignParentEnd="true"
         android:onClick="searchSong"/>
 
-    <LinearLayout
-        android:orientation="vertical"
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/scrollView"
         android:layout_below="@+id/goButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/resultsLayout"></LinearLayout>
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+            android:id="@+id/resultsLayout">
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </RelativeLayout>

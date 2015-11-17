@@ -1,10 +1,9 @@
-package ch.epfl.sweng.spotifytests;
+package ch.epfl.sweng.onebeat;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -27,20 +25,6 @@ import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ConnectionStateCallback, PlayerNotificationCallback, WebPageDownloader {
@@ -176,12 +160,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
 
         linearLayout.removeAllViews();
 
-        List<Track> tracks = JSONParser.parseFromSearchAPI(result);
+        List<Song> tracks = JSONParser.parseFromSearchAPI(result);
 
         for (int i = 0; i < tracks.size(); i++) {
-            Track actualTrack = tracks.get(i);
+            Song actualTrack = tracks.get(i);
             TextView trackTextView = new TextView(this);
-            trackTextView.setText(actualTrack.getArtist()+" - "+actualTrack.getName());
+            trackTextView.setText(actualTrack.getArtist()+" - "+actualTrack.getTitle());
             linearLayout.addView(trackTextView);
         }
     }

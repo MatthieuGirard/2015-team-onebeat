@@ -1,4 +1,4 @@
-package ch.epfl.sweng.spotifytests;
+package ch.epfl.sweng.onebeat;
 
 /**
  * Created by Matthieu on 16.11.2015.

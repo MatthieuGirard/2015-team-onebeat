@@ -1,14 +1,10 @@
-package ch.epfl.sweng.spotifytests;
-
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+package ch.epfl.sweng.onebeat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,7 +12,7 @@ import java.util.List;
  */
 public class JSONParser {
 
-    static public List<Track> parseFromSearchAPI(String jsonStringToParse) throws JSONParserException {
+    static public List<Song> parseFromSearchAPI(String jsonStringToParse) throws JSONParserException {
 
         try {
             JSONObject json = new JSONObject(jsonStringToParse);
@@ -25,18 +21,22 @@ public class JSONParser {
             int numResults = info.getInt("num_results");
             int numPages = info.getInt("page");
 
+            final int limit = 7;
+
             JSONArray jsonTracks = json.optJSONArray("tracks");
 
-            List<Track> tracksFound = new ArrayList<>();
+            List<Song> tracksFound = new ArrayList<>();
 
-            for (int i = 0; i < jsonTracks.length(); i++) {
+            for (int i = 0; i < Math.min(jsonTracks.length(), limit); i++) {
                 JSONObject actualTrack = jsonTracks.getJSONObject(i);
 
                 String artist = actualTrack.getJSONArray("artists").getJSONObject(0).getString("name");
                 String songName = actualTrack.getString("name");
                 String spotifyRef = actualTrack.getString("href");
+                String duration = "";
 
-                tracksFound.add(new Track(artist, songName, spotifyRef));
+                tracksFound.add(new Song(songName, artist, duration, spotifyRef));
+
             }
             return tracksFound;
         } catch (JSONException e) {

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.spotifytests;
+package ch.epfl.sweng.onebeat;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

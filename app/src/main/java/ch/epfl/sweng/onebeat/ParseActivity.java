@@ -1,8 +1,7 @@
-package ch.epfl.sweng.spotifytests;
+package ch.epfl.sweng.onebeat;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 

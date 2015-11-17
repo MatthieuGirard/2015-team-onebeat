@@ -1,3 +1,4 @@
+//JSON1
 {
 	"info" : "song",
 	"artist" : "Justin Bieber",
@@ -7,7 +8,7 @@
 	"localID" : 234134,
 	"addedBy" : "Hugo"
 }
-
+//JSON2
 {
 	"info" : "room",
 	"creator" : "idOfCreatorOfRoom",
@@ -18,4 +19,10 @@
 		12314545,
 		54321545
 	]
+}
+//JSON3
+{
+	"info" : "user",
+	"pseudo" : "Hugo",
+	"id" : 151452435
 }

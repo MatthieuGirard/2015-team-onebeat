@@ -1,0 +1,21 @@
+{
+	"info" : "song",
+	"artist" : "Justin Bieber",
+	"title" : "Baby",
+	"duration" : "234.23",
+	"spotifyRef" : "spotify:track:0uIpyzeR7wSmDCErymJHmc",
+	"localID" : 234134,
+	"addedBy" : "Hugo"
+}
+
+{
+	"info" : "room",
+	"creator" : "idOfCreatorOfRoom",
+	"nameOfRoom" : "Super Cool Room"
+	"tracksIDs" : [
+		12341234,
+		321321,
+		12314545,
+		54321545
+	]
+}

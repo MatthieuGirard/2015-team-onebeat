@@ -1,0 +1,100 @@
+
+
+
+
+
+
+MAIN ACTIVITY : 
+
+connection 
+
+
+ROOM ACTIVITY : 
+
+default : display subscribed room 
+search : result for query : quit without searching ? 
+
+
+PLAYLIST ACTIVITY : 
+
+layout for displaying songs
+layout for search request
+
+
+
+ACTIVITY
+
+
+
+
+
+____________________________________________________________________________
+
+
+
+pa/raksha : 
+
+- make an sql table to register : (id? + ) spotify key + userName  
+- provide exitUser method that return a "boolean message" indicating if the connected spotify user already exist.
+- design request/answer
+- optional : provide connect method, taking the spotifyKey and return error : nonExistingUser if the key is not in the bdd, otherwise : userName;  
+
+mathieu :
+
+- make it's own code with the first implementation of raksha in the aim : get an userkey that certify the user is connected on spotify
+(optional : possible to retrieve a login ?)
+- the message used to make request are declared in the class (to be easily connected with the gui on the next week) 
+- optional : a method transforming the answer in a class SpotifyUser with all information. 
+
+
+karim : 
+
+make methods on MainActivity class to provide different display to the controler : 
+- connection layout : [pseudo(text field) + password (text field) + connection (button)] (don't care about reaction )
+- white layout : (layout with nothing) [may become a loading layout with a loading gif, but don't care]
+- modifying layout clean correctly the previous one.
+- almost done : adapt the roomActivity : resume our different display in differrent methods (don't care too much about the design at first place : 
+  just need to be intuitive)
+
+hugo :
+ 
+- link between pieces : authentification (MainActivity) process with keeping the currentState and the view updated   
+- moving to roomActivity on authentification success
+- almost done : tests  
+
+
+at the end of the sprint : 
+
+ideally, application can display a connection view, displaying blank (or loading) view while making the search. 
+Insert user in the bdd if it's not existing in the backend.
+move to a non-dynamic room view
+Next week all of us will have a specific skill and will make easily work on it. 
+
+
+
+ 
+
+
+
+ request make interaction from Spotify to our backend.
+But still some link undone and not all the test.
+Next week the gui can be connected. 
+
+If the work assigned seems to be unbalanced or some parteners want to echange work, it needs to be done as fast as possible.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

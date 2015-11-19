@@ -5,3 +5,9 @@
 .DS_Store
 /build
 /captures
+myvenv
+*.pyc
+__pycache__
+server/db.sqlite3
+server/static
+

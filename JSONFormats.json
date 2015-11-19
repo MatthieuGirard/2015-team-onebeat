@@ -12,7 +12,7 @@
 {
 	"info" : "room",
 	"creator" : "idOfCreatorOfRoom",
-	"nameOfRoom" : "Super Cool Room"
+	"nameOfRoom" : "Super Cool Room",
 	"tracksIDs" : [
 		12341234,
 		321321,

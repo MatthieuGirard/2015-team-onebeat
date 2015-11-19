@@ -8,5 +8,4 @@ urlpatterns = [
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^onebeat/', include('onebeat.urls')),
-    url(r'', include('page.urls')),
 ]

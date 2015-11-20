@@ -11,12 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.State;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.StaticMachine;
 import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.PlaylistManagerData;
 import ch.epfl.sweng.team_onebeat.R;
 
 public class PlaylistManagerActivity extends AppCompatActivity {
+
+    /*
+    TODO : make the display methods :
+            modify the state in StaticMachine.PlaylistManagerState to add one state
+            by type of displayed view : (like naming your current display)
+            add the code to display the view in the display method.
+     */
 
 
     private List<PlaylistManagerData> myPlaylists = new ArrayList<>();
@@ -45,36 +51,14 @@ public class PlaylistManagerActivity extends AppCompatActivity {
     }
 
 
-    // on an add
-    // TODO : when a clic is done to add song need to popup search by is own
-    /*
-    and call
-                    StaticMachine.get(StaticMachine.Type.PLAYLIST_MANAGER)
-                        .setState(
-                        State.Factory.provide(StaticMachine.PlaylistManagerState.NEW_PLAYLIST)
-                        );
-
-     */
-
-    // on an remove
-    // TODO : when a clic is done to remove a song
-    /*
-    and call
-                    StaticMachine.get(StaticMachine.Type.PLAYLIST_MANAGER)
-                        .setState(
-                        State.Factory.provide(StaticMachine.PlaylistManagerState.UNSUBSCRIBE_PLAYLIST)
-                        );
-
-     */
-
 
     public void display(StaticMachine.PlaylistManagerState state)  {
 
         switch( state ){
 
-            case DISPLAYING:
-                // TODO the list of PlaylistData is set by the controler
-                // just display the playlist name subscribed
+            case DISPLAYING: // <= may be a name of a a view
+                // may be the display of the playlist subscribed (use myPlaylists)
+                // and make a fake instance on onCreate to test the view
 
                 break;
 

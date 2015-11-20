@@ -52,6 +52,11 @@ public class PlaylistData {
 
     }
 
+
+    public String getName(){
+        return name;
+    }
+
     public PendingData<MusicData> downloadsMusics(){
         // TODO use id_musics to retrieve data
         throw new NotImplementedException();

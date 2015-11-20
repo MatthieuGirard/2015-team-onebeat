@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.Observable;
+import java.util.Observer;
 
 import ch.epfl.sweng.team_onebeat.FrontEnd.Activity.PlaylistManagerActivity;
 
@@ -13,7 +14,7 @@ import ch.epfl.sweng.team_onebeat.FrontEnd.Activity.PlaylistManagerActivity;
  * controler of playlist manager activities (rooms on gui)
  */
 
-public class ControlerPlaylistManagerActivity extends Controler {
+public class ControlerPlaylistManagerActivity implements Observer {
 
 
     private PlaylistManagerActivity activity;
@@ -21,7 +22,6 @@ public class ControlerPlaylistManagerActivity extends Controler {
 
 
     public ControlerPlaylistManagerActivity(PlaylistManagerActivity activity)  {
-        super();
         this.activity = activity;
     }
 

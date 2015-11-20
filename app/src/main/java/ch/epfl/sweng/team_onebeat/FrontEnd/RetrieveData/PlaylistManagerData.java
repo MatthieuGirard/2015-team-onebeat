@@ -3,8 +3,6 @@ package ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.team_onebeat.FrontEnd.Controler.StaticMachine;
-
 /**
  * Created by hugo on 25.10.2015.
  *
@@ -29,6 +27,9 @@ public class PlaylistManagerData  {
     }
 
 
+    public List<PlaylistData> getPlayLists(){
+        return new ArrayList<>(playlists);
+    }
 
 
 }

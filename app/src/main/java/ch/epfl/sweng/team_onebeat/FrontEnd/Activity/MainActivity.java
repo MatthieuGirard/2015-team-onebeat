@@ -16,8 +16,10 @@ import ch.epfl.sweng.team_onebeat.R;
 
 
 /*
-    display the authentification with spotify
-
+    TODO : make the display methods :
+            - connection is off : field to connect to spotify
+            - connection is try connect : blank view or loading view
+            - connection is connected : do nothing
  */
 
 
@@ -80,10 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     // new machine state history
                     Log.d("mainAct",  "main activity display off");
                     // TODO : display spotify field for connection
-                    /* when the user click to connect update connection state :
-                    StaticMachine.update(StaticMachine.Type.CONNECTION,
-                            State.Factory.provide(StaticMachine.ConnectionState.TRY_CONNECT);
-                    */
+
                     break;
 
 

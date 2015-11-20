@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.ParseException;
 
 import ch.epfl.sweng.team_onebeat.Exceptions.BuildableException;
+import ch.epfl.sweng.team_onebeat.Exceptions.ParseException;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.Parser;
 
 /**
@@ -73,14 +73,13 @@ public class PendingData<T> {
 
     public PendingData(URL url,
                        NetworkProvider networkProvider,
-                       Message request,
                        Parser<T> parser
                        ){
 
 
         this.downloadState = DownloadState.PENDING;
 
-        this.download = new Thread(new Download(url,networkProvider, request,parser));
+        this.download = new Thread(new Download(url,networkProvider,parser));
         this.download.run();
 
     }
@@ -149,14 +148,12 @@ public class PendingData<T> {
 
         private URL url;
         private NetworkProvider networkProvider;
-        private Message request;
         private Parser<T> parser;
 
 
-        public Download(URL url, NetworkProvider networkProvider, Message request, Parser parser){
+        public Download(URL url, NetworkProvider networkProvider, Parser parser){
             this.url = url;
             this.networkProvider = networkProvider;
-            this.request = request;
             this.parser = parser;
         }
 
@@ -187,8 +184,6 @@ public class PendingData<T> {
 
         @Override
         public void run() {
-
-            NetworkProvider networkProvider = new DefaultNetworkProvider();
 
             try {
 

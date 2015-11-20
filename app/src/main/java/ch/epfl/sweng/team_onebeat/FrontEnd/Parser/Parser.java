@@ -2,7 +2,8 @@ package ch.epfl.sweng.team_onebeat.FrontEnd.Parser;
 
 import org.json.JSONObject;
 
-import java.text.ParseException;
+import ch.epfl.sweng.team_onebeat.Exceptions.ParseException;
+
 
 /**
  * Created by hugo on 24.10.2015.

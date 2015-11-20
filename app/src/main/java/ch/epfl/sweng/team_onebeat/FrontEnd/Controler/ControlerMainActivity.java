@@ -5,23 +5,23 @@ import android.util.Log;
 
 import org.json.JSONException;
 
+import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.Observable;
+import java.util.Observer;
 
-import ch.epfl.sweng.team_onebeat.Exceptions.BackendCommunicationException;
 import ch.epfl.sweng.team_onebeat.Exceptions.BuildableException;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Activity.MainActivity;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Activity.PlaylistManagerActivity;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Network.MessageFactory;
+import ch.epfl.sweng.team_onebeat.FrontEnd.Network.BackendDataProvider;
 import ch.epfl.sweng.team_onebeat.FrontEnd.Network.PendingData;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.BooleanParser;
 import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.BooleanData;
 
 /*
 controler of the main activity : authentification
  */
 
-public class ControlerMainActivity extends Controler {
+public class ControlerMainActivity implements Observer {
 
 
 
@@ -30,7 +30,6 @@ public class ControlerMainActivity extends Controler {
 
 
     public ControlerMainActivity(MainActivity activity)  {
-        super();
         this.activity = activity;
     }
 
@@ -60,14 +59,8 @@ public class ControlerMainActivity extends Controler {
 
                     // get a data in pending mode
 
-                    PendingData<BooleanData> pData = null;
-
-                    pData = pendingData(
-                            BackendService.SPOTIFY_CONNECTION,
-                            MessageFactory.Frontend.spotifyConnect("someone", 1234),
-                            new BooleanParser()
-                    );
-
+                    PendingData<BooleanData> pData =
+                            new BackendDataProvider().connect("activity.getfield");
 
                     // block until the data is ready || timer > 2000 ms
                     pData.blockAtMost(2000);
@@ -91,7 +84,7 @@ public class ControlerMainActivity extends Controler {
 
 
 
-            } catch (BackendCommunicationException | BuildableException | JSONException e1) {
+            } catch (BuildableException | JSONException | MalformedURLException e1) {
                 e1.printStackTrace();
             }
 

@@ -2,15 +2,9 @@ package ch.epfl.sweng.team_onebeat.FrontEnd.Controler;
 
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
 
 import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
 

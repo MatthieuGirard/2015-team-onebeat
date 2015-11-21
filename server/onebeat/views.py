@@ -15,7 +15,7 @@ def redirect(request):
 	req = received_json_data['request']
 	
 	if (req == "getUser"):
-		return redirect('/getUser')
+		return redirect('getUser')
 		
 def existUser(request):
 	received_json_data=json.loads(request.GET['request'])

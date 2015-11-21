@@ -1,14 +1,15 @@
-//JSON1
+//from server to app
+//JSON1 : song
 {
 	"info" : "song",
+	"id" : 234134, //do we really need the id, as we are getting the song using it ?
 	"artist" : "Justin Bieber",
 	"title" : "Baby",
 	"duration" : "234.23",
 	"spotifyRef" : "spotify:track:0uIpyzeR7wSmDCErymJHmc",
-	"localID" : 234134,
 	"addedBy" : "Hugo"
 }
-//JSON2
+//JSON2 : room
 {
 	"info" : "room",
 	"creator" : "idOfCreatorOfRoom",
@@ -20,9 +21,40 @@
 		54321545
 	]
 }
-//JSON3
+//JSON3 : user
 {
 	"info" : "user",
-	"pseudo" : "Hugo",
-	"id" : 151452435
+	"id" : 151452435,
+	"pseudo" : "Hugo"
+}
+
+//from app to server
+//JSON 4 : getUser or existUser
+{
+	"request" : "getUser/existUser",
+	"id" : 123456789
+}
+
+//JSON 5 : addUser
+{
+	"request" : "addUser",
+	"id" : 123456789,
+	"name" : "Hugo"
+}
+
+//JSON6 : getSong gonna be used when getting the playlist for the room
+{
+	"request" : "getSong",
+	"id" : 123456789
+}
+
+//JSON 7 : addSong
+{
+	"request" : "addSong",
+	"id" : 234134,
+	"artist" : "Justin Bieber",
+	"title" : "Baby",
+	"duration" : "234.23",
+	"spotifyRef" : "spotify:track:0uIpyzeR7wSmDCErymJHmc",
+	"addedBy" : "Hugo"
 }

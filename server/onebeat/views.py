@@ -15,7 +15,7 @@ def redirect(request):
 	req = received_json_data['request']
 	
 	if (req == "getUser"):
-		redirect('/getUser')
+		return redirect('/getUser')
 		
 def existUser(request):
 	received_json_data=json.loads(request.GET['request'])
@@ -37,6 +37,14 @@ def getUser(request):
 	userId=received_json_data['id']
 	user = User.objects.get(userId=userId)
 	return JsonResponse({'info': 'user', 'id':userId, 'pseudo':user.name})
+
+def existSong(request):
+	received_json_data=json.loads(request.GET['request'])
+	songId=received_json_data['id']
+	if (Song.objects.filter(songId=songId).exists()):
+		return JsonResponse({'existSong':'true'})
+	else:
+		return JsonResponse({'existSong':'false'})
 
 def addSong(request):
 	received_json_data=json.loads(request.POST['request'])

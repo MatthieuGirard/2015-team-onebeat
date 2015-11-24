@@ -44,7 +44,7 @@
 
 //JSON6 : getSong gonna be used when getting the playlist for the room
 {
-	"request" : "getSong",
+	"request" : "getSong/existSong",
 	"id" : 123456789
 }
 

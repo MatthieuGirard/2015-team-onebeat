@@ -4,6 +4,9 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a1204f384ad09596770243ff7be937ec2b294f
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -14,8 +17,11 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+<<<<<<< HEAD
 =======
     </style>
 >>>>>>> hugo
+=======
+>>>>>>> 90a1204f384ad09596770243ff7be937ec2b294f
 
 </resources>

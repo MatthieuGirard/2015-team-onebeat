@@ -7,6 +7,7 @@
         <option name="BUILDABLE" value="false" />
       </configuration>
     </facet>
+<<<<<<< HEAD
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
         <option name="GRADLE_PROJECT_PATH" value=":" />
@@ -17,6 +18,8 @@
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
       </configuration>
     </facet>
+=======
+>>>>>>> 90a1204f384ad09596770243ff7be937ec2b294f
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="true">
     <exclude-output />

@@ -18,9 +18,15 @@ allprojects {
     }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a1204f384ad09596770243ff7be937ec2b294f
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+<<<<<<< HEAD
 =======
 >>>>>>> hugo
+=======
+>>>>>>> 90a1204f384ad09596770243ff7be937ec2b294f

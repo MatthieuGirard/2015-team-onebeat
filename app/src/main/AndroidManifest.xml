@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 <<<<<<< HEAD
+<<<<<<< HEAD
     package="quizapp.sweng.epfl.ch.spotifytestapp" >
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -11,10 +12,18 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 >>>>>>> hugo
+=======
+    package="ch.epfl.sweng.onebeat" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+>>>>>>> 90a1204f384ad09596770243ff7be937ec2b294f
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+<<<<<<< HEAD
 <<<<<<< HEAD
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
@@ -28,12 +37,29 @@
             android:name=".FrontEnd.Activity.MainActivity"
             android:label="@string/app_name" >
 >>>>>>> hugo
+=======
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="ch.epfl.sweng.onebeat.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" >
+
+        </activity>
+        <activity
+            android:name="com.spotify.sdk.android.authentication.LoginActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name="ch.epfl.sweng.onebeat.ParseActivity" >
+        </activity>
+        <activity android:name="ch.epfl.sweng.onebeat.RoomActivity" >
+>>>>>>> 90a1204f384ad09596770243ff7be937ec2b294f
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         // Needed for LoginActivity to work
@@ -43,6 +69,8 @@
 
 =======
 >>>>>>> hugo
+=======
+>>>>>>> 90a1204f384ad09596770243ff7be937ec2b294f
     </application>
 
 </manifest>

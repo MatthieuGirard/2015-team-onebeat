@@ -6,10 +6,14 @@ package ch.epfl.sweng.onebeat;
 public class SpotifyUser {
 
     private final String pseudo;
+    private final String spotifyID;
 
-    public SpotifyUser(String pseudo) {
+    public SpotifyUser(String pseudo, String spotifyID) {
+
         this.pseudo = pseudo;
+        this.spotifyID = spotifyID;
     }
 
     public String getString() { return this.pseudo; }
+    public String getSpotifyID() { return this.spotifyID; }
 }

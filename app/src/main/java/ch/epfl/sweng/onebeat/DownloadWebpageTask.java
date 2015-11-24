@@ -79,7 +79,7 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         }
     }
 
-    private String readIt(InputStream stream) throws IOException {
+    public static String readIt(InputStream stream) throws IOException {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         StringBuilder sb = new StringBuilder();

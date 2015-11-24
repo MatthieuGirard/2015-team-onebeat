@@ -44,6 +44,15 @@ public class JSONParser {
         }
     }
 
+    static public SpotifyUser parseFromUserJSON(String jsonString) throws JSONException {
+        JSONObject baseJSON = new JSONObject(jsonString);
+        String name = baseJSON.getString("display_name");
+        String spotifyID = baseJSON.getString("id");
+
+        return new SpotifyUser(name, spotifyID);
+
+    }
+
     static int getNumberOfPagesFromSearch(String jsonString) throws JSONParserException {
         try {
             return new JSONObject(jsonString).getJSONObject("info").getInt("page");

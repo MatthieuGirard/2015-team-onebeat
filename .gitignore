@@ -1,8 +1,6 @@
 .gradle
 /local.properties
-.idea/workspace.xml
-.idea/libraries
-.idea/gradle.xml
+.idea
 .DS_Store
 /build
 /captures
@@ -11,4 +9,5 @@ myvenv
 __pycache__
 server/db.sqlite3
 server/static
+app/app.iml
 

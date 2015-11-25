@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,6 +26,15 @@ import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ConnectionStateCallback, PlayerNotificationCallback, WebPageDownloader {
@@ -47,20 +57,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
         builder.setScopes(new String[]{"user-read-private", "streaming"});
         AuthenticationRequest request = builder.build();
 
-        //AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
 
-        EditText editText = (EditText) findViewById(R.id.searchField);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_GO) {
-                    findViewById(R.id.goButton).performClick();
-                    handled = true;
-                }
-                return handled;
-            }
-        });
     }
 
     @Override
@@ -71,7 +69,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
-                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
+
+                new DownloadWebpageTask(this).execute("https://api.spotify.com/v1/me", response.getAccessToken());
+
+/*                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
                 Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
                     @Override
                     public void onInitialized(Player player) {
@@ -85,12 +86,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                     public void onError(Throwable throwable) {
                         Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
                     }
-                });
+                });*/
             }
         }
     }
 
-    public void searchSong(View view) {
+/*   public void searchSong(View view) {
 
         Button goButton = (Button) findViewById(R.id.goButton);
         goButton.setEnabled(false);
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
         if (networkInfo != null && networkInfo.isConnected()) {
             new DownloadWebpageTask(this).execute(stringUrl);
         }
-    }
+    }*/
 
     @Override
     protected void onDestroy() {
@@ -152,21 +153,55 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
     @Override
     public void onPageDataRetrieved(String result) throws JSONParserException {
 
-        Button goButton = (Button) findViewById(R.id.goButton);
-        goButton.setText("GO");
-        goButton.setEnabled(true);
+        JSONParser.parseFromUserJSON(result);
 
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.resultsLayout);
+        TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setText(result);
+    }
 
-        linearLayout.removeAllViews();
+    private class GetUserJSONFromWeb extends AsyncTask<String, Void, String> {
 
-        List<Song> tracks = JSONParser.parseFromSearchAPI(result);
+        @Override
+        protected String doInBackground(String[] params) {
+            try {
+                return downloadUserJSON(params[0], params[1]);
+            } catch (IOException e) {
+                return "Error trying to get the WebData of user JSON";
+            }
+        }
 
-        for (int i = 0; i < tracks.size(); i++) {
-            Song actualTrack = tracks.get(i);
-            TextView trackTextView = new TextView(this);
-            trackTextView.setText(actualTrack.getArtist()+" - "+actualTrack.getTitle());
-            linearLayout.addView(trackTextView);
+        @Override
+        protected void onPostExecute(String result) {
+            TextView textView = (TextView) findViewById(R.id.textView);
+            textView.setText(result);
+        }
+
+        private String downloadUserJSON(String myurl, String token) throws IOException {
+            InputStream is = null;
+
+            try {
+                URL url = new URL(myurl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("Authorization", "Bearer "+ token);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                // Starts the query
+                conn.connect();
+                int response = conn.getResponseCode();
+                Log.d("user JSON request", "The response is: " + response);
+                is = conn.getInputStream();
+
+                // Convert the InputStream into a string
+                String contentAsString = DownloadWebpageTask.readIt(is);
+                return contentAsString;
+
+                // Makes sure that the InputStream is closed after the app is
+                // finished using it.
+            } finally {
+                if (is != null) {
+                    is.close();
+                }
+            }
         }
     }
 }

@@ -5,15 +5,28 @@ package ch.epfl.sweng.onebeat;
  */
 public class SpotifyUser {
 
-    private final String pseudo;
-    private final String spotifyID;
+    private static final SpotifyUser instance = new SpotifyUser();
 
-    public SpotifyUser(String pseudo, String spotifyID) {
+    private String pseudo = null;
+    private String spotifyID = null;
 
-        this.pseudo = pseudo;
-        this.spotifyID = spotifyID;
+    private SpotifyUser() {
+        if (instance != null) {
+            throw new IllegalStateException("Already instantiated");
+        }
     }
+
+    public final static SpotifyUser getInstance() { return instance; }
 
     public String getString() { return this.pseudo; }
     public String getSpotifyID() { return this.spotifyID; }
+
+    public void setInfos(String pseudo, String spotifyID) {
+        if (this.pseudo == null) {
+            this.pseudo = pseudo;
+        }
+        if (this.spotifyID == null) {
+            this.spotifyID = spotifyID;
+        }
+    }
 }

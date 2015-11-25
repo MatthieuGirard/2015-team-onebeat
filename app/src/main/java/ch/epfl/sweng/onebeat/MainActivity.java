@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
 
-                new GetUserJSONFromWeb().execute("https://api.spotify.com/v1/me", response.getAccessToken());
+                new DownloadWebpageTask(this).execute("https://api.spotify.com/v1/me", response.getAccessToken());
 
 /*                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
                 Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
         }
     }
 
-/*    public void searchSong(View view) {
+/*   public void searchSong(View view) {
 
         Button goButton = (Button) findViewById(R.id.goButton);
         goButton.setEnabled(false);
@@ -153,9 +153,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
     @Override
     public void onPageDataRetrieved(String result) throws JSONParserException {
 
+        JSONParser.parseFromUserJSON(result);
+
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText(result);
-
     }
 
     private class GetUserJSONFromWeb extends AsyncTask<String, Void, String> {

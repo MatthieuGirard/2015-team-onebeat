@@ -25,7 +25,15 @@ class Room(models.Model):
 	roomId.primary_key = True
 	creator = models.ForeignKey(User)
 	name = models.CharField(max_length=100)
-	#need to store playlist
 
 	def __str__(self):
 		return self.name
+
+class Playlist(models.Model):
+	room = models.ForeignKey(Room)
+	song = models.ForeignKey(Song)
+	addedBy = models.ForeignKey(User)
+
+class Member(models.Model):
+	user = models.ForeignKey(User)
+	room = models.ForeignKey(Room)

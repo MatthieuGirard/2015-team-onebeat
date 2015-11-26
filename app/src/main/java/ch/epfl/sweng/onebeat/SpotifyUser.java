@@ -18,8 +18,18 @@ public class SpotifyUser {
 
     public final static SpotifyUser getInstance() { return instance; }
 
-    public String getString() { return this.pseudo; }
-    public String getSpotifyID() { return this.spotifyID; }
+    public String getString() throws NotDefinedUserInfosException {
+        if (this.pseudo == null) {
+            throw new NotDefinedUserInfosException("Pseudo not registered yet.");
+        }
+        return this.pseudo;
+    }
+    public String getSpotifyID() throws NotDefinedUserInfosException {
+        if (this.spotifyID == null) {
+            throw new NotDefinedUserInfosException("Pseudo not registered yet.");
+        }
+        return this.spotifyID;
+    }
 
     public void setInfos(String pseudo, String spotifyID) {
         if (this.pseudo == null) {

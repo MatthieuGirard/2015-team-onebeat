@@ -1,60 +1,102 @@
-//from server to app
-//JSON1 : song
+//from server to app (still have to design anwsers to POST requests)
+//JSON1 : song (answer to getSong)
 {
 	"info" : "song",
-	"id" : 234134, //do we really need the id, as we are getting the song using it ?
-	"artist" : "Justin Bieber",
-	"title" : "Baby",
-	"duration" : "234.23",
-	"spotifyRef" : "spotify:track:0uIpyzeR7wSmDCErymJHmc",
-	"addedBy" : "Hugo"
-}
-//JSON2 : room
-{
-	"info" : "room",
-	"creator" : "idOfCreatorOfRoom",
-	"nameOfRoom" : "Super Cool Room",
-	"tracksIDs" : [
-		12341234,
-		321321,
-		12314545,
-		54321545
-	]
-}
-//JSON3 : user
-{
-	"info" : "user",
-	"id" : 151452435,
-	"pseudo" : "Hugo"
-}
-
-//from app to server
-//JSON 4 : getUser or existUser
-{
-	"request" : "getUser/existUser",
-	"id" : 123456789
-}
-
-//JSON 5 : addUser
-{
-	"request" : "addUser",
-	"id" : 123456789,
-	"name" : "Hugo"
-}
-
-//JSON6 : getSong gonna be used when getting the playlist for the room
-{
-	"request" : "getSong/existSong",
-	"id" : 123456789
-}
-
-//JSON 7 : addSong
-{
-	"request" : "addSong",
 	"id" : 234134,
 	"artist" : "Justin Bieber",
 	"title" : "Baby",
 	"duration" : "234.23",
 	"spotifyRef" : "spotify:track:0uIpyzeR7wSmDCErymJHmc",
-	"addedBy" : "Hugo"
+}
+
+//JSON2 : room (answer to getRoom)
+{
+	"info" : "room",
+	"id" : 1298739812,
+	"creator" : "idOfCreator",
+	"name" : "Super Cool Room",
+	"playlist" : [
+		12341234,
+		321321,
+		12314545,
+		54321545
+	],
+	"addedBy" : [
+		"userID1",
+		"userID2",
+		"userID3",
+		"userID4",
+	],
+	"members" : [
+		"userID1",
+		"userID2",
+		"userID3",
+		"userID4",
+		"userID5",
+		"userID6",
+		"userID7",
+	]
+}
+
+//JSON3 : user (answer to getUser)
+{
+	"info" : "user",
+	"id" : "hugo-bonnome", // id is a string because it's the spotify id
+	"name" : "Hugo",
+	"rooms" : [
+		10293801,
+		23873784,
+		97432848,
+	],
+}
+
+
+
+//from app to server
+//JSON 4 : getUser (HTTP GET)
+{
+	"id" : 123456789,
+}
+
+//JSON 5 : addUser (HTTP POST)
+{
+	"id" : "hugo-bonnome",
+	"name" : "Hugo",
+}
+
+//JSON6 : getSong (HTTP GET)
+{
+	"id" : 123456789,
+}
+
+//JSON 7 : addSong (HTTP POST)
+{
+	"room" : 83728738,
+	"artist" : "Justin Bieber",
+	"title" : "Baby",
+	"duration" : "234.23",
+	"spotifyRef" : "spotify:track:0uIpyzeR7wSmDCErymJHmc",
+	"addedBy" : "Hugo",
+}
+
+//JSON8 : getRoom (HTTP GET)
+{
+	"id" : 382732873,
+}
+
+//JSON9 : createRoom (HTTP POST)
+{
+	"creator" : "hugo-bonnome",
+	"name" : "Awesome Room"
+}
+
+//JSON10 : joinRoom (HTTP GET)
+{
+	"name" : "Awesome Room"
+}
+
+//JSON11 : addMember (HTTP POST)
+{
+	"user" : "hugo-bonnome",
+	"room" : 38929879,
 }

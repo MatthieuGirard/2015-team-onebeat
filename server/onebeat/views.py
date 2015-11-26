@@ -5,18 +5,10 @@ from django.http import JsonResponse
 from .models import User
 from .models import Song
 from .models import Room
+from .models import Playlist
+from .models import Member
 
-# Create your views here.
-def redirect(request):
-	if (request.method == "GET"):
-		received_json_data=json.loads(request.GET['request'])
-	elif (request.method == "POST"):
-		received_json_data=json.loads(request.POST['request'])
-	req = received_json_data['request']
 	
-	if (req == "getUser"):
-		return redirect('getUser')
-		
 def existUser(request):
 	received_json_data=json.loads(request.GET['request'])
 	userId=received_json_data['id']

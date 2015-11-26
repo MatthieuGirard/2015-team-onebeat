@@ -1,19 +1,26 @@
 package ch.epfl.sweng.onebeat;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -44,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
 
     private static final int REQUEST_CODE = 1337;
 
+    public final static String EXTRA_MESSAGE = "ch.epfl.sweng.onebeat.CREATING_ROOM_MESSAGE";
+
+
     private Player mPlayer;
 
     @Override
@@ -59,6 +69,17 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
 
+        FloatingActionButton FAB = new FloatingActionButton(this);
+        FAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RoomCreatorDialogFragment dialog = new RoomCreatorDialogFragment();
+                dialog.show(getSupportFragmentManager(), "Room Creator");
+            }
+        });
+
+        RelativeLayout rl = (RelativeLayout) findViewById(R.id.mainLayout);
+        rl.addView(FAB);
     }
 
     @Override
@@ -202,6 +223,36 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                     is.close();
                 }
             }
+        }
+    }
+
+    private class RoomCreatorDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            // Get the layout inflater
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+
+            // Inflate and set the layout for the dialog
+            // Pass null as the parent view because its going in the dialog layout
+            builder.setView(inflater.inflate(R.layout.dialog_create_room, null))
+                    // Add action buttons
+                    .setPositiveButton(R.string.partyOn, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent intent = new Intent(RoomCreatorDialogFragment.this.getActivity(), RoomActivity.class);
+                            EditText roomNameField = (EditText) findViewById(R.id.roomName);
+                            //String message = roomNameField.getText().toString();
+                            //intent.putExtra(EXTRA_MESSAGE, message);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            RoomCreatorDialogFragment.this.getDialog().cancel();
+                        }
+                    });
+            return builder.create();
         }
     }
 }

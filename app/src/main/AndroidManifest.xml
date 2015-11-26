@@ -28,8 +28,11 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name="ch.epfl.sweng.onebeat.ParseActivity" >
         </activity>
-        <activity android:name="ch.epfl.sweng.onebeat.RoomActivity" >
-
+        <activity android:name="ch.epfl.sweng.onebeat.RoomActivity"
+            android:parentActivityName="ch.epfl.sweng.onebeat.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ch.epfl.sweng.onebeat.MainActivity" />
         </activity>
     </application>
 

@@ -120,16 +120,12 @@ def joinRoom(request):
 			})
 
 
-def addMember(request):
-	received_json_data = json.loads(request.POST['request'])
-	roomID = received_json_data['user']
-	roomName = received_json_data['room']
-	if (Room.objects.filter(roomName = roomName).exists()):
-		return JsonResponse({
-			'user' : room.name
-			'room' : room.room
-			})
-
-
-
-
+#def addMember(request):
+#	received_json_data = json.loads(request.POST['request'])
+#	roomID = received_json_data['user']
+#	roomName = received_json_data['room']
+#	if (Room.objects.filter(roomName = roomName).exists()):
+#		return JsonResponse({
+#			'user' : room.name
+#			'room' : room.room
+#			})

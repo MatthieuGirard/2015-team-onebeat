@@ -6,7 +6,7 @@
 	"artist" : "Justin Bieber",
 	"title" : "Baby",
 	"duration" : "234.23",
-	"spotifyRef" : "spotify:track:0uIpyzeR7wSmDCErymJHmc",
+	"spotifyRef" : "spotify:track:0uIpyzeR7wSmDCErymJHmc"
 }
 
 //JSON2 : room (answer to getRoom)
@@ -25,7 +25,7 @@
 		"userID1",
 		"userID2",
 		"userID3",
-		"userID4",
+		"userID4"
 	],
 	"members" : [
 		"userID1",
@@ -34,7 +34,7 @@
 		"userID4",
 		"userID5",
 		"userID6",
-		"userID7",
+		"userID7"
 	]
 }
 
@@ -46,25 +46,42 @@
 	"rooms" : [
 		10293801,
 		23873784,
-		97432848,
-	],
+		97432848
+	]
+}
+
+//if the id doesn't exist
+{
+	"error" : "user/room/song 234134 does not exist",
+	"id" : 1231253
+	//or "id": "hugo-bonnome"
+	//"id" could be String or Integer
+}
+
+//answer if the user/song/room you tried to add/create already exists
+{
+	"added": false, 
+	"error" : "user/song/room 234375/hugo-bonnome doesn't exist",
+	"id" : 1231253
+	//or "id": "hugo-bonnome"
+	//"id" could be String or Integer
 }
 
 //from app to server
 //JSON 4 : getUser (HTTP GET)
 {
-	"id" : "hugo-bonnome",
+	"id" : "hugo-bonnome"
 }
 
 //JSON 5 : addUser (HTTP POST)
 {
 	"id" : "hugo-bonnome",
-	"name" : "Hugo",
+	"name" : "Hugo"
 }
 
 //JSON6 : getSong (HTTP GET)
 {
-	"id" : 123456789,
+	"id" : 123456789
 }
 
 //JSON 7 : addSong (HTTP POST)
@@ -74,27 +91,24 @@
 	"title" : "Baby",
 	"duration" : "234.23",
 	"spotifyRef" : "spotify:track:0uIpyzeR7wSmDCErymJHmc",
-	"addedBy" : "Hugo",
+	"addedBy" : "Hugo"
 }
 
 //JSON8 : getRoom (HTTP GET)
 {
-	"id" : 382732873,
+	"id" : 382732873
 }
 
 //JSON9 : createRoom (HTTP POST)
 {
 	"creator" : "hugo-bonnome",
-	"name" : "Awesome Room"
+	"name" : "Awesome Room",
+	"password": 1234
+	//password value can be null
 }
 
 //JSON10 : joinRoom (HTTP GET)
 {
-	"name" : "Awesome Room"
-}
-
-//JSON11 : addMember (HTTP POST)
-{
 	"user" : "hugo-bonnome",
-	"room" : 38929879,
+	"name" : "Awesome Room"
 }

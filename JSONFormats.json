@@ -50,12 +50,10 @@
 	],
 }
 
-
-
 //from app to server
 //JSON 4 : getUser (HTTP GET)
 {
-	"id" : 123456789,
+	"id" : "hugo-bonnome",
 }
 
 //JSON 5 : addUser (HTTP POST)

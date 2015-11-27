@@ -15,6 +15,7 @@
 	"id" : 1298739812,
 	"creator" : "idOfCreator",
 	"name" : "Super Cool Room",
+	"password" : "1234", //but this attribute can be null
 	"playlist" : [
 		12341234,
 		321321,
@@ -103,12 +104,13 @@
 {
 	"creator" : "hugo-bonnome",
 	"name" : "Awesome Room",
-	"password": 1234
+	"password": "1234"
 	//password value can be null
 }
 
 //JSON10 : joinRoom (HTTP GET)
 {
 	"user" : "hugo-bonnome",
-	"name" : "Awesome Room"
+	"name" : "Awesome Room",
+	"password" : "1234"	//can be null
 }

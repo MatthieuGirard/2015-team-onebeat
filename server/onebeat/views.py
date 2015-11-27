@@ -132,6 +132,7 @@ def getRoom(request):
 			'id' : room.roomId,
 			'creator' : room.creator,
 			'name' : room.name,
+			'password' : room.password,
 			'playlist' : playlist,
 			'addedBy' : addedBy,
 			'members' : members

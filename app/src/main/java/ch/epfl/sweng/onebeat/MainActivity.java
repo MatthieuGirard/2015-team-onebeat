@@ -1,5 +1,6 @@
 package ch.epfl.sweng.onebeat;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,8 +38,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -226,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
         }
     }
 
+    @SuppressLint("ValidFragment")
     private class RoomCreatorDialogFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -242,8 +249,22 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                         public void onClick(DialogInterface dialog, int id) {
                             Intent intent = new Intent(RoomCreatorDialogFragment.this.getActivity(), RoomActivity.class);
                             EditText roomNameField = (EditText) findViewById(R.id.roomName);
+                            EditText roomPasswordField = (EditText) findViewById(R.id.roomPassword);
+
+                            JSONObject jsonToSend = new JSONObject();
+                            try {
+                                jsonToSend.put("creator", SpotifyUser.getInstance().getPseudo());
+                                jsonToSend.put("name", roomNameField.getText().toString());
+                                jsonToSend.put("password", roomPasswordField.getText().toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (NotDefinedUserInfosException e) {
+                                e.printStackTrace();
+                            }
                             //String message = roomNameField.getText().toString();
                             //intent.putExtra(EXTRA_MESSAGE, message);
+
+                            excutePost("http://onebeat.pythonanywhere.com/onebeat/createRoom", jsonToSend.toString());
                             startActivity(intent);
                         }
                     })
@@ -253,6 +274,48 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                         }
                     });
             return builder.create();
+        }
+    }
+
+    public static String excutePost(String targetURL, String dataToSend)
+    {
+        URL url;
+        HttpURLConnection urlConnection = null;
+        try {
+            //Create urlConnection
+            url = new URL(targetURL);
+            urlConnection = (HttpURLConnection)url.openConnection();
+            urlConnection.setDoOutput(true);
+            urlConnection.setChunkedStreamingMode(0);
+
+            //Send request
+            DataOutputStream wr = new DataOutputStream (urlConnection.getOutputStream ());
+            wr.writeBytes (dataToSend);
+            wr.flush ();
+            wr.close ();
+
+            //Get Response
+            InputStream is = urlConnection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            String line;
+            StringBuffer response = new StringBuffer();
+            while((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+            rd.close();
+            return response.toString();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return null;
+
+        } finally {
+
+            if(urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
     }
 }

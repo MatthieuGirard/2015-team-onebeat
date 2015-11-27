@@ -18,7 +18,7 @@ public class SpotifyUser {
 
     public final static SpotifyUser getInstance() { return instance; }
 
-    public String getString() throws NotDefinedUserInfosException {
+    public String getPseudo() throws NotDefinedUserInfosException {
         if (this.pseudo == null) {
             throw new NotDefinedUserInfosException("Pseudo not registered yet.");
         }

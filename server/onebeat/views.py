@@ -143,11 +143,14 @@ def getRoom(request):
 			})
 
 def joinRoom(request):
+	#also have to write code to deal with a possible password
+	#should change format of JSON10 to deal with this
 	received_json_data = json.loads(request.POST['request'])
 	roomName = received_json_data['name']
 	if (Room.objects.filter(roomName = roomName).exists()):
 		#add user to the room's members list
 		#add room to user's rooms
+		#other than that, same code as getRoom basically
 		return JsonResponse({
 			'name' : room.name
 			})

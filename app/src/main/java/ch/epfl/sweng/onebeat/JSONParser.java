@@ -33,7 +33,7 @@ public class JSONParser {
                 String artist = actualTrack.getJSONArray("artists").getJSONObject(0).getString("name");
                 String songName = actualTrack.getString("name");
                 String spotifyRef = actualTrack.getString("href");
-                String duration = "";
+                String duration = actualTrack.getString("duration");
 
                 tracksFound.add(new Song(songName, artist, duration, spotifyRef));
 

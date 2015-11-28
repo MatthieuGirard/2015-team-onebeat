@@ -30,6 +30,7 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         // params comes from the execute() call: params[0] is the url.
+        // params[1] is the token
         try {
             return downloadUrl(params[0], params[1]);
         } catch (IOException e) {

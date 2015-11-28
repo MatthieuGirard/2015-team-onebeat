@@ -3,8 +3,8 @@ from . import views
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^onebeat/', include('onebeat.urls')),
+    #url(r'^admin/', include(admin.site.urls)),
+    #url(r'^onebeat/', include('onebeat.urls')),
     url(r'^getUser/', views.getUser, name='getUser'),
     url(r'^addUser/', views.addUser, name='addUser'),
     url(r'^getSong/', views.getSong, name='getSong'),

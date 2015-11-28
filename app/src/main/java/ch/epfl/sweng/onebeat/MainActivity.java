@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
 
-        FloatingActionButton FAB = new FloatingActionButton(this);
+        FloatingActionButton FAB = (FloatingActionButton) findViewById(R.id.fab);
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,9 +83,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                 dialog.show(getSupportFragmentManager(), "Room Creator");
             }
         });
-
-        RelativeLayout rl = (RelativeLayout) findViewById(R.id.mainLayout);
-        rl.addView(FAB);
     }
 
     @Override
@@ -238,22 +235,23 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             // Get the layout inflater
-            LayoutInflater inflater = getActivity().getLayoutInflater();
+            final LayoutInflater inflater = getActivity().getLayoutInflater();
 
             // Inflate and set the layout for the dialog
             // Pass null as the parent view because its going in the dialog layout
-            builder.setView(inflater.inflate(R.layout.dialog_create_room, null))
+            final View v = inflater.inflate(R.layout.dialog_create_room, null);
+            builder.setView(v)
                     // Add action buttons
                     .setPositiveButton(R.string.partyOn, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
                             Intent intent = new Intent(RoomCreatorDialogFragment.this.getActivity(), RoomActivity.class);
-                            EditText roomNameField = (EditText) findViewById(R.id.roomName);
-                            EditText roomPasswordField = (EditText) findViewById(R.id.roomPassword);
+                            EditText roomNameField = (EditText) v.findViewById(R.id.roomName);
+                            EditText roomPasswordField = (EditText) v.findViewById(R.id.roomPassword);
 
                             JSONObject jsonToSend = new JSONObject();
                             try {
-                                jsonToSend.put("creator", SpotifyUser.getInstance().getPseudo());
+                                jsonToSend.put("creator", SpotifyUser.getInstance().getPseudo()); // TODO
                                 jsonToSend.put("name", roomNameField.getText().toString());
                                 jsonToSend.put("password", roomPasswordField.getText().toString());
                             } catch (JSONException e) {
@@ -264,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                             //String message = roomNameField.getText().toString();
                             //intent.putExtra(EXTRA_MESSAGE, message);
 
-                            excutePost("http://onebeat.pythonanywhere.com/onebeat/createRoom", jsonToSend.toString());
+                            excutePost("http://onebeat.pythonanywhere.com/createRoom", jsonToSend.toString());
                             startActivity(intent);
                         }
                     })

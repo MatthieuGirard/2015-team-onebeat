@@ -15,13 +15,13 @@ public class SpotifyDataProvider {
 
 
     /*
-     TODO
+      TODO
       implements methods using the pending data
       you may have to modify the method's signatures to be compatible with spotify
       run the SpotifyDataProviderTest to verify the implementation (already implemented,
       you just have to complete the : String pseudo, String pass with your spotify account).
       you can watch pendingDataTest that fetch a JSON from a server and retrieve the information (1min).
-      */
+    */
 
     public SpotifyDataProvider() {
     }
@@ -52,6 +52,7 @@ public class SpotifyDataProvider {
     public PendingData<MusicData> music(String key){
         throw new NotImplementedException();
     }
+
 
 
 }

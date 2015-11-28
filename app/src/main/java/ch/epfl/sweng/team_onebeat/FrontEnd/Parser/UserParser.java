@@ -1,5 +1,6 @@
 package ch.epfl.sweng.team_onebeat.FrontEnd.Parser;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
@@ -16,6 +17,30 @@ public class UserParser implements Parser<UserData> {
 
     @Override
     public  UserData parse(JSONObject obj) throws ParseException {
-        throw new NotImplementedException();
+
+        try {
+            int id = obj.getInt("id");
+            String pseudo = obj.getString("pseudo");
+
+            return new UserData(id, pseudo);
+
+        } catch (JSONException e) {
+            throw new ParseException();
+        }
+
+
+
+
     }
+
+/*
+
+    //JSON3 : user
+    {
+        "info" : "user",
+            "id" : 151452435,
+            "pseudo" : "Hugo"
+    }
+
+    */
 }

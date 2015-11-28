@@ -28,7 +28,6 @@ public abstract class Controler implements Observer {
     private static final NetworkProvider networkProvider = new DefaultNetworkProvider();
 
 
-
     private static LinkedList<Message> requestTracker = new LinkedList<>();
 
 

@@ -29,43 +29,47 @@ import ch.epfl.sweng.team_onebeat.FrontEnd.Network.PendingData;
 
 public class PlaylistData {
 
+
     private int id;
-
-    private Date lastUpdate;
     private List<Integer> id_musics;
-    private Set<Integer> id_participants;
+    private List<Integer> id_participants;
     private String name;
+    private int addedBy;
+    private int lastUpdateDate;
 
 
-    public PlaylistData(int id,
-                    Date lastUpdate,
-                    String name,
-                    List<Integer> id_musics,
-                    Set<Integer> id_participants ){
+    public PlaylistData(
+            int id,
+            String name,
+            List<Integer> id_musics,
+            int addedBy,
+            List<Integer> id_participants,
+            int lastUpdateDate){
+
 
         this.id = id;
-        this.lastUpdate = lastUpdate;
         this.name = name;
         this.id_musics = id_musics;
         this.id_participants = id_participants;
-
+        this.addedBy = addedBy;
+        this.lastUpdateDate = lastUpdateDate;
 
     }
 
+
+    public int getId() {
+        return id;
+    }
 
     public String getName(){
         return name;
     }
 
-    public PendingData<MusicData> downloadsMusics(){
-        // TODO use id_musics to retrieve data
+
+    public PendingData<UserData> downloadAddedBy(){
         throw new NotImplementedException();
     }
 
-    public PendingData<UserData> downloadsUsers(){
-        // TODO use id_musics to retrieve data
-        throw new NotImplementedException();
-    }
 
     // need a buffer ? room1 goout room2 goout room1 ? [optional]
 

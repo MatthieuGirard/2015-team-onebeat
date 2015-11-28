@@ -1,13 +1,21 @@
 package ch.epfl.sweng.team_onebeat.FrontEnd.Network;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Map;
 
 import ch.epfl.sweng.team_onebeat.Exceptions.BuildableException;
 import ch.epfl.sweng.team_onebeat.Exceptions.ParseException;
@@ -69,7 +77,7 @@ public class PendingData<T> {
     }
 
 
-    // real constructor
+    // constructor for get
 
     public PendingData(URL url,
                        NetworkProvider networkProvider,
@@ -83,6 +91,23 @@ public class PendingData<T> {
         this.download.run();
 
     }
+
+
+    // constructor for post
+
+    public PendingData(URL url,
+                       Map<String,String> namesValues,
+                       NetworkProvider networkProvider,
+                       Parser<T> parser
+    ){
+
+
+        this.downloadState = DownloadState.PENDING;
+        this.download = new Thread(new Download(url,namesValues,networkProvider,parser));
+        this.download.run();
+
+    }
+
 
 
 
@@ -149,14 +174,29 @@ public class PendingData<T> {
         private URL url;
         private NetworkProvider networkProvider;
         private Parser<T> parser;
+        private Map<String, String> namesValues;
 
 
-        public Download(URL url, NetworkProvider networkProvider, Parser parser){
+        public Download(URL url,
+                        Map<String, String> namesValues,
+                        NetworkProvider networkProvider,
+                        Parser parser) {
+
+            this.url = url;
+            this.networkProvider = networkProvider;
+            this.parser = parser;
+            this.namesValues = namesValues;
+        }
+
+
+        public Download(URL url, NetworkProvider networkProvider, Parser parser) {
             this.url = url;
             this.networkProvider = networkProvider;
             this.parser = parser;
         }
 
+
+        // TODO: disconect
 
         private String fetchContent(HttpURLConnection conn) throws IOException {
             StringBuilder out = new StringBuilder();
@@ -187,16 +227,52 @@ public class PendingData<T> {
 
             try {
 
+
+
                 HttpURLConnection conn = networkProvider.getConnection(url);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                conn.connect();
+
+
+
+
+                if (namesValues == null) {
+
+                    conn.setRequestMethod("GET");
+                    conn.setDoInput(true);
+                    conn.connect();
+
+                } else {
+
+
+                    conn = networkProvider.getConnection(url);
+
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+
+
+                    OutputStream outputStream = conn.getOutputStream();
+                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8");
+                    BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+
+                    bufferedWriter.write(postRequest(namesValues));
+
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+
+                    conn.connect();
+
+                }
+
+
+
 
                 int response = conn.getResponseCode();
+
+
                 if (response < HTTP_SUCCESS_START || response > HTTP_SUCCESS_END) {
                     downloadState = DownloadState.ERROR;
-                }
-                else {
+                } else {
 
                     // instance is ready
                     downloadState = DownloadState.LOADED;
@@ -205,18 +281,48 @@ public class PendingData<T> {
                 }
 
 
-            } catch (IOException e) {
+            } catch (IOException | JSONException | ParseException e) {
                 downloadState = DownloadState.ERROR;
-            } catch (JSONException e) {
                 e.printStackTrace();
-            } catch (ParseException e) {
-                downloadState = DownloadState.ERROR;
             }
+
+
         }
+
+
+        private String postRequest(Map<String, String> namesValues) throws UnsupportedEncodingException {
+
+
+            StringBuilder strB = new StringBuilder();
+            boolean first = true;
+
+            for (Map.Entry<String, String> entry : namesValues.entrySet()) {
+
+                if (first == true) {
+                    first = false;
+                } else {
+                    strB.append("&");
+                }
+                strB.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+                strB.append("=");
+                strB.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+
+
+            }
+
+            return strB.toString();
+        }
+
+
+
 
     }
 
 
 
-
 }
+
+
+
+
+

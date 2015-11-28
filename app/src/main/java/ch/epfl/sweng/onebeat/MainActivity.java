@@ -1,18 +1,27 @@
 package ch.epfl.sweng.onebeat;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -25,6 +34,20 @@ import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ConnectionStateCallback, PlayerNotificationCallback, WebPageDownloader {
@@ -33,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
     private static final String REDIRECT_URI = "onebeatapp://callback";
 
     private static final int REQUEST_CODE = 1337;
+
+    public final static String EXTRA_MESSAGE = "ch.epfl.sweng.onebeat.CREATING_ROOM_MESSAGE";
+
 
     private Player mPlayer;
 
@@ -47,18 +73,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
         builder.setScopes(new String[]{"user-read-private", "streaming"});
         AuthenticationRequest request = builder.build();
 
-        //AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
 
-        EditText editText = (EditText) findViewById(R.id.searchField);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        FloatingActionButton FAB = (FloatingActionButton) findViewById(R.id.fab);
+        FAB.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_GO) {
-                    findViewById(R.id.goButton).performClick();
-                    handled = true;
-                }
-                return handled;
+            public void onClick(View v) {
+                RoomCreatorDialogFragment dialog = new RoomCreatorDialogFragment();
+                dialog.show(getSupportFragmentManager(), "Room Creator");
             }
         });
     }
@@ -71,7 +93,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
-                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
+
+                new DownloadWebpageTask(this).execute("https://api.spotify.com/v1/me", response.getAccessToken());
+
+/*                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
                 Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
                     @Override
                     public void onInitialized(Player player) {
@@ -85,12 +110,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                     public void onError(Throwable throwable) {
                         Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
                     }
-                });
+                });*/
             }
         }
     }
 
-    public void searchSong(View view) {
+/*   public void searchSong(View view) {
 
         Button goButton = (Button) findViewById(R.id.goButton);
         goButton.setEnabled(false);
@@ -106,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
         if (networkInfo != null && networkInfo.isConnected()) {
             new DownloadWebpageTask(this).execute(stringUrl);
         }
-    }
+    }*/
 
     @Override
     protected void onDestroy() {
@@ -152,21 +177,143 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
     @Override
     public void onPageDataRetrieved(String result) throws JSONParserException {
 
-        Button goButton = (Button) findViewById(R.id.goButton);
-        goButton.setText("GO");
-        goButton.setEnabled(true);
+        JSONParser.parseFromUserJSON(result);
 
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.resultsLayout);
+        TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setText(result);
+    }
 
-        linearLayout.removeAllViews();
+    private class GetUserJSONFromWeb extends AsyncTask<String, Void, String> {
 
-        List<Song> tracks = JSONParser.parseFromSearchAPI(result);
+        @Override
+        protected String doInBackground(String[] params) {
+            try {
+                return downloadUserJSON(params[0], params[1]);
+            } catch (IOException e) {
+                return "Error trying to get the WebData of user JSON";
+            }
+        }
 
-        for (int i = 0; i < tracks.size(); i++) {
-            Song actualTrack = tracks.get(i);
-            TextView trackTextView = new TextView(this);
-            trackTextView.setText(actualTrack.getArtist()+" - "+actualTrack.getTitle());
-            linearLayout.addView(trackTextView);
+        @Override
+        protected void onPostExecute(String result) {
+            TextView textView = (TextView) findViewById(R.id.textView);
+            textView.setText(result);
+        }
+
+        private String downloadUserJSON(String myurl, String token) throws IOException {
+            InputStream is = null;
+
+            try {
+                URL url = new URL(myurl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("Authorization", "Bearer "+ token);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                // Starts the query
+                conn.connect();
+                int response = conn.getResponseCode();
+                Log.d("user JSON request", "The response is: " + response);
+                is = conn.getInputStream();
+
+                // Convert the InputStream into a string
+                String contentAsString = DownloadWebpageTask.readIt(is);
+                return contentAsString;
+
+                // Makes sure that the InputStream is closed after the app is
+                // finished using it.
+            } finally {
+                if (is != null) {
+                    is.close();
+                }
+            }
+        }
+    }
+
+    @SuppressLint("ValidFragment")
+    private class RoomCreatorDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            // Get the layout inflater
+            final LayoutInflater inflater = getActivity().getLayoutInflater();
+
+            // Inflate and set the layout for the dialog
+            // Pass null as the parent view because its going in the dialog layout
+            final View v = inflater.inflate(R.layout.dialog_create_room, null);
+            builder.setView(v)
+                    // Add action buttons
+                    .setPositiveButton(R.string.partyOn, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent intent = new Intent(RoomCreatorDialogFragment.this.getActivity(), RoomActivity.class);
+                            EditText roomNameField = (EditText) v.findViewById(R.id.roomName);
+                            EditText roomPasswordField = (EditText) v.findViewById(R.id.roomPassword);
+
+                            JSONObject jsonToSend = new JSONObject();
+                            try {
+                                jsonToSend.put("creator", SpotifyUser.getInstance().getPseudo()); // TODO
+                                jsonToSend.put("name", roomNameField.getText().toString());
+                                jsonToSend.put("password", roomPasswordField.getText().toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (NotDefinedUserInfosException e) {
+                                e.printStackTrace();
+                            }
+                            //String message = roomNameField.getText().toString();
+                            //intent.putExtra(EXTRA_MESSAGE, message);
+
+                            excutePost("http://onebeat.pythonanywhere.com/createRoom", jsonToSend.toString());
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            RoomCreatorDialogFragment.this.getDialog().cancel();
+                        }
+                    });
+            return builder.create();
+        }
+    }
+
+    public static String excutePost(String targetURL, String dataToSend)
+    {
+        URL url;
+        HttpURLConnection urlConnection = null;
+        try {
+            //Create urlConnection
+            url = new URL(targetURL);
+            urlConnection = (HttpURLConnection)url.openConnection();
+            urlConnection.setDoOutput(true);
+            urlConnection.setChunkedStreamingMode(0);
+
+            //Send request
+            DataOutputStream wr = new DataOutputStream (urlConnection.getOutputStream ());
+            wr.writeBytes (dataToSend);
+            wr.flush ();
+            wr.close ();
+
+            //Get Response
+            InputStream is = urlConnection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            String line;
+            StringBuffer response = new StringBuffer();
+            while((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+            rd.close();
+            return response.toString();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return null;
+
+        } finally {
+
+            if(urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
     }
 }

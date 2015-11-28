@@ -5,11 +5,38 @@ package ch.epfl.sweng.onebeat;
  */
 public class SpotifyUser {
 
-    private final String pseudo;
+    private static final SpotifyUser instance = new SpotifyUser();
 
-    public SpotifyUser(String pseudo) {
-        this.pseudo = pseudo;
+    private String pseudo = null;
+    private String spotifyID = null;
+
+    private SpotifyUser() {
+        if (instance != null) {
+            throw new IllegalStateException("Already instantiated");
+        }
     }
 
-    public String getString() { return this.pseudo; }
+    public final static SpotifyUser getInstance() { return instance; }
+
+    public String getPseudo() throws NotDefinedUserInfosException {
+        if (this.pseudo == null) {
+            throw new NotDefinedUserInfosException("Pseudo not registered yet.");
+        }
+        return this.pseudo;
+    }
+    public String getSpotifyID() throws NotDefinedUserInfosException {
+        if (this.spotifyID == null) {
+            throw new NotDefinedUserInfosException("Pseudo not registered yet.");
+        }
+        return this.spotifyID;
+    }
+
+    public void setInfos(String pseudo, String spotifyID) {
+        if (this.pseudo == null) {
+            this.pseudo = pseudo;
+        }
+        if (this.spotifyID == null) {
+            this.spotifyID = spotifyID;
+        }
+    }
 }

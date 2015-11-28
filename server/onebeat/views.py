@@ -14,7 +14,8 @@ def addUser(request):
 	name = received_json_data['name']
 	if (User.objects.filter(userId = userId).exists()):
 		return JsonResponse({
-			'error':'user already exists',
+			'added' : False,
+			'error' : 'user already exists',
 			'id' : userId
 			})
 	else:
@@ -23,8 +24,8 @@ def addUser(request):
 			name = name
 			)
 		return JsonResponse({
-			'added':True,
-			'user':userId
+			'added' : True,
+			'user' : userId
 			})
 
 def getUser(request):
@@ -32,47 +33,48 @@ def getUser(request):
 	userId = received_json_data['id']
 	if (User.objects.filter(userId = userId).exists()):
 		user = User.objects.get(userId = userId)
+		#we need to make sure rooms only contains the room id and not the user id
 		rooms = Member.objects.filter(user = userId)
 		return JsonResponse({
-			'info':'user',
-			'id':userId,
-			'name':user.name,
-			'rooms':rooms
+			'info' : 'user',
+			'id' : userId,
+			'name' : user.name,
+			'rooms' : rooms.room
 			})
 	else:
 		return JsonResponse({
-			'error':'user does not exist',
+			'added' : False,
+			'error' : 'user does not exist',
 			'id' : userId
 			})
 
 def addSong(request):
 	received_json_data = json.loads(request.POST['request'])
 	songId = received_json_data['id']
-	if (Song.objects.filter(songId = songId).exists()):
-		return JsonResponse({
-			'error':'song already exists',
-			'id' : songId
-			})
-	else:
-		#how are songs added to the room's playlist?
-		#and how is the addedBy list compiled when ppl add songs?
+	#if we don't have the song, we add it to our database
+	if ( not(Song.objects.filter(songId = songId).exists()) ):
 		title = received_json_data['title']
 		artist = received_json_data['artist']
 		duration = received_json_data['duration']
 		spotifyRef = received_json_data['spotifyRef']
-		addedBy = received_json_data['addedBy']
 		Song.objects.create(
 			songId = songId,
 			artist = artist,
 			title = title,
 			duration = duration,
 			spotifyRef = spotifyRef,
-			addedBy = addedBy
 			)
-		return JsonResponse({
-			'added':True,
-			'song':songId
-			})
+	addedBy = received_json_data['addedBy']
+	room = received_json_data['room']
+	Playlist.objects.create(
+		room = room,
+		song = songId,
+		addedBy = addedBy
+		)
+	return JsonResponse({
+		'added' : True,
+		'song' : songId
+		})
 
 def getSong(request):
 	received_json_data = json.loads(request.GET['request'])
@@ -89,7 +91,8 @@ def getSong(request):
 			})
 	else:
 		return JsonResponse({
-			'error':'song does not exist',
+			'added' : False,
+			'error' : 'song does not exist',
 			'id' : songId
 			})
 
@@ -124,18 +127,19 @@ def getRoom(request):
 	roomId = received_json_data['id']
 	if (Room.objects.filter(roomId = roomId).exists()):
 		room = Room.objects.get(roomId = roomId)
-		playlist = Member.objects.filter(room = roomId)
-		addedBy = Member.objects.filter(room = roomId)
+		#also, same as in getUser, find how to get different arrays for songs and addedBy from playlist
+		playlist = Playlist.objects.filter(room = roomId)
+		#same as in getUser
 		members = Member.objects.filter(room = roomId)
 		return JsonResponse({
 			'info' : 'room',
-			'id' : room.roomId,
+			'id' : room.id,
 			'creator' : room.creator,
 			'name' : room.name,
 			'password' : room.password,
-			'playlist' : playlist,
-			'addedBy' : addedBy,
-			'members' : members
+			'playlist' : playlist.song,
+			'addedBy' : playlist.addedBy,
+			'members' : members.user
 			})
 	else:
 		return JsonResponse({
@@ -148,10 +152,21 @@ def joinRoom(request):
 	#should change format of JSON10 to deal with this
 	received_json_data = json.loads(request.POST['request'])
 	roomName = received_json_data['name']
+	userId = received_json_data['user']
 	if (Room.objects.filter(roomName = roomName).exists()):
-		#add user to the room's members list
-		#add room to user's rooms
-		#other than that, same code as getRoom basically
+		room = Room.objects.get(roomName = roomName)
+		Member.objects.create(
+			user = userId,
+			room = room.id
+			)
 		return JsonResponse({
-			'name' : room.name
+			'added' : True,
+			'roomId' : room.id,
+			'userId' : userId,
+			})
+	else:
+		return JsonResponse({
+			'added' : False,
+			'error' : 'room does not exist',
+			'room' : roomName
 			})

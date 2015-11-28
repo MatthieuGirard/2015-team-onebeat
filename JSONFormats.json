@@ -1,4 +1,4 @@
-//from server to app (still have to design anwsers to POST requests)
+//from server to app
 //JSON1 : song (answer to getSong)
 {
 	"info" : "song",
@@ -59,10 +59,10 @@
 	//"id" could be String or Integer
 }
 
-//answer if the user/song/room you tried to add/create already exists
+//answer if the user/room you tried to add/create already exists
 {
 	"added": false, 
-	"error" : "user/song/room 234375/hugo-bonnome doesn't exist",
+	"error" : "user/room doesn't exist",
 	"id" : 1231253
 	//or "id": "hugo-bonnome"
 	//"id" could be String or Integer
@@ -92,7 +92,7 @@
 	"title" : "Baby",
 	"duration" : "234.23",
 	"spotifyRef" : "spotify:track:0uIpyzeR7wSmDCErymJHmc",
-	"addedBy" : "Hugo"
+	"addedBy" : "hugo-bonnome"
 }
 
 //JSON8 : getRoom (HTTP GET)

@@ -2,8 +2,6 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    #url(r'^$', views.redirect, name='redirect'),
-
     url(r'^admin/', include(admin.site.urls)),
     url(r'^getUser', views.getUser, name='getUser'),
     url(r'^addUser', views.addUser, name='addUser'),

@@ -53,7 +53,7 @@
 
 //if the id doesn't exist
 {
-	"error" : "user/room/song 234134 does not exist",
+	"error" : "user/room/song does not exist",
 	"id" : 1231253
 	//or "id": "hugo-bonnome"
 	//"id" could be String or Integer
@@ -62,7 +62,7 @@
 //answer if the user/room you tried to add/create already exists
 {
 	"added": false, 
-	"error" : "user/room doesn't exist",
+	"error" : "user/room does not exist",
 	"id" : 1231253
 	//or "id": "hugo-bonnome"
 	//"id" could be String or Integer
@@ -108,7 +108,7 @@
 	//password value can be null
 }
 
-//JSON10 : joinRoom (HTTP GET)
+//JSON10 : joinRoom (HTTP POST)
 {
 	"user" : "hugo-bonnome",
 	"name" : "Awesome Room",

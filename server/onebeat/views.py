@@ -43,7 +43,6 @@ def getUser(request):
 			})
 	else:
 		return JsonResponse({
-			'added' : False,
 			'error' : 'user does not exist',
 			'id' : userId
 			})
@@ -91,7 +90,6 @@ def getSong(request):
 			})
 	else:
 		return JsonResponse({
-			'added' : False,
 			'error' : 'song does not exist',
 			'id' : songId
 			})

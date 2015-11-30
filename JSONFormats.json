@@ -70,9 +70,8 @@
 
 //from app to server
 //JSON 4 : getUser (HTTP GET)
-{
-	"id" : "hugo-bonnome"
-}
+//Not a JSON
+ 	id = "hugo-bonnome"
 
 //JSON 5 : addUser (HTTP POST)
 {
@@ -81,9 +80,9 @@
 }
 
 //JSON6 : getSong (HTTP GET)
-{
-	"id" : 123456789
-}
+//Not a JSON
+	id = 123456789
+
 
 //JSON 7 : addSong (HTTP POST)
 {
@@ -96,9 +95,8 @@
 }
 
 //JSON8 : getRoom (HTTP GET)
-{
-	"id" : 382732873
-}
+//Not a JSON
+	id = 382732873
 
 //JSON9 : createRoom (HTTP POST)
 {

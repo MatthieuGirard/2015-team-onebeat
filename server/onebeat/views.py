@@ -29,8 +29,7 @@ def addUser(request):
 			})
 
 def getUser(request):
-	received_json_data = json.loads(request.GET['request'])
-	userId = received_json_data['id']
+	userId = request.GET['id']
 	if (User.objects.filter(userId = userId).exists()):
 		user = User.objects.get(userId = userId)
 		#we need to make sure rooms.room only contains the room id and not the user id
@@ -76,8 +75,7 @@ def addSong(request):
 		})
 
 def getSong(request):
-	received_json_data = json.loads(request.GET['request'])
-	songId = received_json_data['id']
+	songId = request.GET['id']
 	if (Song.objects.filter(songId = songId).exists()):
 		song = Song.objects.get(songId = songId)
 		return JsonResponse({
@@ -120,8 +118,7 @@ def createRoom(request):
 			})
 
 def getRoom(request):
-	received_json_data = json.loads(request.GET['request'])
-	roomId = received_json_data['id']
+	roomId = request.GET['id']
 	if (Room.objects.filter(roomId = roomId).exists()):
 		room = Room.objects.get(roomId = roomId)
 		#also, same as in getUser, find how to get different arrays for songs and addedBy from playlist

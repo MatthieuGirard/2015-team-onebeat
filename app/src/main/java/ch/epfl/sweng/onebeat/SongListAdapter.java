@@ -57,9 +57,9 @@ public class SongListAdapter extends ArrayAdapter<Song> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.title.setText(song.title);
-        viewHolder.artist.setText(song.artist);
-        viewHolder.duration.setText(song.duration);
+        viewHolder.title.setText(song.getTitle());
+        viewHolder.artist.setText(song.getArtist());
+        viewHolder.duration.setText(song.getDuration());
 
         return convertView;
         //return super.getView(position, convertView, parent);

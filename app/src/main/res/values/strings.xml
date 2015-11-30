@@ -9,4 +9,5 @@
     <string name="title_activity_select_song">SelectSong</string>
     <string name="partyOn">Party on!</string>
     <string name="cancel">cancel</string>
+    <string name="title_activity_select_room">SelectRoom</string>
 </resources>

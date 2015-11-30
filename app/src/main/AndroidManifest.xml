@@ -21,17 +21,23 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".ParseActivity" >
         </activity>
-        <activity android:name=".RoomActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity
+            android:name=".RoomActivity"
+            android:parentActivityName="ch.epfl.sweng.onebeat.SelectRoomActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ch.epfl.sweng.onebeat.SelectRoomActivity" />
         </activity>
         <activity
             android:name=".SelectRoomActivity"
             android:label="@string/title_activity_select_room"
             android:theme="@style/AppTheme.NoActionBar" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
         </activity>
     </application>
 

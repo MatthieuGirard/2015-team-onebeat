@@ -1,6 +1,7 @@
 package ch.epfl.sweng.onebeat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ import java.util.List;
 public class RoomActivity extends AppCompatActivity implements WebPageDownloader {
     private ListView listViewSongs;
     private EditText addNextSong;
+    private TextView roomName;
 
     private ArrayList<Song> currentSongs;
     private ArrayAdapter<Song> adapter;
@@ -45,6 +48,11 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
 
         listViewSongs = (ListView) findViewById(R.id.currentSongsList);
         addNextSong = (EditText) findViewById(R.id.addSongTextBox);
+        roomName = (TextView) findViewById(R.id.currentRoomName);
+
+        // Assign the room name by getting it from the intent which opened this room
+        Intent intent = getIntent();
+        roomName.setText(intent.getStringExtra(SelectRoomActivity.ROOM_NAME_MESSAGE));
 
         /*
         TODO: Make currentSongs call a method which checks if there was previously a list of songs
@@ -58,8 +66,7 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
         registerForContextMenu(listViewSongs);
         registerForContextMenu(addNextSong);
 
-        EditText editText = (EditText) findViewById(R.id.addSongTextBox);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        addNextSong.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;

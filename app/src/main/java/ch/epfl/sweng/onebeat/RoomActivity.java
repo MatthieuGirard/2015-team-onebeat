@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -28,7 +29,6 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
     private ListView listViewSongs;
     private EditText addNextSong;
 
-    //TODO: change currentSongs to be an array of songs but only after making a SongListAdapter
     private ArrayList<Song> currentSongs;
     private ArrayAdapter<Song> adapter;
 
@@ -81,12 +81,11 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
             Log.v("KEINFO - ", "Con Menu inflated for song to delete");
             inflater.inflate(R.menu.delete_song_context_menu, menu);
         }
-        //TODO: Find a way to differentiate when we want to display the delete menu or a list
-        //      of possible song choices
+
         else if (v.getId() == addNextSong.getId()) {
             for (int i = 0; i < tempSongs.size(); i++) {
                 Song s = tempSongs.get(i);
-                menu.add(tempSongs.hashCode(), i, i, s.title + " by " + s.artist);
+                menu.add(tempSongs.hashCode(), i, i, s.getTitle() + " by " + s.getArtist());
             }
         }
     }
@@ -133,7 +132,14 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
             if (networkInfo != null && networkInfo.isConnected()) {
                 new DownloadWebpageTask(this).execute(stringUrl);
             }
-            // TODO: Show Toast if no connection
+            else {
+                // TODO: Show Toast if no connection, maybe also inside DownloadWebpageTask ?
+                Context context = getApplicationContext();
+                int dur = Toast.LENGTH_SHORT;
+                CharSequence error_msg = "Connection error while searching for song. Please try again";
+
+                Toast.makeText(context, error_msg, dur).show();
+            }
         }
     }
 
@@ -149,14 +155,21 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
         openContextMenu(addNextSong);
     }
 
+    //TODO: Before adding a song, update the currentSong list from the database
     public void addSong(Song song) {
         currentSongs.add(song);
         adapter.notifyDataSetChanged();
     }
 
+    //TODO: Before removing a song, update the currentSong list from the database
     public void removeSong(int index) {
         // We need to delete a song from the currentSongs list
-        currentSongs.remove(index);
+        Song songToRemove = currentSongs.remove(index);
+        // TODO: Now that we know which song we want to remove, update the list from the database
+        // then check to see if the song is still in the list at which point we delete it and post
+        // the changes
+
+
         // Now notify the adapter the list has changed and it should be updated
         adapter.notifyDataSetChanged();
     }

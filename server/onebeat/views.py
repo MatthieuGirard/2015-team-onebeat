@@ -32,7 +32,6 @@ def getUser(request):
 	userId = request.GET['id']
 	if (User.objects.filter(userId = userId).exists()):
 		user = User.objects.get(userId = userId)
-		#we need to make sure rooms.room only contains the room id and not the user id
 		rooms = Member.objects.filter(user = userId)
 		return JsonResponse({
 			'info' : 'user',
@@ -103,6 +102,7 @@ def createRoom(request):
 			})
 	else:
 		creator = received_json_data['creator']
+		password = received_json_data['password']
 		newRoom = Room.objects.create(
 			name = name,
 			creator = creator,
@@ -121,7 +121,6 @@ def getRoom(request):
 	roomId = request.GET['id']
 	if (Room.objects.filter(roomId = roomId).exists()):
 		room = Room.objects.get(roomId = roomId)
-		#also, same as in getUser, find how to get different arrays for songs and addedBy from playlist
 		playlist = Playlist.objects.filter(room = roomId)
 		members = Member.objects.filter(room = roomId)
 		return JsonResponse({
@@ -141,8 +140,6 @@ def getRoom(request):
 			})
 
 def joinRoom(request):
-	#also have to write code to deal with a possible password
-	#should change format of JSON10 to deal with this
 	received_json_data = json.loads(request.POST['request'])
 	roomName = received_json_data['name']
 	userId = received_json_data['user']

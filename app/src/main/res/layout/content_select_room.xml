@@ -29,7 +29,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/roomListView"
-        android:layout_below="@+id/selectRoomTextView"
         android:layout_centerHorizontal="true"
-        android:clickable="true" />
+        android:clickable="true"
+        android:layout_below="@+id/searchRoomTextView" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchRoomTextView"
+        android:hint="@string/searchRoomTextViewHint"
+        android:layout_below="@+id/selectRoomTextView"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

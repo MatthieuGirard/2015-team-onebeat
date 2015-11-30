@@ -10,4 +10,5 @@
     <string name="partyOn">Party on!</string>
     <string name="cancel">cancel</string>
     <string name="title_activity_select_room">SelectRoom</string>
+    <string name="searchRoomTextViewHint">Searching for your friend\'s room?</string>
 </resources>

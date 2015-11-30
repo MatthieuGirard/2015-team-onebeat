@@ -119,7 +119,8 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
 
         if (searchInput.length() <= 0) {
             return;
-        } else {
+        }
+        else {
             Button button = (Button) findViewById(R.id.search_song_button);
             button.setEnabled(false);
             button.setText("Searching...");
@@ -139,6 +140,10 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
                 CharSequence error_msg = "Connection error while searching for song. Please try again";
 
                 Toast.makeText(context, error_msg, dur).show();
+
+                // Enable the user to search again
+                button.setEnabled(true);
+                button.setText("Search");
             }
         }
     }

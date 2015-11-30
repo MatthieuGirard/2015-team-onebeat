@@ -2,6 +2,7 @@ package ch.epfl.sweng.onebeat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
     private ListView listViewSongs;
     private EditText addNextSong;
     private TextView roomName;
+    private ImageView playerButton;
 
     private ArrayList<Song> currentSongs;
     private ArrayAdapter<Song> adapter;
@@ -184,5 +187,17 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
 
         // Now notify the adapter the list has changed and it should be updated
         adapter.notifyDataSetChanged();
+    }
+
+    public void playerClick(View v) {
+        playerButton = (ImageView) v.findViewById(R.id.list_image);
+        if (playerButton.getTag() == false) {
+            playerButton.setTag(true);
+            playerButton.setImageResource(R.drawable.player_pause);
+        }
+        else {
+            playerButton.setTag(false);
+            playerButton.setImageResource(R.drawable.player_play);
+        }
     }
 }

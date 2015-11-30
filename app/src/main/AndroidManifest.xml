@@ -26,7 +26,8 @@
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".ParseActivity"></activity>
+        <activity android:name=".ParseActivity" >
+        </activity>
         <activity
             android:name=".RoomActivity"
             android:parentActivityName="ch.epfl.sweng.onebeat.MainActivity"
@@ -43,7 +44,14 @@
         <activity
             android:name=".SelectRoomActivity"
             android:label="@string/title_activity_select_room"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>

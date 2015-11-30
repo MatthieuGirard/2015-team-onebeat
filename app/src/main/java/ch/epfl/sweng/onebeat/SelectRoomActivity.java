@@ -46,16 +46,22 @@ public class SelectRoomActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(this, R.layout.room_item_list_view, roomsArray);
         listViewRooms.setAdapter(adapter);
 
-        listViewRooms.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        listViewRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("KEINFO", "Position Selected = " + Integer.toString(position));
-                //onRoomSelect(position);
-            }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO: Change room type if it is not a string
+                String room = adapter.getItem(position);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO: make this class the hierarchical parent of RoomActivity (edit in RoomActivity) //
+                //       that will allow a "back" button to work
 
+                Intent intent = new Intent(SelectRoomActivity.this, RoomActivity.class);
+                String roomName = room;
+
+                intent.putExtra(ROOM_NAME_MESSAGE, roomName);
+                startActivity(intent);
+
+                // TODO: Edit RoomActivity to get the intent and set the room name
             }
         });
 
@@ -76,26 +82,6 @@ public class SelectRoomActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    /*
-     * Once a user selects a room by clicking an item on the listViewRoom, this function should
-     * be called. It will then take the room name, and start a new RoomActivity.
-     */
-    public void onRoomSelect(int position) {
-        // TODO: How to make listViewRooms call this on click
-        // TODO: make this class the hierarchical parent of RoomActivity (edit in RoomActivity) //
-        //       that will allow a "back" button to work
-
-        Intent intent = new Intent(this, RoomActivity.class);
-        //TODO: get position of the Room in the listViewRooms (call this item)
-        //TODO: String roomName = item.getText().toString();
-        String roomName = "Blank Room";
-
-        intent.putExtra(ROOM_NAME_MESSAGE, roomName);
-        startActivity(intent);
-
-        // TODO: Edit RoomActivity to get the intent and set the room name
     }
 
 }

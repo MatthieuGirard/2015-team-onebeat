@@ -1,4 +1,5 @@
 //from server to app
+//ANSWERS FOR GET
 //JSON1 : song (answer to getSong)
 {
 	"info" : "song",
@@ -15,7 +16,7 @@
 	"id" : 1298739812,
 	"creator" : "idOfCreator",
 	"name" : "Super Cool Room",
-	"password" : "1234", //but this attribute can be null
+	"password" : "1234",
 	"playlist" : [
 		12341234,
 		321321,
@@ -51,6 +52,7 @@
 	]
 }
 
+//JSON4
 //if the id doesn't exist
 {
 	"error" : "user/room/song does not exist",
@@ -59,7 +61,17 @@
 	//"id" could be String or Integer
 }
 
-//answer if the user/room you tried to add/create already exists
+//ANSWERS FOR POST
+//JSON5
+{
+	"added" : true,
+	"id" : 1231253
+	//or "id": "hugo-bonnome"
+	//"id" could be String or Integer
+}
+
+//JSON6
+//if the user/room you tried to add/create already exists
 {
 	"added": false, 
 	"error" : "user/room does not exist",
@@ -68,23 +80,25 @@
 	//"id" could be String or Integer
 }
 
+
+
 //from app to server
-//JSON 4 : getUser (HTTP GET)
+//JSON6 : getUser (HTTP GET)
 //Not a JSON
  	id = "hugo-bonnome"
 
-//JSON 5 : addUser (HTTP POST)
+//JSON7 : addUser (HTTP POST)
 {
 	"id" : "hugo-bonnome",
 	"name" : "Hugo"
 }
 
-//JSON6 : getSong (HTTP GET)
+//JSON8 : getSong (HTTP GET)
 //Not a JSON
 	id = 123456789
 
 
-//JSON 7 : addSong (HTTP POST)
+//JSON9 : addSong (HTTP POST)
 {
 	"room" : 83728738,
 	"artist" : "Justin Bieber",
@@ -94,21 +108,20 @@
 	"addedBy" : "hugo-bonnome"
 }
 
-//JSON8 : getRoom (HTTP GET)
+//JSON10 : getRoom (HTTP GET)
 //Not a JSON
 	id = 382732873
 
-//JSON9 : createRoom (HTTP POST)
+//JSON11 : createRoom (HTTP POST)
 {
 	"creator" : "hugo-bonnome",
 	"name" : "Awesome Room",
-	"password": "1234"
-	//password value can be null
+	"password": "1234" //just give an empty string if no password
 }
 
-//JSON10 : joinRoom (HTTP POST)
+//JSON12 : joinRoom (HTTP POST)
 {
 	"user" : "hugo-bonnome",
 	"name" : "Awesome Room",
-	"password" : "1234"	//can be null
+	"password" : "1234"
 }

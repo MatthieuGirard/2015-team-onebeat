@@ -145,15 +145,17 @@ def joinRoom(request):
 	userId = received_json_data['user']
 	if (Room.objects.filter(roomName = roomName).exists()):
 		room = Room.objects.get(roomName = roomName)
-		Member.objects.create(
-			user = userId,
-			room = room.id
-			)
-		return JsonResponse({
-			'added' : True,
-			'roomId' : room.id,
-			'userId' : userId,
-			})
+		password = received_json_data['password']
+		if (password == room.password):
+			Member.objects.create(
+				user = userId,
+				room = room.id
+				)
+			return JsonResponse({
+				'added' : True,
+				'roomId' : room.id,
+				'userId' : userId,
+				})
 	else:
 		return JsonResponse({
 			'added' : False,

@@ -33,7 +33,7 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
     private ListView listViewSongs;
     private EditText addNextSong;
     private TextView roomName;
-    private ImageView playerButton;
+    private ImageView prevPlayerButton;
 
     private ArrayList<Song> currentSongs;
     private ArrayAdapter<Song> adapter;
@@ -88,7 +88,6 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
 
         MenuInflater inflater = getMenuInflater();
         if (v.getId() == listViewSongs.getId()) {
-            Log.v("KEINFO - ", "Con Menu inflated for song to delete");
             inflater.inflate(R.menu.delete_song_context_menu, menu);
         }
 
@@ -142,8 +141,7 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected()) {
                 new DownloadWebpageTask(this).execute(stringUrl, "");
-            }
-            else {
+            } else {
                 // TODO: Show Toast if no connection, maybe also inside DownloadWebpageTask ?
                 Context context = getApplicationContext();
                 int dur = Toast.LENGTH_SHORT;
@@ -167,6 +165,7 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
 
         List<Song> tracks = JSONParser.parseFromSearchAPI(result);
         tempSongs = tracks;
+        Log.d("KEINFO", "Found tracks, about to display con menu");
         openContextMenu(addNextSong);
     }
 
@@ -190,14 +189,26 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
     }
 
     public void playerClick(View v) {
-        playerButton = (ImageView) v.findViewById(R.id.list_image);
-        if (playerButton.getTag() == false) {
-            playerButton.setTag(true);
-            playerButton.setImageResource(R.drawable.player_pause);
-        }
-        else {
-            playerButton.setTag(false);
-            playerButton.setImageResource(R.drawable.player_play);
+        ImageView currPlayerButton = (ImageView) v.findViewById(R.id.list_image);
+
+        // Was there a song playing?
+        if (prevPlayerButton != null && (boolean)prevPlayerButton.getTag()) {
+            prevPlayerButton.setTag(false);
+            prevPlayerButton.setImageResource(R.drawable.player_play);
+
+            if (prevPlayerButton == currPlayerButton) {
+                // Were we the ones who were playing? If so, we already stopped playing
+                prevPlayerButton = null;
+            } else {
+                // Someone else was playing, now we play
+                currPlayerButton.setTag(true);
+                currPlayerButton.setImageResource(R.drawable.player_pause);
+                prevPlayerButton = currPlayerButton;
+            }
+        } else {
+            currPlayerButton.setTag(true);
+            currPlayerButton.setImageResource(R.drawable.player_pause);
+            prevPlayerButton = currPlayerButton;
         }
     }
 }

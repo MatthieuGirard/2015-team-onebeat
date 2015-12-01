@@ -52,16 +52,10 @@ public class SelectRoomActivity extends AppCompatActivity {
                 //TODO: Change room type if it is not a string
                 String room = adapter.getItem(position);
 
-                // TODO: make this class the hierarchical parent of RoomActivity (edit in RoomActivity) //
-                //       that will allow a "back" button to work
-
                 Intent intent = new Intent(SelectRoomActivity.this, RoomActivity.class);
-                String roomName = room;
 
-                intent.putExtra(ROOM_NAME_MESSAGE, roomName);
+                intent.putExtra(ROOM_NAME_MESSAGE, room);
                 startActivity(intent);
-
-                // TODO: Edit RoomActivity to get the intent and set the room name
             }
         });
 

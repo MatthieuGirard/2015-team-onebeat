@@ -2,7 +2,6 @@ package ch.epfl.sweng.onebeat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -32,7 +31,6 @@ import java.util.List;
 public class RoomActivity extends AppCompatActivity implements WebPageDownloader {
     private ListView listViewSongs;
     private EditText addNextSong;
-    private TextView roomName;
     private ImageView prevPlayerButton;
 
     private ArrayList<Song> currentSongs;
@@ -51,16 +49,14 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
 
         listViewSongs = (ListView) findViewById(R.id.currentSongsList);
         addNextSong = (EditText) findViewById(R.id.addSongTextBox);
-        roomName = (TextView) findViewById(R.id.currentRoomName);
+        TextView roomName = (TextView) findViewById(R.id.currentRoomName);
 
         // Assign the room name by getting it from the intent which opened this room
         Intent intent = getIntent();
         roomName.setText(intent.getStringExtra(SelectRoomActivity.ROOM_NAME_MESSAGE));
 
-        /*
-        TODO: Make currentSongs call a method which checks if there was previously a list of songs
-              that the user was playing.
-        */
+        //TODO: Make currentSongs call a method which checks database if there was a list of songs
+
         currentSongs = new ArrayList<>();
 
         adapter = new SongListAdapter(this, currentSongs);
@@ -126,10 +122,7 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
     public void searchForSong(View view) {
         String searchInput = addNextSong.getText().toString().trim();
 
-        if (searchInput.length() <= 0) {
-            return;
-        }
-        else {
+        if (searchInput.length() > 0) {
             Button button = (Button) findViewById(R.id.search_song_button);
             button.setEnabled(false);
             button.setText("Searching...");
@@ -163,8 +156,7 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
         button.setEnabled(true);
         button.setText("Search");
 
-        List<Song> tracks = JSONParser.parseFromSearchAPI(result);
-        tempSongs = tracks;
+        tempSongs = JSONParser.parseFromSearchAPI(result);
         Log.d("KEINFO", "Found tracks, about to display con menu");
         openContextMenu(addNextSong);
     }

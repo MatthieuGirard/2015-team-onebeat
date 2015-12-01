@@ -1,58 +1,31 @@
 package ch.epfl.sweng.onebeat.Network;
 
-import java.util.List;
-
-import ch.epfl.sweng.onebeat.Exceptions.NotImplementedException;
-import ch.epfl.sweng.onebeat.RetrievedData.BooleanData;
-import ch.epfl.sweng.onebeat.RetrievedData.MusicData;
-import ch.epfl.sweng.onebeat.RetrievedData.MusicInformationData;
-import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
+import ch.epfl.sweng.onebeat.Exceptions.ParseException;
+import ch.epfl.sweng.onebeat.Parsers.SongFromSearchParser;
 
 /**
  * Created by hugo on 20.11.15.
  */
-public class SpotifyDataProvider {
+public class SpotifyDataProvider implements WebPageDownloader {
 
+    DataProviderObserver callingActivity;
 
-    /*
-      TODO
-      implements methods using the pending data
-      you may have to modify the method's signatures to be compatible with spotify
-      run the SpotifyDataProviderTest to verify the implementation (already implemented,
-      you just have to complete the : String pseudo, String pass with your spotify account).
-      you can watch pendingDataTest that fetch a JSON from a server and retrieve the information (1min).
-    */
-
-    public SpotifyDataProvider() {
+    public SpotifyDataProvider(DataProviderObserver callingDude) {
+        this.callingActivity = callingDude;
     }
 
-
-
-    public PendingData<BooleanData> existUser( String pseudo, String pass ){
-        throw new NotImplementedException();
+    @Override
+    public void onWebDataReception(String result) throws ParseException {
+        callingActivity.onDataReception(new SongFromSearchParser().parse(result));
     }
 
+    public void getListOfSongs(String searchInput) {
+        String stringUrl = "http://ws.spotify.com/search/1/track.json?q=" + searchInput.replace(" ", "%20");
 
-    public PendingData<SpotifyUser> connect( String pseudo, String pass ){
-        throw new NotImplementedException();
+        new DownloadWebpageTask(this).execute(stringUrl, "");
     }
 
-
-    // music information without the music itself
-    public PendingData<MusicInformationData> musicInformation(String key){
-        throw new NotImplementedException();
+    public void getUserInfos(String token) {
+        new DownloadWebpageTask(this).execute("https://api.spotify.com/v1/me", token);
     }
-
-    // list of song on a search
-    public PendingData<List<MusicInformationData>> searchMusics(String name){
-        throw new NotImplementedException();
-    }
-
-    // music data
-    public PendingData<MusicData> music(String key){
-        throw new NotImplementedException();
-    }
-
-
-
 }

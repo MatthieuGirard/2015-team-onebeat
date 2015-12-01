@@ -1,11 +1,9 @@
 package ch.epfl.sweng.onebeat.RetrievedData;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Network.PendingData;
+import ch.epfl.sweng.onebeat.Exceptions.NotImplementedException;
+import ch.epfl.sweng.onebeat.Network.PendingData;
 
 /**
  * Created by hugo on 25.10.2015.

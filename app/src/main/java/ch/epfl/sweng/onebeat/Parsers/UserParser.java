@@ -16,6 +16,11 @@ public class UserParser implements Parser<UserData> {
 
 
     @Override
+    public UserData parse(String JSONStringToParse) throws ParseException {
+        return null;
+    }
+
+    @Override
     public  UserData parse(JSONObject obj) throws ParseException {
 
         try {

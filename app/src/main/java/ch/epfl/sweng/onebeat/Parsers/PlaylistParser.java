@@ -1,4 +1,4 @@
-package ch.epfl.sweng.onebeat.Parser;
+package ch.epfl.sweng.onebeat.Parsers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
+import ch.epfl.sweng.onebeat.Parsers.Parser;
 import ch.epfl.sweng.onebeat.RetrievedData.PlaylistData;
 
 /**
@@ -16,6 +17,10 @@ import ch.epfl.sweng.onebeat.RetrievedData.PlaylistData;
 public class PlaylistParser implements Parser<PlaylistData> {
 
 
+    @Override
+    public PlaylistData parse(String JSONStringToParse) throws ParseException {
+        return null;
+    }
 
     @Override
     public PlaylistData parse(JSONObject obj) throws ParseException {

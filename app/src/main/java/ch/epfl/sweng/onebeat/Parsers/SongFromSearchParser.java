@@ -8,18 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
+import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 import ch.epfl.sweng.onebeat.RetrievedData.Song;
-import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
 /**
- * Created by Matthieu on 16.11.2015.
+ * Created by Matthieu on 01.12.2015.
  */
-public class JSONParser {
+public class SongFromSearchParser implements Parser<List<Song>> {
 
-    static public List<Song> parseFromSearchAPI(String jsonStringToParse) throws JSONParserException {
-
+    @Override
+    public List<Song> parse(String JSONStringToParse) throws ParseException {
         try {
-            JSONObject json = new JSONObject(jsonStringToParse);
+            JSONObject json = new JSONObject(JSONStringToParse);
             JSONObject info = json.getJSONObject("info");
 
             int numResults = info.getInt("num_results");
@@ -37,7 +37,6 @@ public class JSONParser {
                 String artist = actualTrack.getJSONArray("artists").getJSONObject(0).getString("name");
                 String songName = actualTrack.getString("name");
                 String spotifyRef = actualTrack.getString("href");
-                //String duration = actualTrack.getString("duration");
                 String duration = "";
 
                 tracksFound.add(new Song(songName, artist, duration, spotifyRef));
@@ -45,27 +44,12 @@ public class JSONParser {
             }
             return tracksFound;
         } catch (JSONException e) {
-            throw new JSONParserException(e);
+            throw new ParseException(e);
         }
     }
 
-    static public void parseFromUserJSON(String jsonString) throws JSONParserException {
-        try {
-            JSONObject baseJSON = new JSONObject(jsonString);
-            String name = baseJSON.getString("display_name");
-            String spotifyID = baseJSON.getString("id");
-
-            SpotifyUser.getInstance().setInfos(name, spotifyID); }
-        catch (JSONException e) {
-            throw new JSONParserException(e);
-        }
-    }
-
-    static int getNumberOfPagesFromSearch(String jsonString) throws JSONParserException {
-        try {
-            return new JSONObject(jsonString).getJSONObject("info").getInt("page");
-        } catch (JSONException e) {
-            throw new JSONParserException("Can't retrieve number of pages");
-        }
+    @Override
+    public List<Song> parse(JSONObject json) throws ParseException {
+        return null;
     }
 }

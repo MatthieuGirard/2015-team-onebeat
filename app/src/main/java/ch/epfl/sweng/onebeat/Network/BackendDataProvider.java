@@ -6,11 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.onebeat.Parsers.AddedUserParser;
-import ch.epfl.sweng.onebeat.Parsers.Parser;
-import ch.epfl.sweng.onebeat.RetrievedData.BooleanData;
 import ch.epfl.sweng.onebeat.RetrievedData.IntegerData;
-import ch.epfl.sweng.onebeat.RetrievedData.MusicInformationData;
-import ch.epfl.sweng.onebeat.RetrievedData.UserData;
 
 /**
  * Created by hugo on 07.11.15.

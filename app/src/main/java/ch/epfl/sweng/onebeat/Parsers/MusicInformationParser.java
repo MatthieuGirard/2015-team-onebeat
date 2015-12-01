@@ -15,6 +15,11 @@ public class MusicInformationParser implements Parser<MusicInformationData>{
 
 
 	@Override
+	public MusicInformationData parse(String JSONStringToParse) throws ParseException {
+		return null;
+	}
+
+	@Override
 	public MusicInformationData parse(JSONObject obj) throws ParseException {
 
 

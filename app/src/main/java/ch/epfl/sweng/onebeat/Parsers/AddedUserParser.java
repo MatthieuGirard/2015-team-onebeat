@@ -12,6 +12,10 @@ import ch.epfl.sweng.onebeat.RetrievedData.IntegerData;
 public class AddedUserParser implements Parser<IntegerData> {
 
 
+    @Override
+    public IntegerData parse(String JSONStringToParse) throws ParseException {
+        return null;
+    }
 
     @Override
     public IntegerData parse(JSONObject obj) throws ParseException {

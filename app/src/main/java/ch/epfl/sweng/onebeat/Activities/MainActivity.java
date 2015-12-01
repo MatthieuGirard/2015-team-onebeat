@@ -36,7 +36,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
 import ch.epfl.sweng.onebeat.Network.DownloadWebpageTask;
+import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.Parsers.JSONParser;
 import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
@@ -44,7 +46,7 @@ import ch.epfl.sweng.onebeat.R;
 import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 import ch.epfl.sweng.onebeat.Network.WebPageDownloader;
 
-public class MainActivity extends AppCompatActivity implements ConnectionStateCallback, PlayerNotificationCallback, WebPageDownloader {
+public class MainActivity extends AppCompatActivity implements ConnectionStateCallback, PlayerNotificationCallback, DataProviderObserver {
 
     private static final String CLIENT_ID = "eb868e0c8f33441b86de1904b3503f10";
     private static final String REDIRECT_URI = "onebeatapp://callback";
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
 
-                new DownloadWebpageTask(this).execute("https://api.spotify.com/v1/me", response.getAccessToken());
+                new SpotifyDataProvider(this).getUserInfos(response.getAccessToken());
 
 /*                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
                 Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
@@ -169,58 +171,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
     }
 
     @Override
-    public void onPageDataRetrieved(String result) throws JSONParserException {
+    public void onDataReception(Object data) {
 
-        JSONParser.parseFromUserJSON(result);
-
-        TextView textView = (TextView) findViewById(R.id.textView);
-        textView.setText(result);
-    }
-
-    private class GetUserJSONFromWeb extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String[] params) {
-            try {
-                return downloadUserJSON(params[0], params[1]);
-            } catch (IOException e) {
-                return "Error trying to get the WebData of user JSON";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            TextView textView = (TextView) findViewById(R.id.textView);
-            textView.setText(result);
-        }
-
-        private String downloadUserJSON(String myurl, String token) throws IOException {
-            InputStream is = null;
-
-            try {
-                URL url = new URL(myurl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestProperty("Authorization", "Bearer "+ token);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                // Starts the query
-                conn.connect();
-                int response = conn.getResponseCode();
-                Log.d("user JSON request", "The response is: " + response);
-                is = conn.getInputStream();
-
-                // Convert the InputStream into a string
-                String contentAsString = DownloadWebpageTask.readIt(is);
-                return contentAsString;
-
-                // Makes sure that the InputStream is closed after the app is
-                // finished using it.
-            } finally {
-                if (is != null) {
-                    is.close();
-                }
-            }
-        }
     }
 
     @SuppressLint("ValidFragment")

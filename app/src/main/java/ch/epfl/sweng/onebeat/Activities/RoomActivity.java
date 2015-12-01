@@ -21,17 +21,19 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.onebeat.Network.DownloadWebpageTask;
+import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
+import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.Parsers.JSONParser;
 import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
 import ch.epfl.sweng.onebeat.R;
 import ch.epfl.sweng.onebeat.RetrievedData.Song;
 import ch.epfl.sweng.onebeat.Network.WebPageDownloader;
 
-public class RoomActivity extends AppCompatActivity implements WebPageDownloader {
+public class RoomActivity extends AppCompatActivity implements DataProviderObserver {
     private ListView listViewSongs;
     private EditText addNextSong;
 
@@ -122,7 +124,7 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
         }
     }
 
-    public void searchForSong(View view) {
+    public void searchForSong(View view) throws MalformedURLException {
         String searchInput = addNextSong.getText().toString().trim();
 
         if (searchInput.length() <= 0) {
@@ -132,28 +134,16 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
             button.setEnabled(false);
             button.setText("Searching...");
 
-            String stringUrl = "http://ws.spotify.com/search/1/track.json?q=" + searchInput.replace(" ", "%20");
-
             ConnectivityManager connMgr = (ConnectivityManager)
                     getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected()) {
-                new DownloadWebpageTask(this).execute(stringUrl, "");
+
+                new SpotifyDataProvider(this).getListOfSongs(searchInput);
+
             }
             // TODO: Show Toast if no connection
         }
-    }
-
-    @Override
-    public void onPageDataRetrieved(String result) throws JSONException, JSONParserException {
-
-        Button button = (Button) findViewById(R.id.search_song_button);
-        button.setEnabled(true);
-        button.setText("Search");
-
-        List<Song> tracks = JSONParser.parseFromSearchAPI(result);
-        tempSongs = tracks;
-        openContextMenu(addNextSong);
     }
 
     public void addSong(Song song) {
@@ -167,4 +157,16 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
         // Now notify the adapter the list has changed and it should be updated
         adapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onDataReception(Object data) {
+
+        Button button = (Button) findViewById(R.id.search_song_button);
+        button.setEnabled(true);
+        button.setText("Search");
+
+        tempSongs = (List<Song>) data;
+        openContextMenu(addNextSong);
+    }
+
 }

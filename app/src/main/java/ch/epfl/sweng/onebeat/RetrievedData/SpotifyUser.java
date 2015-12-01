@@ -1,4 +1,4 @@
-package ch.epfl.sweng.onebeat;
+package ch.epfl.sweng.onebeat.RetrievedData;
 
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
 

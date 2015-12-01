@@ -5,8 +5,8 @@
     android:orientation="horizontal"
     android:padding="5dip" >
 
-    <!--  ListRow Left side Thumbnail image -->
-    <LinearLayout android:id="@+id/thumbnail"
+    <!--  ListRow Left side Play Pause Button (Image) -->
+    <LinearLayout android:id="@+id/PlayPauseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="3dip"
@@ -16,7 +16,10 @@
         <ImageView
             android:id="@+id/list_image"
             android:layout_width="50dip"
-            android:layout_height="50dip"/>
+            android:layout_height="50dip"
+            android:clickable="true"
+            android:src="@drawable/player_play"
+            android:onClick="playerClick" />
 
     </LinearLayout>
 
@@ -25,8 +28,8 @@
         android:id="@+id/song_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thumbnail"
-        android:layout_toRightOf="@+id/thumbnail"
+        android:layout_alignTop="@+id/PlayPauseButton"
+        android:layout_toRightOf="@+id/PlayPauseButton"
         android:text="Rihanna Love the way lie"
         android:textColor="#040404"
         android:typeface="sans"
@@ -42,7 +45,7 @@
         android:textColor="#343434"
         android:textSize="12sp"
         android:layout_marginTop="1dip"
-        android:layout_toRightOf="@+id/thumbnail"
+        android:layout_toRightOf="@+id/PlayPauseButton"
         android:text="Just gonna stand there and ..." />
 
     <!-- Right end Song Duration -->
@@ -55,7 +58,7 @@
         android:gravity="end"
         android:text="5:45"
         android:layout_marginRight="5dip"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:textColor="#10bcc9"
         android:textStyle="bold"/>
 

@@ -1,6 +1,7 @@
 package ch.epfl.sweng.onebeat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,8 +17,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -27,8 +30,8 @@ import java.util.List;
 public class RoomActivity extends AppCompatActivity implements WebPageDownloader {
     private ListView listViewSongs;
     private EditText addNextSong;
+    private ImageView prevPlayerButton;
 
-    //TODO: change currentSongs to be an array of songs but only after making a SongListAdapter
     private ArrayList<Song> currentSongs;
     private ArrayAdapter<Song> adapter;
 
@@ -45,11 +48,15 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
 
         listViewSongs = (ListView) findViewById(R.id.currentSongsList);
         addNextSong = (EditText) findViewById(R.id.addSongTextBox);
+        TextView roomName = (TextView) findViewById(R.id.currentRoomName);
 
-        /*
-        TODO: Make currentSongs call a method which checks if there was previously a list of songs
-              that the user was playing.
-        */
+        // Assign the room name by getting it from the intent which opened this room
+        Intent intent = getIntent();
+        roomName.setText(intent.getStringExtra(SelectRoomActivity.ROOM_NAME_MESSAGE));
+
+
+        //TODO: Make currentSongs call a method which checks database if there was a list of songs
+
         currentSongs = new ArrayList<>();
 
         adapter = new SongListAdapter(this, currentSongs);
@@ -58,8 +65,7 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
         registerForContextMenu(listViewSongs);
         registerForContextMenu(addNextSong);
 
-        EditText editText = (EditText) findViewById(R.id.addSongTextBox);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        addNextSong.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
@@ -78,15 +84,13 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
 
         MenuInflater inflater = getMenuInflater();
         if (v.getId() == listViewSongs.getId()) {
-            Log.v("KEINFO - ", "Con Menu inflated for song to delete");
             inflater.inflate(R.menu.delete_song_context_menu, menu);
         }
-        //TODO: Find a way to differentiate when we want to display the delete menu or a list
-        //      of possible song choices
+
         else if (v.getId() == addNextSong.getId()) {
             for (int i = 0; i < tempSongs.size(); i++) {
                 Song s = tempSongs.get(i);
-                menu.add(tempSongs.hashCode(), i, i, s.title + " by " + s.artist);
+                menu.add(tempSongs.hashCode(), i, i, s.getTitle() + " by " + s.getArtist());
             }
         }
     }
@@ -118,9 +122,7 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
     public void searchForSong(View view) {
         String searchInput = addNextSong.getText().toString().trim();
 
-        if (searchInput.length() <= 0) {
-            return;
-        } else {
+        if (searchInput.length() > 0) {
             Button button = (Button) findViewById(R.id.search_song_button);
             button.setEnabled(false);
             button.setText("Searching...");
@@ -132,8 +134,18 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected()) {
                 new DownloadWebpageTask(this).execute(stringUrl, "");
+            } else {
+                // TODO: Show Toast if no connection, maybe also inside DownloadWebpageTask ?
+                Context context = getApplicationContext();
+                int dur = Toast.LENGTH_SHORT;
+                CharSequence error_msg = "Connection error while searching for song. Please try again";
+
+                Toast.makeText(context, error_msg, dur).show();
+
+                // Enable the user to search again
+                button.setEnabled(true);
+                button.setText("Search");
             }
-            // TODO: Show Toast if no connection
         }
     }
 
@@ -144,20 +156,51 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
         button.setEnabled(true);
         button.setText("Search");
 
-        List<Song> tracks = JSONParser.parseFromSearchAPI(result);
-        tempSongs = tracks;
+        tempSongs = JSONParser.parseFromSearchAPI(result);
+        Log.d("KEINFO", "Found tracks, about to display con menu");
         openContextMenu(addNextSong);
     }
 
+    //TODO: Before adding a song, update the currentSong list from the database
     public void addSong(Song song) {
         currentSongs.add(song);
         adapter.notifyDataSetChanged();
     }
 
+    //TODO: Before removing a song, update the currentSong list from the database
     public void removeSong(int index) {
         // We need to delete a song from the currentSongs list
-        currentSongs.remove(index);
+        Song songToRemove = currentSongs.remove(index);
+        // TODO: Now that we know which song we want to remove, update the list from the database
+        // then check to see if the song is still in the list at which point we delete it and post
+        // the changes
+
+
         // Now notify the adapter the list has changed and it should be updated
         adapter.notifyDataSetChanged();
+    }
+
+    public void playerClick(View v) {
+        ImageView currPlayerButton = (ImageView) v.findViewById(R.id.list_image);
+
+        // Was there a song playing?
+        if (prevPlayerButton != null && (boolean)prevPlayerButton.getTag()) {
+            prevPlayerButton.setTag(false);
+            prevPlayerButton.setImageResource(R.drawable.player_play);
+
+            if (prevPlayerButton == currPlayerButton) {
+                // Were we the ones who were playing? If so, we already stopped playing
+                prevPlayerButton = null;
+            } else {
+                // Someone else was playing, now we play
+                currPlayerButton.setTag(true);
+                currPlayerButton.setImageResource(R.drawable.player_pause);
+                prevPlayerButton = currPlayerButton;
+            }
+        } else {
+            currPlayerButton.setTag(true);
+            currPlayerButton.setImageResource(R.drawable.player_pause);
+            prevPlayerButton = currPlayerButton;
+        }
     }
 }

@@ -13,6 +13,7 @@ import java.net.URL;
 
 import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
+import ch.epfl.sweng.onebeat.Exceptions.ParserNotDefinedException;
 
 /**
  * Created by Matthieu on 13.11.2015.
@@ -43,6 +44,8 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         try {
             callingProvider.onWebDataReception(result);
         } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (ParserNotDefinedException e) {
             e.printStackTrace();
         }
     }

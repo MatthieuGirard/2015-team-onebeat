@@ -172,7 +172,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
 
     @Override
     public void onDataReception(Object data) {
-
+        TextView textView = (TextView) findViewById(R.id.textView);
+        try {
+            textView.setText(((SpotifyUser)data).getPseudo());
+        } catch (NotDefinedUserInfosException e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressLint("ValidFragment")
@@ -208,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                             //String message = roomNameField.getText().toString();
                             //intent.putExtra(EXTRA_MESSAGE, message);
 
-                            excutePost("http://onebeat.pythonanywhere.com/createRoom", jsonToSend.toString());
+                            //excutePost("http://onebeat.pythonanywhere.com/createRoom", jsonToSend.toString());
                             startActivity(intent);
                         }
                     })

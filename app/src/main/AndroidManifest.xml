@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ch.epfl.sweng.onebeat">
+    package="ch.epfl.sweng.onebeat" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,18 +11,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
@@ -31,17 +24,12 @@
         </activity>
         <activity
             android:name=".RoomActivity"
-            android:parentActivityName="ch.epfl.sweng.onebeat.MainActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+            android:parentActivityName="ch.epfl.sweng.onebeat.SelectRoomActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ch.epfl.sweng.onebeat.MainActivity" />
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                android:value="ch.epfl.sweng.onebeat.SelectRoomActivity" />
         </activity>
+
         <activity
             android:name=".SelectRoomActivity"
             android:label="@string/title_activity_select_room"

@@ -22,7 +22,6 @@ import ch.epfl.sweng.onebeat.R;
 
 public class SelectRoomActivity extends AppCompatActivity {
     public final static String ROOM_NAME_MESSAGE = "ch.epfl.sweng.onebeat.MESSAGE";
-    private ListView listViewRooms;
 
     private ArrayList roomsArray;
     private ArrayAdapter<String> adapter; //TODO: Change to type room
@@ -34,7 +33,7 @@ public class SelectRoomActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        listViewRooms = (ListView) findViewById(R.id.roomListView);
+        ListView listViewRooms = (ListView) findViewById(R.id.roomListView);
 
         //TODO: Pull from server list of rooms that belong to the user who just logged in
         // roomsArray = getRooms(user); Hopefully just Strings? Otherwise we need a RoomListAdapter class
@@ -43,7 +42,7 @@ public class SelectRoomActivity extends AppCompatActivity {
         roomsArray.add("Jazz");
         roomsArray.add("Rap");
 
-        adapter = new ArrayAdapter<String>(this, R.layout.room_item_list_view, roomsArray);
+        adapter = new ArrayAdapter<>(this, R.layout.room_item_list_view, roomsArray);
         listViewRooms.setAdapter(adapter);
 
         listViewRooms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -56,9 +55,8 @@ public class SelectRoomActivity extends AppCompatActivity {
                 //       that will allow a "back" button to work
 
                 Intent intent = new Intent(SelectRoomActivity.this, RoomActivity.class);
-                String roomName = room;
 
-                intent.putExtra(ROOM_NAME_MESSAGE, roomName);
+                intent.putExtra(ROOM_NAME_MESSAGE, room);
                 startActivity(intent);
 
                 // TODO: Edit RoomActivity to get the intent and set the room name

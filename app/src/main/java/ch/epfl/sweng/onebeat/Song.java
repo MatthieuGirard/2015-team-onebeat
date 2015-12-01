@@ -1,8 +1,5 @@
 package ch.epfl.sweng.onebeat;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 public class Song {
 
     private String title;
@@ -24,11 +21,6 @@ public class Song {
     public String getDuration() { return duration; }
 
     public boolean isEqual(Song song) {
-        if (spotifyRef.contentEquals(song.getSpotifyRef())) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return spotifyRef.contentEquals(song.getSpotifyRef());
     }
 }

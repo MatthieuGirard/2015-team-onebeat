@@ -38,6 +38,7 @@ import java.net.URL;
 
 import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
 import ch.epfl.sweng.onebeat.Network.DownloadWebpageTask;
+import ch.epfl.sweng.onebeat.Network.SendDataTask;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.Parsers.JSONParser;
 import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
@@ -213,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                             //String message = roomNameField.getText().toString();
                             //intent.putExtra(EXTRA_MESSAGE, message);
 
-                            //excutePost("http://onebeat.pythonanywhere.com/createRoom", jsonToSend.toString());
+                            new SendDataTask().execute("http://onebeat.pythonanywhere.com/createRoom", jsonToSend.toString());
                             startActivity(intent);
                         }
                     })

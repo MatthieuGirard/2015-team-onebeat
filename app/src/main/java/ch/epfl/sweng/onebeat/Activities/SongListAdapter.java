@@ -1,11 +1,11 @@
 package ch.epfl.sweng.onebeat.Activities;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,7 +22,6 @@ import ch.epfl.sweng.onebeat.RetrievedData.Song;
 public class SongListAdapter extends ArrayAdapter<Song> {
     public SongListAdapter(Context context, ArrayList<Song> songs) {
         super(context, R.layout.song_item_list_view, songs);
-        Log.d("KEINFO", "was able to super");
     }
 
     /**
@@ -34,6 +33,7 @@ public class SongListAdapter extends ArrayAdapter<Song> {
         TextView title;
         TextView artist;
         TextView duration;
+        ImageView player;
     }
 
     @Override
@@ -44,7 +44,6 @@ public class SongListAdapter extends ArrayAdapter<Song> {
 
         // Check if an existing view is being reused
         if (convertView == null) {
-            Log.d("KEINFO", "No previous view found");
             viewHolder = new ViewHolder();
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -53,16 +52,18 @@ public class SongListAdapter extends ArrayAdapter<Song> {
             viewHolder.title = (TextView) convertView.findViewById(R.id.song_title);
             viewHolder.artist = (TextView) convertView.findViewById(R.id.artist);
             viewHolder.duration = (TextView) convertView.findViewById(R.id.duration);
+            viewHolder.player = (ImageView) convertView.findViewById(R.id.list_image);
 
             convertView.setTag(viewHolder);
         } else {
-            Log.d("KEINFO", "Reusing a view holder");
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.title.setText(song.title);
-        viewHolder.artist.setText(song.artist);
-        viewHolder.duration.setText(song.duration);
+        viewHolder.title.setText(song.getTitle());
+        viewHolder.artist.setText(song.getArtist());
+        viewHolder.duration.setText(song.getDuration());
+        viewHolder.player.setImageResource(R.drawable.player_play);
+        viewHolder.player.setTag(false);
 
         return convertView;
         //return super.getView(position, convertView, parent);

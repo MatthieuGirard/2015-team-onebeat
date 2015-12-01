@@ -1,14 +1,11 @@
 package ch.epfl.sweng.onebeat.RetrievedData;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 public class Song {
 
+    private String title;
+    private String artist;
+    private String duration;
     private String spotifyRef;
-    public String title;
-    public String artist;
-    public String duration;
     //TODO: add all sorts of separate fields such as song picture, mp3 file, etc.
 
     public Song(String title, String artist, String duration, String spotifyRef) {
@@ -21,4 +18,9 @@ public class Song {
     public String getArtist() { return artist; }
     public String getSpotifyRef() { return spotifyRef; }
     public String getTitle() { return title; }
+    public String getDuration() { return duration; }
+
+    public boolean isEqual(Song song) {
+        return spotifyRef.contentEquals(song.getSpotifyRef());
+    }
 }

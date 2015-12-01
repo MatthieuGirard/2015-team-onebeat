@@ -19,7 +19,7 @@ public class SpotifyUser {
         }
     }
 
-    public final static SpotifyUser getInstance() { return instance; }
+    public static SpotifyUser getInstance() { return instance; }
 
     public String getToken() { return this.token; }
     public String getPseudo() throws NotDefinedUserInfosException {

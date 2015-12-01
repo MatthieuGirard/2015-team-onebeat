@@ -1,4 +1,4 @@
-package ch.epfl.sweng.team_onebeat.Exceptions;
+package ch.epfl.sweng.onebeat.Exceptions;
 
 /**
  * Created by hugo on 08.11.15.

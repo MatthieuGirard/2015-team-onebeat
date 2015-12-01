@@ -1,4 +1,4 @@
-package ch.epfl.sweng.team_onebeat.FrontEnd.Network;
+package ch.epfl.sweng.onebeat.Network;
 
 import android.util.Log;
 
@@ -6,22 +6,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Observable;
-import java.util.Observer;
 
-import ch.epfl.sweng.team_onebeat.Exceptions.BuildableException;
-import ch.epfl.sweng.team_onebeat.Exceptions.ParseException;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.Parser;
+import ch.epfl.sweng.onebeat.Exceptions.BuildableException;
+import ch.epfl.sweng.onebeat.Exceptions.ParseException;
+import ch.epfl.sweng.onebeat.Parsers.Parser;
 
 /**
  * Created by hugo on 26.10.2015.

@@ -1,12 +1,12 @@
-package ch.epfl.sweng.team_onebeat.FrontEnd.Network;
+package ch.epfl.sweng.onebeat.Network;
 
 import java.util.List;
 
-import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
-import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.BooleanData;
-import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.MusicData;
-import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.MusicInformationData;
-import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.SpotifyUser;
+import ch.epfl.sweng.onebeat.Exceptions.NotImplementedException;
+import ch.epfl.sweng.onebeat.RetrievedData.BooleanData;
+import ch.epfl.sweng.onebeat.RetrievedData.MusicData;
+import ch.epfl.sweng.onebeat.RetrievedData.MusicInformationData;
+import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
 /**
  * Created by hugo on 20.11.15.

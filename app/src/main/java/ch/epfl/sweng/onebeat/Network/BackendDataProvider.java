@@ -1,25 +1,16 @@
-package ch.epfl.sweng.team_onebeat.FrontEnd.Network;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+package ch.epfl.sweng.onebeat.Network;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.epfl.sweng.team_onebeat.Exceptions.NotImplementedException;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.AddedUserParser;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.BooleanParser;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.MusicInformationParser;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.Parser;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.PlaylistParser;
-import ch.epfl.sweng.team_onebeat.FrontEnd.Parser.UserParser;
-import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.BooleanData;
-import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.IntegerData;
-import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.MusicInformationData;
-import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.PlaylistData;
-import ch.epfl.sweng.team_onebeat.FrontEnd.RetrieveData.UserData;
+import ch.epfl.sweng.onebeat.Parsers.AddedUserParser;
+import ch.epfl.sweng.onebeat.Parsers.Parser;
+import ch.epfl.sweng.onebeat.RetrievedData.BooleanData;
+import ch.epfl.sweng.onebeat.RetrievedData.IntegerData;
+import ch.epfl.sweng.onebeat.RetrievedData.MusicInformationData;
+import ch.epfl.sweng.onebeat.RetrievedData.UserData;
 
 /**
  * Created by hugo on 07.11.15.

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.onebeat.RetrievedData;
+package ch.epfl.sweng.onebeat;
 
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
 
@@ -11,6 +11,7 @@ public class SpotifyUser {
 
     private String pseudo = null;
     private String spotifyID = null;
+    private String token = null;
 
     private SpotifyUser() {
         if (instance != null) {
@@ -20,6 +21,7 @@ public class SpotifyUser {
 
     public final static SpotifyUser getInstance() { return instance; }
 
+    public String getToken() { return this.token; }
     public String getPseudo() throws NotDefinedUserInfosException {
         if (this.pseudo == null) {
             throw new NotDefinedUserInfosException("Pseudo not registered yet.");

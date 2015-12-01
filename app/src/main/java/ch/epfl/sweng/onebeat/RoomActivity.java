@@ -54,10 +54,9 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
         Intent intent = getIntent();
         roomName.setText(intent.getStringExtra(SelectRoomActivity.ROOM_NAME_MESSAGE));
 
-        /*
-        TODO: Make currentSongs call a method which checks if there was previously a list of songs
-              that the user was playing.
-        */
+
+        //TODO: Make currentSongs call a method which checks database if there was a list of songs
+
         currentSongs = new ArrayList<>();
 
         adapter = new SongListAdapter(this, currentSongs);

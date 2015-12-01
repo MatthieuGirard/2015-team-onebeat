@@ -28,8 +28,7 @@
         android:id="@+id/goButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="searchSong"/>
+        android:layout_alignParentEnd="true" />
 
 
     <ScrollView

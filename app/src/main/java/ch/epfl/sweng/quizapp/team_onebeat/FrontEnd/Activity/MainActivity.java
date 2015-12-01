@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import ch.epfl.sweng.quizapp.team_onebeat.R;
+import ch.epfl.sweng.onebeat.R;
 
 public class MainActivity extends AppCompatActivity {
 

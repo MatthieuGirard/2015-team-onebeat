@@ -8,6 +8,10 @@
     <string name="delete_song_menu_text">Delete Song</string>
     <string name="currentRoomName">Blank Room</string>
     <string name="title_activity_select_song">SelectSong</string>
-    <string name="title_activity_select_room">SelectRoom</string>
+
+    <string name="title_activity_select_room">OneBeat - Room Selection</string>
     <string name="searchRoomTextViewHint">Searching for your friend\'s room?</string>
+
+    <string name="partyOn">Party on!</string>
+    <string name="cancel">cancel</string>
 </resources>

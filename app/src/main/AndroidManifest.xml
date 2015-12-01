@@ -28,6 +28,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.epfl.sweng.onebeat.SelectRoomActivity" />
         </activity>
+
         <activity
             android:name=".SelectRoomActivity"
             android:label="@string/title_activity_select_room"

@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 // Created by Spotify on 25/02/14.
 // Copyright (c) 2014 Spotify. All rights reserved.
 
-package quizapp.sweng.epfl.ch.spotifytestapp;
+import ch.epfl.sweng.onebeat.R;
 
 import android.app.Activity;
 import android.content.Intent;

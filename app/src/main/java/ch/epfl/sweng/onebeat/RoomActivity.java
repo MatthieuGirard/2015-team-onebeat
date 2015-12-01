@@ -141,7 +141,7 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
                     getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected()) {
-                new DownloadWebpageTask(this).execute(stringUrl);
+                new DownloadWebpageTask(this).execute(stringUrl, "");
             }
             else {
                 // TODO: Show Toast if no connection, maybe also inside DownloadWebpageTask ?

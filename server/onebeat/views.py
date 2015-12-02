@@ -37,7 +37,7 @@ def getUser(request):
 			'info' : 'user',
 			'id' : user.userId,
 			'name' : user.name,
-			'rooms' : d['room'] for d in rooms
+			'rooms' : [d['room'] for d in rooms]
 			})
 	else:
 		return JsonResponse({

@@ -32,7 +32,7 @@ def getUser(request):
 	userId = request.GET['id']
 	if (User.objects.filter(userId = userId).exists()):
 		user = User.objects.get(userId = userId)
-		rooms = Member.objects.filter(user = userId).values('room')
+		rooms = Member.objects.filter(user = userId)
 		return JsonResponse({
 			'info' : 'user',
 			'id' : user.userId,
@@ -122,16 +122,16 @@ def getRoom(request):
 	if (Room.objects.filter(roomId = roomId).exists()):
 		room = Room.objects.get(roomId = roomId)
 		playlist = Playlist.objects.filter(room = roomId)
-		members = Member.objects.filter(room = roomId)
+		members = Member.objects.filter(room = roomId).values('user')
 		return JsonResponse({
 			'info' : 'room',
 			'id' : room.id,
 			'creator' : room.creator,
 			'name' : room.name,
 			'password' : room.password,
-			'playlist' : playlist.song,
-			'addedBy' : playlist.addedBy,
-			'members' : members.user
+			'playlist' : [d['song'] for d in playlist],
+			'addedBy' : [d['addedBy'] for d in playlist],
+			'members' : [d['user'] for d in users]
 			})
 	else:
 		return JsonResponse({

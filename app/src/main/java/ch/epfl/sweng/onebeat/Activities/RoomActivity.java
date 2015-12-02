@@ -22,19 +22,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
-import ch.epfl.sweng.onebeat.Parsers.JSONParser;
-import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
 import ch.epfl.sweng.onebeat.R;
 import ch.epfl.sweng.onebeat.RetrievedData.Song;
-import ch.epfl.sweng.onebeat.Network.WebPageDownloader;
 
 public class RoomActivity extends AppCompatActivity implements DataProviderObserver {
     private ListView listViewSongs;
@@ -57,15 +52,12 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
 
         listViewSongs = (ListView) findViewById(R.id.currentSongsList);
         addNextSong = (EditText) findViewById(R.id.addSongTextBox);
-        TextView roomName = (TextView) findViewById(R.id.currentRoomName);
 
         // Assign the room name by getting it from the intent which opened this room
         Intent intent = getIntent();
-        roomName.setText(intent.getStringExtra(SelectRoomActivity.ROOM_NAME_MESSAGE));
-
+        setTitle(intent.getStringExtra(SelectRoomActivity.ROOM_NAME_MESSAGE));
 
         //TODO: Make currentSongs call a method which checks database if there was a list of songs
-
         currentSongs = new ArrayList<>();
 
         adapter = new SongListAdapter(this, currentSongs);

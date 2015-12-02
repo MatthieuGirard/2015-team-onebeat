@@ -1,7 +1,6 @@
 <resources>
-    <string name="app_name">OneBeatApp</string>
+    <string name="app_name">OneBeat</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_room">RoomActivity</string>
     <string name="search_song_hint">Add a song</string>
     <string name="search_button">Search</string>
     <string name="delete_song_menu_text">Delete Song</string>
@@ -9,6 +8,7 @@
     <string name="title_activity_select_song">SelectSong</string>
     <string name="partyOn">Party on!</string>
     <string name="cancel">cancel</string>
-    <string name="title_activity_select_room">SelectRoom</string>
+    <string name="title_activity_select_room">OneBeat - Room Selection</string>
     <string name="searchRoomTextViewHint">Searching for your friend\'s room?</string>
+    <string name="select_room_text">Please select a room or \n create one below!</string>
 </resources>

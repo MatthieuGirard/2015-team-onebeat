@@ -1,19 +1,8 @@
 package ch.epfl.sweng.onebeat.Activities;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -25,28 +14,21 @@ import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
-import ch.epfl.sweng.onebeat.Network.DownloadWebpageTask;
-import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
-import ch.epfl.sweng.onebeat.Parsers.JSONParser;
-import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
+import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
+import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.R;
 import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
-import ch.epfl.sweng.onebeat.Network.WebPageDownloader;
 
-public class MainActivity extends AppCompatActivity implements ConnectionStateCallback, PlayerNotificationCallback, DataProviderObserver {
+public class MainActivity extends AppCompatActivity implements ConnectionStateCallback,
+        PlayerNotificationCallback, DataProviderObserver {
 
     private static final String CLIENT_ID = "eb868e0c8f33441b86de1904b3503f10";
     private static final String REDIRECT_URI = "onebeatapp://callback";
@@ -54,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
     private static final int REQUEST_CODE = 1337;
 
     public final static String EXTRA_MESSAGE = "ch.epfl.sweng.onebeat.CREATING_ROOM_MESSAGE";
-
 
     private Player mPlayer;
 
@@ -70,15 +51,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
         AuthenticationRequest request = builder.build();
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
-
-        FloatingActionButton FAB = (FloatingActionButton) findViewById(R.id.fab);
-        FAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RoomCreatorDialogFragment dialog = new RoomCreatorDialogFragment();
-                dialog.show(getSupportFragmentManager(), "Room Creator");
-            }
-        });
     }
 
     @Override
@@ -177,52 +149,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
             textView.setText(((SpotifyUser)data).getPseudo());
         } catch (NotDefinedUserInfosException e) {
             e.printStackTrace();
-        }
-    }
-
-    @SuppressLint("ValidFragment")
-    private class RoomCreatorDialogFragment extends DialogFragment {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            // Get the layout inflater
-            final LayoutInflater inflater = getActivity().getLayoutInflater();
-
-            // Inflate and set the layout for the dialog
-            // Pass null as the parent view because its going in the dialog layout
-            final View v = inflater.inflate(R.layout.dialog_create_room, null);
-            builder.setView(v)
-                    // Add action buttons
-                    .setPositiveButton(R.string.partyOn, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            Intent intent = new Intent(RoomCreatorDialogFragment.this.getActivity(), RoomActivity.class);
-                            EditText roomNameField = (EditText) v.findViewById(R.id.roomName);
-                            EditText roomPasswordField = (EditText) v.findViewById(R.id.roomPassword);
-
-                            JSONObject jsonToSend = new JSONObject();
-                            try {
-                                jsonToSend.put("creator", SpotifyUser.getInstance().getPseudo()); // TODO
-                                jsonToSend.put("name", roomNameField.getText().toString());
-                                jsonToSend.put("password", roomPasswordField.getText().toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (NotDefinedUserInfosException e) {
-                                e.printStackTrace();
-                            }
-                            //String message = roomNameField.getText().toString();
-                            //intent.putExtra(EXTRA_MESSAGE, message);
-
-                            //excutePost("http://onebeat.pythonanywhere.com/createRoom", jsonToSend.toString());
-                            startActivity(intent);
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            RoomCreatorDialogFragment.this.getDialog().cancel();
-                        }
-                    });
-            return builder.create();
         }
     }
 

@@ -35,7 +35,7 @@ def getUser(request):
 		rooms = Member.objects.filter(user = userId)
 		return JsonResponse({
 			'info' : 'user',
-			'id' : user.id,
+			'id' : user.userId,
 			'name' : user.name,
 			'rooms' : rooms
 			})

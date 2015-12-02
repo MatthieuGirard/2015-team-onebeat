@@ -103,7 +103,7 @@ def createRoom(request):
 			'id' : room.id
 			})
 	elif (User.objects.filter(userId = creatorId).exists()):
-		creator = User.objects.get(creatorId)
+		creator = User.objects.get(userId = creatorId)
 		password = received_json_data['password']
 		newRoom = Room.objects.create(
 			name = name,

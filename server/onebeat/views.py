@@ -98,7 +98,7 @@ def createRoom(request):
 	if (Room.objects.filter(name = name).exists()):
 		room = Room.objects.get(name = name)
 		return JsonResponse({
-			'added' : False
+			'added' : False,
 			'error' : 'room already exists',
 			'id' : room.id
 			})
@@ -120,7 +120,7 @@ def createRoom(request):
 			})
 	else:
 		return JsonResponse({
-			'added' : False
+			'added' : False,
 			'error':'creator does not exist',
 			'id' : creatorName
 			})

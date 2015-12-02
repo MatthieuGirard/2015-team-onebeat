@@ -54,24 +54,43 @@ def addSong(request):
 		artist = received_json_data['artist']
 		duration = received_json_data['duration']
 		spotifyRef = received_json_data['spotifyRef']
-		Song.objects.create(
+		song = Song.objects.create(
 			songId = songId,
 			artist = artist,
 			title = title,
 			duration = duration,
 			spotifyRef = spotifyRef,
 			)
-	addedBy = received_json_data['addedBy']
-	room = received_json_data['room']
-	Playlist.objects.create(
-		room = room,
-		song = songId,
-		addedBy = addedBy
-		)
-	return JsonResponse({
-		'added' : True,
-		'song' : songId
-		})
+	userId = received_json_data['addedBy']
+	roomId = received_json_data['room']
+	if ( User.objects.filter(userId = addedBy).exists() ):
+		addedBy = User.objects.get(userId = userId)
+		if ( Room.objects.filter(id = roomId).exists() ):
+			room = Room.objects.get(id = roomId)
+			Playlist.objects.create(
+				room = room,
+				song = songId,
+				addedBy = addedBy
+				)
+			return JsonResponse({
+				'added' : True,
+				'song' : song.id
+				'room' : room.id
+				'addedBy' : addedBy.id
+				})
+		else:
+			return JsonResponse({
+			'added' : False,
+			'error' : 'room does not exist',
+			'room' : roomId
+			})
+	else:
+		return JsonResponse({
+				'added' : False,
+				'error' : 'user does not exist',
+				'user' : userId
+				})
+
 
 def getSong(request):
 	songId = request.GET['id']
@@ -175,11 +194,11 @@ def joinRoom(request):
 					'password' : password
 					})
 		else:
-		return JsonResponse({
-			'added' : False,
-			'error' : 'user does not exist',
-			'user' : userId
-			})
+			return JsonResponse({
+				'added' : False,
+				'error' : 'user does not exist',
+				'user' : userId
+				})
 	else:
 		return JsonResponse({
 			'added' : False,

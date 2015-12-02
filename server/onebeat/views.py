@@ -86,8 +86,8 @@ def addSong(request):
 			
 			return JsonResponse({
 				'added' : True,
-				'song' : song.id
-				'room' : room.id
+				'song' : song.id,
+				'room' : room.id,
 				'addedBy' : addedBy.id
 				})
 		

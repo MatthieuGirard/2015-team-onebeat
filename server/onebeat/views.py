@@ -32,7 +32,7 @@ def getUser(request):
 	userId = request.GET['id']
 	if (User.objects.filter(userId = userId).exists()):
 		user = User.objects.get(userId = userId)
-		rooms = Member.objects.filter(user = userId)
+		rooms = Member.objects.filter(user = userId).values('room')
 		return JsonResponse({
 			'info' : 'user',
 			'id' : user.userId,

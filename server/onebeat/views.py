@@ -94,14 +94,16 @@ def getSong(request):
 def createRoom(request):
 	received_json_data = json.loads(request.POST['request'])
 	name = received_json_data['name']
+	creatorName = received_json_data['creator']
 	if (Room.objects.filter(name = name).exists()):
 		room = Room.objects.get(name = name)
 		return JsonResponse({
-			'error':'room already exists',
+			'added' : False
+			'error' : 'room already exists',
 			'id' : room.id
 			})
-	else:
-		creator = received_json_data['creator']
+	elif (User.objects.filter(creatorName).exists()):
+		creator = User.objects.get(creatorName)
 		password = received_json_data['password']
 		newRoom = Room.objects.create(
 			name = name,
@@ -110,12 +112,19 @@ def createRoom(request):
 			)
 		Member.objects.create(
 			user = creator,
-			room = newRoom.id
+			room = newRoom
 			)
 		return JsonResponse({
 			'added':True,
 			'room' : newRoom.id
 			})
+	else:
+		return JsonResponse({
+			'added' : False
+			'error':'creator does not exist',
+			'id' : creatorName
+			})
+
 
 def getRoom(request):
 	roomId = request.GET['id']

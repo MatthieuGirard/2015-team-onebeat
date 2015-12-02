@@ -20,23 +20,28 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
-        <activity android:name=".Activities.RoomActivity"
-            android:parentActivityName=".Activities.MainActivity"
+        <activity
+            android:name=".Activities.RoomActivity"
+            android:parentActivityName=".Activities.SelectRoomActivity"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                android:value=".Activities.SelectRoomActivity" />
         </activity>
 
         <activity
             android:name=".Activities.SelectRoomActivity"
             android:label="@string/title_activity_select_room"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".Activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.MainActivity" />
         </activity>
 
     </application>

@@ -208,4 +208,8 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
             prevPlayerButton = currPlayerButton;
         }
     }
+
+    public void setListOfSongsFromSearch(List<Song> parsedResult) {
+
+    }
 }

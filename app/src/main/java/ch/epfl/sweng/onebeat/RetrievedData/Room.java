@@ -1,7 +1,9 @@
 package ch.epfl.sweng.onebeat.RetrievedData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Matthieu on 28.11.2015.
@@ -10,12 +12,14 @@ public class Room {
 
     private final String name;
     private final String creator;
-    private List<Integer> songs;
+    private Map<Song, User> songs;
+    private String password;
 
-    public Room(String name, String creator) {
+    public Room(String name, String creator, Map<Song, User> songs, String password ) {
         this.name = name;
         this.creator = creator;
-        this.songs = new ArrayList<>();
+        this.songs = new HashMap<>(songs);
+        this.password = password;
     }
 
     public String getName() {
@@ -26,7 +30,11 @@ public class Room {
         return creator;
     }
 
-    public void setSongs(List<Integer> songs) {
-        this.songs = songs;
+    public Map<Song, User> getSongs() {
+        return songs;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

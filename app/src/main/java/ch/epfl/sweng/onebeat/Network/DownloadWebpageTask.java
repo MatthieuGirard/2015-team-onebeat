@@ -99,4 +99,12 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         }
         return sb.toString();
     }
+
+    public void start(String url) {
+        this.execute(url, "");
+    }
+
+    public void start(String url, String token) {
+        this.execute(url, token);
+    }
 }

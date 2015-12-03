@@ -184,16 +184,15 @@ def getRoom(request):
 		room = Room.objects.get(id = roomId)
 		playlist = Playlist.objects.filter(room = room)
 		users = Member.objects.filter(room = room).values('user')
-		members = [d['user'] for d in users]
 		
 		return JsonResponse({
 			'info' : 'room',
 			'id' : room.id,
-			'creator' : room.creator.userId,
+			'creator' : room.creator,
 			'name' : room.name,
 			'playlist' : [d['song'] for d in playlist],
 			'addedBy' : [d['addedBy'] for d in playlist],
-			'members' : members
+			'members' : [l['user'] for l in users]
 			})
 	
 	else:

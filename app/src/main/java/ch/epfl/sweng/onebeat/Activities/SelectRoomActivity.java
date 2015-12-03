@@ -24,9 +24,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
 import ch.epfl.sweng.onebeat.R;
+import ch.epfl.sweng.onebeat.RetrievedData.Room;
 import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
 public class SelectRoomActivity extends AppCompatActivity {
@@ -95,6 +97,14 @@ public class SelectRoomActivity extends AppCompatActivity {
                 dialog.show(getSupportFragmentManager(), "Room Creator");
             }
         });
+    }
+
+    public void setListOfRooms(List<Room> roomsList) {
+
+    }
+
+    public void onNewRoomMessage(JSONObject result) {
+
     }
 
 

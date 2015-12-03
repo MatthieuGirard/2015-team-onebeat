@@ -6,6 +6,7 @@ public class Song {
     private String artist;
     private String duration;
     private String spotifyRef;
+    private int localID;
     //TODO: add all sorts of separate fields such as song picture, mp3 file, etc.
 
     public Song(String title, String artist, String duration, String spotifyRef) {
@@ -13,6 +14,10 @@ public class Song {
         this.artist = artist;
         this.duration = duration;
         this.spotifyRef = spotifyRef;
+    }
+
+    public Song(int localID) {
+        this.localID = localID;
     }
 
     public String getArtist() { return artist; }

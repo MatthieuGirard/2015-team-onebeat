@@ -30,6 +30,7 @@ import ch.epfl.sweng.onebeat.Network.DataProvider;
 import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.R;
+import ch.epfl.sweng.onebeat.RetrievedData.Room;
 import ch.epfl.sweng.onebeat.RetrievedData.Song;
 
 public class RoomActivity extends AppCompatActivity implements DataProviderObserver {
@@ -207,6 +208,10 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
     }
 
     public void setListOfSongsFromSearch(List<Song> parsedResult) {
+
+    }
+
+    public void setRoomInformations(Room actualRoom) {
 
     }
 }

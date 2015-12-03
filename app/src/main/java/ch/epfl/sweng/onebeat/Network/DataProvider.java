@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public abstract class DataProvider {
             Object parsedResult = parser.parse(result);
             switch (requestType) {
                 case CREATE_ROOM:
-                    ((SelectRoomActivity) callingActivity).onNewRoomMessage(parsedResult);
+                    ((SelectRoomActivity) callingActivity).onNewRoomMessage((JSONObject) parsedResult);
                     break;
                 case GET_SPOTIFY_USER:
                     ((MainActivity) callingActivity).onUserLogged();

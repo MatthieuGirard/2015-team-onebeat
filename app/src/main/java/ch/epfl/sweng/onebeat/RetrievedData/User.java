@@ -5,11 +5,16 @@ package ch.epfl.sweng.onebeat.RetrievedData;
  */
 public class User {
 
-    private final String pseudo;
-    private final String spotifyRef;
+    private String pseudo = null;
+    private String spotifyRef;
 
     public User(String pseudo, String spotifyRef) {
         this.pseudo = pseudo;
         this.spotifyRef = spotifyRef;
     }
+
+    public User(String spotifyRef) {
+        this.spotifyRef = spotifyRef;
+    }
+
 }

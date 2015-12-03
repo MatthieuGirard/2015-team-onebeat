@@ -28,8 +28,12 @@ public class RoomInfosParser implements Parser {
             JSONArray addedBy = json.getJSONArray("addedBy");
             Map<Song, User> songs = new HashMap<>();
             for (int i = 0; i < playlist.length(); i++) {
-
+                songs.put(new Song(playlist.getInt(i)), new User(addedBy.getString(i)));
             }
+
+            String password = json.getString("password");
+
+            return new Room(name, creator, songs, password);
 
         } catch (JSONException e) {
             throw new ParseException(e);

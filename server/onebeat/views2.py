@@ -15,7 +15,7 @@ def getRoom2(request):
 		room = Room.objects.get(id = roomId)
 		playlist = Playlist.objects.filter(room = room).values()
 		members = Member.objects.filter(room = room).values('user')
-		songsId = [p['song'] for p in playlist]
+		songsId = [p['song_id'] for p in playlist]
 		
 		return JsonResponse({
 			'info' : 'room',

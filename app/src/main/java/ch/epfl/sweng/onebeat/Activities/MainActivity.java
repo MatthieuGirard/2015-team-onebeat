@@ -1,18 +1,8 @@
 package ch.epfl.sweng.onebeat.Activities;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -25,15 +15,11 @@ import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
-import ch.epfl.sweng.onebeat.Network.DataProvider;
-import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
-import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
+import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
+import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.R;
-import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
 public class MainActivity extends AppCompatActivity implements ConnectionStateCallback, PlayerNotificationCallback {
 
@@ -43,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
     private static final int REQUEST_CODE = 1337;
 
     public final static String EXTRA_MESSAGE = "ch.epfl.sweng.onebeat.CREATING_ROOM_MESSAGE";
-
 
     private Player mPlayer;
 
@@ -123,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
 
     public void onUserLogged() throws NotDefinedUserInfosException, JSONException {
         new BackendDataProvider(this).addUser();
-
     }
     public void onUserRegistered() {
         Intent intent = new Intent(this, SelectRoomActivity.class);

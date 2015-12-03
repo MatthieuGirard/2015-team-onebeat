@@ -53,15 +53,12 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
 
         listViewSongs = (ListView) findViewById(R.id.currentSongsList);
         addNextSong = (EditText) findViewById(R.id.addSongTextBox);
-        TextView roomName = (TextView) findViewById(R.id.currentRoomName);
 
         // Assign the room name by getting it from the intent which opened this room
         Intent intent = getIntent();
-        roomName.setText(intent.getStringExtra(SelectRoomActivity.ROOM_NAME_MESSAGE));
-
+        setTitle(intent.getStringExtra(SelectRoomActivity.ROOM_NAME_MESSAGE));
 
         //TODO: Make currentSongs call a method which checks database if there was a list of songs
-
         currentSongs = new ArrayList<>();
 
         adapter = new SongListAdapter(this, currentSongs);

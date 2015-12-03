@@ -190,8 +190,8 @@ def getRoom(request):
 			'id' : room.id,
 			'creator' : room.creator.userId,
 			'name' : room.name,
-			'playlist' : [p['song'] for p in playlist],
-			'addedBy' : [p['addedBy'] for p in playlist],
+			'playlist' : [p['song_id'] for p in playlist],
+			'addedBy' : [p['addedBy_id'] for p in playlist],
 			'members' : [m['user'] for m in members]
 			})
 	

@@ -1,13 +1,17 @@
 package ch.epfl.sweng.onebeat.Network;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.renderscript.ScriptGroup;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -42,21 +46,21 @@ public class SendDataTask extends AsyncTask<String, Void, String> {
             //Create urlConnection
             url = new URL(targetURL);
             urlConnection = (HttpURLConnection) url.openConnection();
-            /*urlConnection.setDoOutput(true);
-            urlConnection.setChunkedStreamingMode(0);
-            urlConnection.setRequestProperty("Accept-Charset", charset);
-            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);*/
 
             urlConnection.setDoOutput(true);
             urlConnection.setRequestProperty("Accept-Charset", charset);
             urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
 
-            //Send request
-            DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
-            wr.write(dataToSend.getBytes(charset));
-/*            wr.writeBytes(dataToSend);
-            wr.flush();
-            wr.close();*/
+            Uri.Builder builder = new Uri.Builder().appendQueryParameter("request", dataToSend);
+            String query = builder.build().getEncodedQuery();
+
+            OutputStream os = urlConnection.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            writer.write(query);
+            writer.flush();
+            writer.close();
+            os.close();
 
             InputStream is;
 

@@ -60,8 +60,6 @@ public class RoomActivity extends AppCompatActivity {
 
         // Assign the room name by getting it from the intent which opened this room
         Intent intent = getIntent();
-        setTitle(intent.getStringExtra(SelectRoomActivity.ROOM_ID_MESSAGE));
-
         new BackendDataProvider(this).getRoom(intent.getIntExtra(SelectRoomActivity.ROOM_ID_MESSAGE, 0));
 
         //TODO: Make currentSongs call a method which checks database if there was a list of songs

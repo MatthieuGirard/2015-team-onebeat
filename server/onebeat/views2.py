@@ -29,6 +29,7 @@ def getRoom2(request):
 				'duration' : Song.objects.get(id = songId).duration,
 				'spotifyRef' : Song.objects.get(id = songId).spotifyRef
 			} for songId in songsId],
+			'addedBy' : [p['addedBy_id'] for p in playlist],
 			'members' : [d['user'] for d in members]
 			})
 	
@@ -37,3 +38,4 @@ def getRoom2(request):
 			'error':'room does not exist',
 			'id' : roomId
 			})
+		

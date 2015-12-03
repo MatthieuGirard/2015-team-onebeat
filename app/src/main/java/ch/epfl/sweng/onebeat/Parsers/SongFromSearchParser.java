@@ -37,7 +37,7 @@ public class SongFromSearchParser implements Parser<List<Song>> {
                 String artist = actualTrack.getJSONArray("artists").getJSONObject(0).getString("name");
                 String songName = actualTrack.getString("name");
                 String spotifyRef = actualTrack.getString("href");
-                String duration = actualTrack.getString("length");
+                double duration = actualTrack.getDouble("length");
 
                 tracksFound.add(new Song(songName, artist, duration, spotifyRef));
 

@@ -18,22 +18,25 @@ import ch.epfl.sweng.onebeat.RetrievedData.User;
 public class RoomInfosParser implements Parser {
     @Override
     public Room parse(String JSONStringToParse) throws ParseException {
-
-        Room newRoom;
         try {
             JSONObject json = new JSONObject(JSONStringToParse);
             String name = json.getString("name");
             String creator = json.getString("creator");
-            JSONArray playlist = json.getJSONArray("playlist");
+            JSONArray JSONsongs = json.getJSONArray("songs");
             JSONArray addedBy = json.getJSONArray("addedBy");
             Map<Song, User> songs = new HashMap<>();
-            for (int i = 0; i < playlist.length(); i++) {
-                songs.put(new Song(playlist.getInt(i)), new User(addedBy.getString(i)));
+            for (int i = 0; i < JSONsongs.length(); i++) {
+                JSONObject aSong = JSONsongs.getJSONObject(i);
+                songs.put(new Song(aSong.getString("title"),
+                        aSong.getString("artist"),
+                        aSong.getDouble("duration"),
+                        aSong.getString("spotifyRef")), new User(addedBy.getString(i)));
             }
 
             String password = json.getString("password");
+            int id = json.getInt("id");
 
-            return new Room(name, creator, songs, password);
+            return new Room(name, creator, songs, password, id);
 
         } catch (JSONException e) {
             throw new ParseException(e);

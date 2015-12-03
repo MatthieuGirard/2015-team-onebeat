@@ -3,6 +3,7 @@ package ch.epfl.sweng.onebeat.Activities;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -112,7 +114,7 @@ public class SelectRoomActivity extends AppCompatActivity {
     }
 
     public void errorOnCreatingRoom(String error) {
-        //TODO: show the error :)
+        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
     }
 
     @SuppressLint("ValidFragment")

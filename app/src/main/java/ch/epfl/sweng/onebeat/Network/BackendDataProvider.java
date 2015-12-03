@@ -1,6 +1,7 @@
 package ch.epfl.sweng.onebeat.Network;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +32,7 @@ public class BackendDataProvider extends DataProvider {
     public void getRoom(int RoomId) {
         super.setParser(new RoomInfosParser());
         super.setRequestType(RequestTypes.GET_ROOM_INFOS);
-        new DownloadWebpageTask(this).start(serverURL + "getRoom?id=" + RoomId);
+        new DownloadWebpageTask(this).start(serverURL + "getRoom2?id=" + RoomId);
     }
 
     public void addUser() throws NotDefinedUserInfosException, JSONException {
@@ -47,7 +48,7 @@ public class BackendDataProvider extends DataProvider {
     public void createRoom(String roomName, String roomPassword) {
         JSONObject jsonToSend = new JSONObject();
         try {
-            jsonToSend.put("creator", SpotifyUser.getInstance().getPseudo());
+            jsonToSend.put("creator", SpotifyUser.getInstance().getSpotifyID());
             jsonToSend.put("name", roomName);
             jsonToSend.put("password", roomPassword);
         } catch (JSONException | NotDefinedUserInfosException e) {
@@ -56,11 +57,13 @@ public class BackendDataProvider extends DataProvider {
 
         super.setParser(new CreateRoomParser());
         super.setRequestType(RequestTypes.CREATE_ROOM);
-        new SendDataTask(this).execute(serverURL + "createRoom/", jsonToSend.toString());
-    }
 
-    public void getSong(int id) {
-        super.setParser(new SongInfosParser());
+        try {
+            Log.d("#createRoom", SpotifyUser.getInstance().getPseudo());
+        } catch (NotDefinedUserInfosException e) {
+            e.printStackTrace();
+        }
+        new SendDataTask(this).execute(serverURL + "createRoom/", jsonToSend.toString());
     }
 }
 

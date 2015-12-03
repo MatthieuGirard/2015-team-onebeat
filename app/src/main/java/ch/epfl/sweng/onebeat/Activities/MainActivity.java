@@ -144,12 +144,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
 
     @Override
     public void onDataReception(Object data) {
-        TextView textView = (TextView) findViewById(R.id.textView);
-        try {
-            textView.setText(((SpotifyUser)data).getPseudo());
-        } catch (NotDefinedUserInfosException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public static String excutePost(String targetURL, String dataToSend)

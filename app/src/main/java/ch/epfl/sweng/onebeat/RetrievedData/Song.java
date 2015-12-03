@@ -20,7 +20,7 @@ public class Song {
     public String getTitle() { return title; }
     public String getDuration() { return duration; }
 
-    public boolean isEqual(Song song) {
+    public boolean equals(Song song) {
         return spotifyRef.contentEquals(song.getSpotifyRef());
     }
 }

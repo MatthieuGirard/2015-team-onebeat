@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -132,7 +135,6 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
                     getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected()) {
-
                 new SpotifyDataProvider(this).getListOfSongs(searchInput);
 
             } else {
@@ -151,28 +153,72 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
     }
 
     //TODO: Before adding a song, update the currentSong list from the database
-
     public void addSong(Song song) {
-        currentSongs.add(song);
-        adapter.notifyDataSetChanged();
+        AsyncMsg msg = new AsyncMsg(song, REQUEST.ADD);
+        new AsyncUpdateSongOnline().execute(msg);
     }
 
     //TODO: Before removing a song, update the currentSong list from the database
     public void removeSong(int index) {
         // We need to delete a song from the currentSongs list
-        Song songToRemove = currentSongs.remove(index);
+        Song songToRemove = currentSongs.get(index);
         // TODO: Now that we know which song we want to remove, update the list from the database
         // then check to see if the song is still in the list at which point we delete it and post
         // the changes
 
+        AsyncMsg msg = new AsyncMsg(songToRemove, REQUEST.REMOVE);
+        new AsyncUpdateSongOnline().execute(msg);
+    }
 
-        // Now notify the adapter the list has changed and it should be updated
-        adapter.notifyDataSetChanged();
+    public enum REQUEST {
+        ADD, REMOVE
+    }
+    private class AsyncMsg {
+        private Song song;
+        private REQUEST message;
+
+        public AsyncMsg(Song song, REQUEST message) {
+            this.message = message;
+            this.song = song;
+        }
+        public Song getSong() {
+            return this.song;
+        }
+        public REQUEST getMessage() {
+            return this.message;
+        }
+    }
+
+    //TODO: Choose an appropriate input type whether it be a JSONObject or Song
+    private class AsyncUpdateSongOnline extends AsyncTask<AsyncMsg, Void, String> {
+        @Override
+        protected String doInBackground(AsyncMsg... params) {
+            AsyncMsg msg = params[0];
+            switch (msg.getMessage()) {
+                case ADD:
+                    //TODO: Communicate with server to add this song to the room
+
+                    currentSongs.add(msg.getSong());
+                    break;
+                case REMOVE:
+                    //TODO: Communicate with server to try and remove this song
+
+                    currentSongs.remove(msg.getSong());
+                    break;
+            }
+
+            //TODO: After talking to the server, we either add or remove a song from currentSongs
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onDataReception(Object data) {
-
         Button button = (Button) findViewById(R.id.search_song_button);
         button.setEnabled(true);
         button.setText("Search");

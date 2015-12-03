@@ -58,6 +58,10 @@ public class BackendDataProvider extends DataProvider {
         super.setRequestType(RequestTypes.CREATE_ROOM);
         new SendDataTask(this).execute(serverURL + "createRoom/", jsonToSend.toString());
     }
+
+    public void getSong(int id) {
+        super.setParser(new SongInfosParser());
+    }
 }
 
 

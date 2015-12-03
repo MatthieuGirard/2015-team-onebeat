@@ -34,7 +34,7 @@ import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
 public class SelectRoomActivity extends AppCompatActivity {
     public final static String ROOM_NAME_MESSAGE = "ch.epfl.sweng.onebeat.ROOM_NAME_MESSAGE";
-    private static final String ROOM_ID_MESSAGE = "ch.epfl.sweng.onebeat.ROOM_ID_MESSAGE";
+    public static final String ROOM_ID_MESSAGE = "ch.epfl.sweng.onebeat.ROOM_ID_MESSAGE";
 
     private ArrayList roomsArray;
     private ArrayAdapter<String> adapter; //TODO: Change to type room

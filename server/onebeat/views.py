@@ -37,15 +37,14 @@ def getUser(request):
 	if (User.objects.filter(userId = userId).exists()):
 		user = User.objects.get(userId = userId)
 		rooms = Member.objects.filter(user = userId).values('room')
-
-
+		roomsId = [d['room'] for d in rooms]
 		
 		return JsonResponse({
 			'info' : 'user',
 			'id' : user.userId,
 			'name' : user.name,
-			'roomsId' : [d['room'] for d in rooms],
-			'roomsName' : [Room.objects.get(id = d['room']).name for d in rooms]
+			'roomsId' : roomsId,
+			'roomsName' : [ Room.objects.get(id = roomId).name for roomId in roomsId]
 			})
 	
 	else:

@@ -44,7 +44,7 @@ def getUser(request):
 			'id' : user.userId,
 			'name' : user.name,
 			'roomsId' : roomsId,
-			'roomsName' : [ Room.objects.get(id = roomId).name for roomId in roomsId]
+			'roomsName' : [ { 'id' : roomId , 'name' : Room.objects.get(id = roomId).name } for roomId in roomsId]
 			})
 	
 	else:

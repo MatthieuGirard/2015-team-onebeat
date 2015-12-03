@@ -46,9 +46,9 @@
 	"id" : "hugo-bonnome", // id is a string because it's the spotify id
 	"name" : "Hugo",
 	"rooms" : [
-		10293801,
-		23873784,
-		97432848
+		{ "id" : 10293801, "name" : "cool room" },
+		{ "id" : 23873784, "name" : "nice room" },
+		{ "id" : 97432848, "name" : "best room" }
 	]
 }
 

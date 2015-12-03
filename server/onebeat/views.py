@@ -44,7 +44,10 @@ def getUser(request):
 			'info' : 'user',
 			'id' : user.userId,
 			'name' : user.name,
-			'rooms' : [ { 'id' : roomId , 'name' : Room.objects.get(id = roomId).name } for roomId in roomsId]
+			'rooms' : [ { 
+				'id' : roomId,
+				'name' : Room.objects.get(id = roomId).name
+				} for roomId in roomsId]
 			})
 	
 	else:
@@ -56,21 +59,6 @@ def getUser(request):
 
 def addSong(request):
 	received_json_data = json.loads(request.POST['request'])
-	songId = received_json_data['id']
-
-	if ( not(Song.objects.filter(songId = songId).exists()) ):
-		title = received_json_data['title']
-		artist = received_json_data['artist']
-		duration = received_json_data['duration']
-		spotifyRef = received_json_data['spotifyRef']
-		
-		song = Song.objects.create(
-			songId = songId,
-			artist = artist,
-			title = title,
-			duration = duration,
-			spotifyRef = spotifyRef,
-			)
 	
 	userId = received_json_data['addedBy']
 	roomId = received_json_data['room']
@@ -80,10 +68,26 @@ def addSong(request):
 		
 		if ( Room.objects.filter(id = roomId).exists() ):
 			room = Room.objects.get(id = roomId)
-			
+
+			#add the song to the DB
+			songId = received_json_data['id']
+			if ( not(Song.objects.filter(songId = songId).exists()) ):
+				title = received_json_data['title']
+				artist = received_json_data['artist']
+				duration = received_json_data['duration']
+				spotifyRef = received_json_data['spotifyRef']
+				
+				song = Song.objects.create(
+					songId = songId,
+					artist = artist,
+					title = title,
+					duration = duration,
+					spotifyRef = spotifyRef,
+				)
+
 			Playlist.objects.create(
 				room = room,
-				song = songId,
+				song = song,
 				addedBy = addedBy
 				)
 			
@@ -96,17 +100,17 @@ def addSong(request):
 		
 		else:
 			return JsonResponse({
-			'added' : False,
-			'error' : 'room does not exist',
-			'id' : roomId
-			})
+				'added' : False,
+				'error' : 'room does not exist',
+				'id' : roomId
+				})
 	
 	else:
 		return JsonResponse({
-				'added' : False,
-				'error' : 'user does not exist',
-				'id' : userId
-				})
+			'added' : False,
+			'error' : 'user does not exist',
+			'id' : userId
+			})
 
 
 def getSong(request):

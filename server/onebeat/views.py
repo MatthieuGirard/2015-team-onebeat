@@ -165,7 +165,7 @@ def createRoom(request):
 		return JsonResponse({
 			'added' : False,
 			'error':'creator does not exist',
-			'id' : creatorName
+			'id' : creatorId
 			})
 
 

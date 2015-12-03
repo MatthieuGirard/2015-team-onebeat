@@ -13,7 +13,7 @@ def getRoom2(request):
 	
 	if (Room.objects.filter(id = roomId).exists()):
 		room = Room.objects.get(id = roomId)
-		playlist = Playlist.objects.filter(room = room)
+		playlist = Playlist.objects.filter(room = room).values()
 		members = Member.objects.filter(room = room).values('user')
 		songsId = [p['song'] for p in playlist]
 		

@@ -182,8 +182,8 @@ def getRoom(request):
 	
 	if (Room.objects.filter(id = roomId).exists()):
 		room = Room.objects.get(id = roomId)
-		playlist = Playlist.objects.filter(room = roomId)
-		members = Member.objects.filter(room = roomId).values('user')
+		playlist = Playlist.objects.filter(room = room)
+		members = Member.objects.filter(room = room).values('user')
 		
 		return JsonResponse({
 			'info' : 'room',

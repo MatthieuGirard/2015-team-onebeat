@@ -28,7 +28,7 @@ def addUser(request):
 		
 		return JsonResponse({
 			'added' : True,
-			'user' : userId
+			'id' : userId
 			})
 
 def getUser(request):
@@ -37,15 +37,15 @@ def getUser(request):
 	if (User.objects.filter(userId = userId).exists()):
 		user = User.objects.get(userId = userId)
 		rooms = Member.objects.filter(user = userId).values('room')
+
+
 		
 		return JsonResponse({
 			'info' : 'user',
 			'id' : user.userId,
 			'name' : user.name,
-			'rooms' : [{
-				"id" : d['room'],
-				"name" : Room.objects.get(d['room']).name
-				}for d in rooms]
+			'roomsId' : [d['room'] for d in rooms],
+			'roomsName' : [Room.objects.get(d['room']).name for d in rooms]
 			})
 	
 	else:
@@ -98,14 +98,14 @@ def addSong(request):
 			return JsonResponse({
 			'added' : False,
 			'error' : 'room does not exist',
-			'room' : roomId
+			'id' : roomId
 			})
 	
 	else:
 		return JsonResponse({
 				'added' : False,
 				'error' : 'user does not exist',
-				'user' : userId
+				'id' : userId
 				})
 
 
@@ -161,7 +161,7 @@ def createRoom(request):
 		
 		return JsonResponse({
 			'added':True,
-			'room' : newRoom.id
+			'id' : newRoom.id
 			})
 	
 	else:
@@ -233,12 +233,12 @@ def joinRoom(request):
 			return JsonResponse({
 				'added' : False,
 				'error' : 'user does not exist',
-				'user' : userId
+				'id' : userId
 				})
 	
 	else:
 		return JsonResponse({
 			'added' : False,
 			'error' : 'room does not exist',
-			'room' : roomName
+			'name' : roomName
 			})

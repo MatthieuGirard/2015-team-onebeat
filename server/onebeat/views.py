@@ -188,7 +188,7 @@ def getRoom(request):
 		return JsonResponse({
 			'info' : 'room',
 			'id' : room.id,
-			'creator' : room.creator,
+			'creator' : room.creator.userId,
 			'name' : room.name,
 			'playlist' : [d['song'] for d in playlist],
 			'addedBy' : [d['addedBy'] for d in playlist],

@@ -61,7 +61,7 @@ public class SongListAdapter extends ArrayAdapter<Song> {
 
         viewHolder.title.setText(song.getTitle());
         viewHolder.artist.setText(song.getArtist());
-        viewHolder.duration.setText(song.getDuration());
+        viewHolder.duration.setText(String.valueOf(song.getDuration()));
         viewHolder.player.setImageResource(R.drawable.player_play);
         viewHolder.player.setTag(false);
 

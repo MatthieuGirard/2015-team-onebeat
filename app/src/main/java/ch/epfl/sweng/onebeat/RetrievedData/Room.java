@@ -18,11 +18,12 @@ public class Room {
     private String password;
     private int id;
 
-    public Room(String name, String creator, Map<Song, User> songs, String password) {
+    public Room(String name, String creator, Map<Song, User> songs, String password, int id) {
         this.name = name;
         this.creator = creator;
         this.songs = new HashMap<>(songs);
         this.password = password;
+        this.id = id;
     }
 
     public Room(int id, String name) {

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
+import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
 import ch.epfl.sweng.onebeat.R;
 import ch.epfl.sweng.onebeat.RetrievedData.Room;
 import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
@@ -138,7 +139,8 @@ public class SelectRoomActivity extends AppCompatActivity {
                             //TODO: Figure out what to actually do in case of error
                             e.printStackTrace();
                         }
-                        //excutePost("http://onebeat.pythonanywhere.com/createRoom", jsonToSend.toString());
+
+                        new BackendDataProvider(SelectRoomActivity.this).createRoom(jsonToSend);
 
                         Intent intent = new Intent(RoomCreatorDialogFragment.this.getActivity(),
                                 RoomActivity.class);

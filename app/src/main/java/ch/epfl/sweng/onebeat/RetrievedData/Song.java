@@ -1,4 +1,4 @@
-package ch.epfl.sweng.onebeat;
+package ch.epfl.sweng.onebeat.RetrievedData;
 
 public class Song {
 

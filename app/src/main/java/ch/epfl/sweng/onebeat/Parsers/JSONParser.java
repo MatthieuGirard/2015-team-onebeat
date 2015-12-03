@@ -1,4 +1,4 @@
-package ch.epfl.sweng.onebeat;
+package ch.epfl.sweng.onebeat.Parsers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -6,6 +6,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
+import ch.epfl.sweng.onebeat.RetrievedData.Song;
+import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
 /**
  * Created by Matthieu on 16.11.2015.
@@ -33,7 +37,8 @@ public class JSONParser {
                 String artist = actualTrack.getJSONArray("artists").getJSONObject(0).getString("name");
                 String songName = actualTrack.getString("name");
                 String spotifyRef = actualTrack.getString("href");
-                String duration = actualTrack.getString("duration");
+                //String duration = actualTrack.getString("duration");
+                String duration = "";
 
                 tracksFound.add(new Song(songName, artist, duration, spotifyRef));
 

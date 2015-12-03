@@ -31,6 +31,7 @@ def addUser(request):
 			'id' : userId
 			})
 
+
 def getUser(request):
 	userId = request.GET['id']
 	
@@ -43,8 +44,7 @@ def getUser(request):
 			'info' : 'user',
 			'id' : user.userId,
 			'name' : user.name,
-			'roomsId' : roomsId,
-			'roomsName' : [ { 'id' : roomId , 'name' : Room.objects.get(id = roomId).name } for roomId in roomsId]
+			'rooms' : [ { 'id' : roomId , 'name' : Room.objects.get(id = roomId).name } for roomId in roomsId]
 			})
 	
 	else:
@@ -52,6 +52,7 @@ def getUser(request):
 			'error' : 'user does not exist',
 			'id' : userId
 			})
+
 
 def addSong(request):
 	received_json_data = json.loads(request.POST['request'])
@@ -129,6 +130,7 @@ def getSong(request):
 			'id' : songId
 			})
 
+
 def createRoom(request):
 	received_json_data = json.loads(request.POST['request'])
 	name = received_json_data['name']
@@ -195,6 +197,7 @@ def getRoom(request):
 			'error':'room does not exist',
 			'id' : roomId
 			})
+
 
 def joinRoom(request):
 	received_json_data = json.loads(request.POST['request'])

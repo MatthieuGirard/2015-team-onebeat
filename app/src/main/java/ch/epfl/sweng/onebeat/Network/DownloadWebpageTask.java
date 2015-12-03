@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
+import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 import ch.epfl.sweng.onebeat.Exceptions.ParserNotDefinedException;
 
@@ -46,6 +47,10 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (ParserNotDefinedException e) {
+            e.printStackTrace();
+        } catch (NotDefinedUserInfosException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
@@ -98,5 +103,13 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
             }
         }
         return sb.toString();
+    }
+
+    public void start(String url) {
+        this.execute(url, "");
+    }
+
+    public void start(String url, String token) {
+        this.execute(url, token);
     }
 }

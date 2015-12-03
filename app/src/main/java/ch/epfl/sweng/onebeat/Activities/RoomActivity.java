@@ -26,13 +26,16 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
 import ch.epfl.sweng.onebeat.Network.DataProvider;
 import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.R;
+import ch.epfl.sweng.onebeat.RetrievedData.Room;
 import ch.epfl.sweng.onebeat.RetrievedData.Song;
 
-public class RoomActivity extends AppCompatActivity implements DataProviderObserver {
+public class RoomActivity extends AppCompatActivity {
+
     private ListView listViewSongs;
     private EditText addNextSong;
     private ImageView prevPlayerButton;
@@ -53,15 +56,15 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
 
         listViewSongs = (ListView) findViewById(R.id.currentSongsList);
         addNextSong = (EditText) findViewById(R.id.addSongTextBox);
-        TextView roomName = (TextView) findViewById(R.id.currentRoomName);
+
 
         // Assign the room name by getting it from the intent which opened this room
         Intent intent = getIntent();
-        roomName.setText(intent.getStringExtra(SelectRoomActivity.ROOM_NAME_MESSAGE));
+        setTitle(intent.getStringExtra(SelectRoomActivity.ROOM_ID_MESSAGE));
 
+        new BackendDataProvider(this).getRoom(intent.getIntExtra(SelectRoomActivity.ROOM_ID_MESSAGE, 0));
 
         //TODO: Make currentSongs call a method which checks database if there was a list of songs
-
         currentSongs = new ArrayList<>();
 
         adapter = new SongListAdapter(this, currentSongs);
@@ -174,17 +177,6 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onDataReception(Object data, DataProvider.RequestTypes requestTypes) {
-
-        Button button = (Button) findViewById(R.id.search_song_button);
-        button.setEnabled(true);
-        button.setText("Search");
-
-        tempSongs = (List<Song>) data;
-        openContextMenu(addNextSong);
-    }
-
     public void playerClick(View v) {
         ImageView currPlayerButton = (ImageView) v.findViewById(R.id.list_image);
 
@@ -207,5 +199,13 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
             currPlayerButton.setImageResource(R.drawable.player_pause);
             prevPlayerButton = currPlayerButton;
         }
+    }
+
+    public void setListOfSongsFromSearch(List<Song> parsedResult) {
+
+    }
+
+    public void setRoomInformations(Room actualRoom) {
+
     }
 }

@@ -13,7 +13,11 @@ import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 public class CreateRoomParser implements Parser {
 
     @Override
-    public String parse(String JSONStringToParse) throws ParseException {
-        return JSONStringToParse;
+    public JSONObject parse(String JSONStringToParse) throws ParseException {
+        try {
+            return new JSONObject(JSONStringToParse);
+        } catch (JSONException e) {
+            throw new ParseException(e);
+        }
     }
 }

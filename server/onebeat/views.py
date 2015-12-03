@@ -42,7 +42,10 @@ def getUser(request):
 			'info' : 'user',
 			'id' : user.userId,
 			'name' : user.name,
-			'rooms' : [d['room'] for d in rooms]
+			'rooms' : [{
+				"id" : d['room'],
+				"name" : Room.objects.get(d['room']).name
+				}for d in rooms]
 			})
 	
 	else:

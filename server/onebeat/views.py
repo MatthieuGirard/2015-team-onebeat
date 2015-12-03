@@ -42,6 +42,7 @@ def getUser(request):
 		
 		return JsonResponse({
 			'info' : 'user',
+			'user' : user,
 			'id' : user.userId,
 			'name' : user.name,
 			'rooms' : [ { 

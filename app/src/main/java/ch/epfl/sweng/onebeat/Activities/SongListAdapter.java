@@ -1,4 +1,4 @@
-package ch.epfl.sweng.onebeat;
+package ch.epfl.sweng.onebeat.Activities;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import ch.epfl.sweng.onebeat.R;
+import ch.epfl.sweng.onebeat.RetrievedData.Song;
 
 
 /**

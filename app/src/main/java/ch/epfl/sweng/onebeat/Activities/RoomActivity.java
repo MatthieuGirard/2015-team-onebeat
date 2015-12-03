@@ -1,4 +1,4 @@
-package ch.epfl.sweng.onebeat;
+package ch.epfl.sweng.onebeat.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,12 +22,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomActivity extends AppCompatActivity implements WebPageDownloader {
+import ch.epfl.sweng.onebeat.Network.DataProvider;
+import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
+import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
+import ch.epfl.sweng.onebeat.R;
+import ch.epfl.sweng.onebeat.RetrievedData.Song;
+
+public class RoomActivity extends AppCompatActivity implements DataProviderObserver {
     private ListView listViewSongs;
     private EditText addNextSong;
     private ImageView prevPlayerButton;
@@ -119,7 +124,7 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
         }
     }
 
-    public void searchForSong(View view) {
+    public void searchForSong(View view) throws MalformedURLException {
         String searchInput = addNextSong.getText().toString().trim();
 
         if (searchInput.length() > 0) {
@@ -127,13 +132,13 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
             button.setEnabled(false);
             button.setText("Searching...");
 
-            String stringUrl = "http://ws.spotify.com/search/1/track.json?q=" + searchInput.replace(" ", "%20");
-
             ConnectivityManager connMgr = (ConnectivityManager)
                     getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected()) {
-                new DownloadWebpageTask(this).execute(stringUrl, "");
+
+                new SpotifyDataProvider(this).getListOfSongs(searchInput);
+
             } else {
                 // TODO: Show Toast if no connection, maybe also inside DownloadWebpageTask ?
                 Context context = getApplicationContext();
@@ -149,19 +154,8 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
         }
     }
 
-    @Override
-    public void onPageDataRetrieved(String result) throws JSONException, JSONParserException {
-
-        Button button = (Button) findViewById(R.id.search_song_button);
-        button.setEnabled(true);
-        button.setText("Search");
-
-        tempSongs = JSONParser.parseFromSearchAPI(result);
-        Log.d("KEINFO", "Found tracks, about to display con menu");
-        openContextMenu(addNextSong);
-    }
-
     //TODO: Before adding a song, update the currentSong list from the database
+
     public void addSong(Song song) {
         currentSongs.add(song);
         adapter.notifyDataSetChanged();
@@ -178,6 +172,17 @@ public class RoomActivity extends AppCompatActivity implements WebPageDownloader
 
         // Now notify the adapter the list has changed and it should be updated
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDataReception(Object data, DataProvider.RequestTypes requestTypes) {
+
+        Button button = (Button) findViewById(R.id.search_song_button);
+        button.setEnabled(true);
+        button.setText("Search");
+
+        tempSongs = (List<Song>) data;
+        openContextMenu(addNextSong);
     }
 
     public void playerClick(View v) {

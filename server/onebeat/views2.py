@@ -14,9 +14,9 @@ def getRoom2(request):
 			'name' : room.name,
 			'password' : room.password,
 			'songs' : [ { 
-				'artist' : Song.objects.get(id = songId).artist
-				'title' : Song.objects.get(id = songId).title
-				'duration' : Song.objects.get(id = songId).duration
+				'artist' : Song.objects.get(id = songId).artist,
+				'title' : Song.objects.get(id = songId).title,
+				'duration' : Song.objects.get(id = songId).duration,
 				'spotifyRef' : Song.objects.get(id = songId).spotifyRef
 			} songId in songsId],
 			'members' : [d['user'] for d in users]

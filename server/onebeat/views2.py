@@ -11,11 +11,12 @@ from .models import Member
 def getRoom2(request):
 	roomId = request.GET['id']
 	
-	if (Room.objects.filter(roomId = roomId).exists()):
-		room = Room.objects.get(roomId = roomId)
-		playlist = Playlist.objects.filter(room = roomId)
-		members = Member.objects.filter(room = roomId).values('user')
+	if (Room.objects.filter(id = roomId).exists()):
+		room = Room.objects.get(id = roomId)
+		playlist = Playlist.objects.filter(room = room)
+		members = Member.objects.filter(room = room).values('user')
 		songsId = [d['song'] for d in playlist]
+		song = Song.objects.get(id = songId)
 		
 		return JsonResponse({
 			'info' : 'room',
@@ -24,10 +25,10 @@ def getRoom2(request):
 			'name' : room.name,
 			'password' : room.password,
 			'songs' : [ { 
-				'artist' : Song.objects.get(id = songId).artist,
-				'title' : Song.objects.get(id = songId).title,
-				'duration' : Song.objects.get(id = songId).duration,
-				'spotifyRef' : Song.objects.get(id = songId).spotifyRef
+				'artist' : song.artist,
+				'title' : song.title,
+				'duration' : song.duration,
+				'spotifyRef' : song.spotifyRef
 			} for songId in songsId],
 			'members' : [d['user'] for d in users]
 			})

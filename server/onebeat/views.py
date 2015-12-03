@@ -116,8 +116,8 @@ def addSong(request):
 def getSong(request):
 	songId = request.GET['id']
 	
-	if (Song.objects.filter(songId = songId).exists()):
-		song = Song.objects.get(songId = songId)
+	if (Song.objects.filter(ic = songId).exists()):
+		song = Song.objects.get(id = songId)
 		
 		return JsonResponse({
 			'info' : 'song', 
@@ -180,8 +180,8 @@ def createRoom(request):
 def getRoom(request):
 	roomId = request.GET['id']
 	
-	if (Room.objects.filter(roomId = roomId).exists()):
-		room = Room.objects.get(roomId = roomId)
+	if (Room.objects.filter(id = roomId).exists()):
+		room = Room.objects.get(id = roomId)
 		playlist = Playlist.objects.filter(room = roomId)
 		members = Member.objects.filter(room = roomId).values('user')
 		

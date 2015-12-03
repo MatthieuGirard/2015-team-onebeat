@@ -1,6 +1,8 @@
 package ch.epfl.sweng.onebeat.Network;
 
 import android.os.AsyncTask;
+import android.renderscript.ScriptGroup;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -8,39 +10,69 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+
+import ch.epfl.sweng.onebeat.Exceptions.ParseException;
+import ch.epfl.sweng.onebeat.Exceptions.ParserNotDefinedException;
 
 /**
  * Created by Matthieu on 01.12.2015.
  */
 public class SendDataTask extends AsyncTask<String, Void, String> {
+
+    private DataProvider callingProvider;
+
+    public SendDataTask(DataProvider callingProvider) {
+        this.callingProvider = callingProvider;
+    }
+
     @Override
     protected String doInBackground(String... params) {
 
+        // params[0] is url
+        // params[1] is stuff to send
         return uploadUrl(params[0], params[1]);
     }
 
     private String uploadUrl(String targetURL, String dataToSend) {
         URL url;
         HttpURLConnection urlConnection = null;
+        String charset = "UTF-8";
         try {
             //Create urlConnection
             url = new URL(targetURL);
-            urlConnection = (HttpURLConnection)url.openConnection();
-            urlConnection.setDoOutput(true);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            /*urlConnection.setDoOutput(true);
             urlConnection.setChunkedStreamingMode(0);
+            urlConnection.setRequestProperty("Accept-Charset", charset);
+            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);*/
+
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Accept-Charset", charset);
+            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
 
             //Send request
-            DataOutputStream wr = new DataOutputStream (urlConnection.getOutputStream ());
-            wr.writeBytes (dataToSend);
-            wr.flush ();
-            wr.close ();
+            DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
+            wr.write(dataToSend.getBytes(charset));
+/*            wr.writeBytes(dataToSend);
+            wr.flush();
+            wr.close();*/
 
-            //Get Response
-            InputStream is = urlConnection.getInputStream();
+            InputStream is;
+
+            if (urlConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                Log.d("#SendData", "http response code is " + urlConnection.getResponseCode());
+                is = urlConnection.getErrorStream();
+            }
+            else {
+
+                //Get Response
+                is = urlConnection.getInputStream();
+            }
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
             String line;
             StringBuffer response = new StringBuffer();
-            while((line = rd.readLine()) != null) {
+            while ((line = rd.readLine()) != null) {
                 response.append(line);
                 response.append('\r');
             }
@@ -54,9 +86,20 @@ public class SendDataTask extends AsyncTask<String, Void, String> {
 
         } finally {
 
-            if(urlConnection != null) {
+            if (urlConnection != null) {
                 urlConnection.disconnect();
             }
+        }
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        try {
+            callingProvider.onWebDataReception(result);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (ParserNotDefinedException e) {
+            e.printStackTrace();
         }
     }
 }

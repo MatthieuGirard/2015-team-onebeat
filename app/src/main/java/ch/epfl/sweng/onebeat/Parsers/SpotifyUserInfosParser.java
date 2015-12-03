@@ -23,12 +23,7 @@ public class SpotifyUserInfosParser implements Parser {
             return SpotifyUser.getInstance();
         }
         catch (JSONException e) {
-            throw new ParseException();
+            throw new ParseException(e);
         }
-    }
-
-    @Override
-    public Object parse(JSONObject json) throws ParseException {
-        return null;
     }
 }

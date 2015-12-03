@@ -22,19 +22,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.onebeat.Network.DataProvider;
 import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
-import ch.epfl.sweng.onebeat.Parsers.JSONParser;
-import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
 import ch.epfl.sweng.onebeat.R;
 import ch.epfl.sweng.onebeat.RetrievedData.Song;
-import ch.epfl.sweng.onebeat.Network.WebPageDownloader;
 
 public class RoomActivity extends AppCompatActivity implements DataProviderObserver {
     private ListView listViewSongs;
@@ -179,7 +175,7 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
     }
 
     @Override
-    public void onDataReception(Object data) {
+    public void onDataReception(Object data, DataProvider.RequestTypes requestTypes) {
 
         Button button = (Button) findViewById(R.id.search_song_button);
         button.setEnabled(true);

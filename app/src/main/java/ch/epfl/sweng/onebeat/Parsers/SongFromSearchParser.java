@@ -47,9 +47,4 @@ public class SongFromSearchParser implements Parser<List<Song>> {
             throw new ParseException(e);
         }
     }
-
-    @Override
-    public List<Song> parse(JSONObject json) throws ParseException {
-        return null;
-    }
 }

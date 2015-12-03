@@ -9,26 +9,15 @@ import ch.epfl.sweng.onebeat.Parsers.SpotifyUserInfosParser;
 /**
  * Created by hugo on 20.11.15.
  */
-public class SpotifyDataProvider implements WebPageDownloader {
-
-    private DataProviderObserver callingActivity;
-    private Parser parser = null;
+public class SpotifyDataProvider extends DataProvider {
 
     public SpotifyDataProvider(DataProviderObserver callingDude) {
-        this.callingActivity = callingDude;
-    }
-
-    @Override
-    public void onWebDataReception(String result) throws ParseException, ParserNotDefinedException {
-        if (parser != null) {
-            callingActivity.onDataReception(parser.parse(result));
-        } else {
-            throw new ParserNotDefinedException();
-        }
+        super(callingDude);
     }
 
     public void getListOfSongs(String searchInput) {
-        parser = new SongFromSearchParser();
+        super.setParser(new SongFromSearchParser());
+        super.setRequestType(RequestTypes.GET_LIST_OF_SPOTIFY_SONGS);
 
         String stringUrl = "http://ws.spotify.com/search/1/track.json?q=" + searchInput.replace(" ", "%20");
 
@@ -36,7 +25,10 @@ public class SpotifyDataProvider implements WebPageDownloader {
     }
 
     public void getUserInfos(String token) {
-        parser = new SpotifyUserInfosParser();
+        super.setParser(new SpotifyUserInfosParser());
+        super.setRequestType(RequestTypes.GET_SPOTIFY_USER);
+
         new DownloadWebpageTask(this).execute("https://api.spotify.com/v1/me", token);
+
     }
 }

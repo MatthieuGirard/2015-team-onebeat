@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
@@ -28,24 +27,13 @@ import com.spotify.sdk.android.player.Spotify;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
+import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
+import ch.epfl.sweng.onebeat.Network.DataProvider;
 import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
-import ch.epfl.sweng.onebeat.Network.DownloadWebpageTask;
-import ch.epfl.sweng.onebeat.Network.SendDataTask;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
-import ch.epfl.sweng.onebeat.Parsers.JSONParser;
-import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
 import ch.epfl.sweng.onebeat.R;
 import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
-import ch.epfl.sweng.onebeat.Network.WebPageDownloader;
 
 public class MainActivity extends AppCompatActivity implements ConnectionStateCallback, PlayerNotificationCallback, DataProviderObserver {
 
@@ -172,17 +160,45 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
     }
 
     @Override
-    public void onDataReception(Object data) {
-        TextView textView = (TextView) findViewById(R.id.textView);
-        try {
-            textView.setText(((SpotifyUser)data).getPseudo());
-        } catch (NotDefinedUserInfosException e) {
-            e.printStackTrace();
+    public void onDataReception(Object data, DataProvider.RequestTypes requestTypes) {
+
+        switch (requestTypes) {
+            case CREATE_ROOM:
+                //JSONObject json = (JSONObject) data;
+                Log.d("#NetworkDebug", (String) data);
+
+                ((TextView) findViewById(R.id.textView)).setText((String) data);
+                /*try {
+                    String hasBeenCreated = json.getString("added");
+                    if (hasBeenCreated == "true") {
+                        Intent intent = new Intent(this, RoomActivity.class);
+                        startActivity(intent);
+                    } else {
+                        showError("Room already exists");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
+                break;
+            case GET_SPOTIFY_USER:
+                TextView textView = (TextView) findViewById(R.id.textView);
+                try {
+                    textView.setText(((SpotifyUser) data).getPseudo());
+                } catch (NotDefinedUserInfosException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
+    }
+
+    private void showError(String s) {
+        ((TextView)findViewById(R.id.textView)).setText(s);
+
     }
 
     @SuppressLint("ValidFragment")
     private class RoomCreatorDialogFragment extends DialogFragment {
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -203,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
 
                             JSONObject jsonToSend = new JSONObject();
                             try {
-                                jsonToSend.put("creator", SpotifyUser.getInstance().getPseudo()); // TODO
+                                jsonToSend.put("creator", SpotifyUser.getInstance().getSpotifyID());
                                 jsonToSend.put("name", roomNameField.getText().toString());
                                 jsonToSend.put("password", roomPasswordField.getText().toString());
                             } catch (JSONException e) {
@@ -211,11 +227,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                             } catch (NotDefinedUserInfosException e) {
                                 e.printStackTrace();
                             }
-                            //String message = roomNameField.getText().toString();
-                            //intent.putExtra(EXTRA_MESSAGE, message);
 
-                            new SendDataTask().execute("http://onebeat.pythonanywhere.com/createRoom", jsonToSend.toString());
-                            startActivity(intent);
+                            new BackendDataProvider(MainActivity.this).createRoom(jsonToSend);
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -224,48 +237,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                         }
                     });
             return builder.create();
-        }
-    }
-
-    public static String excutePost(String targetURL, String dataToSend)
-    {
-        URL url;
-        HttpURLConnection urlConnection = null;
-        try {
-            //Create urlConnection
-            url = new URL(targetURL);
-            urlConnection = (HttpURLConnection)url.openConnection();
-            urlConnection.setDoOutput(true);
-            urlConnection.setChunkedStreamingMode(0);
-
-            //Send request
-            DataOutputStream wr = new DataOutputStream (urlConnection.getOutputStream ());
-            wr.writeBytes (dataToSend);
-            wr.flush ();
-            wr.close ();
-
-            //Get Response
-            InputStream is = urlConnection.getInputStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            String line;
-            StringBuffer response = new StringBuffer();
-            while((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append('\r');
-            }
-            rd.close();
-            return response.toString();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            return null;
-
-        } finally {
-
-            if(urlConnection != null) {
-                urlConnection.disconnect();
-            }
         }
     }
 }

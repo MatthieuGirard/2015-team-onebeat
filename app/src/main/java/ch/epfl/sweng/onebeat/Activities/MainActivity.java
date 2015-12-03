@@ -22,6 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
+import ch.epfl.sweng.onebeat.Network.DataProvider;
 import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.R;
@@ -142,10 +143,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
 
     }
 
-    @Override
-    public void onDataReception(Object data) {
 
-    }
 
     public static String excutePost(String targetURL, String dataToSend)
     {
@@ -187,5 +185,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                 urlConnection.disconnect();
             }
         }
+    }
+
+    @Override
+    public void onDataReception(Object data, DataProvider.RequestTypes requestTypes) {
+
     }
 }

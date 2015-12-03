@@ -29,6 +29,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.onebeat.Network.DataProvider;
 import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.R;
@@ -170,6 +171,16 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
         new AsyncUpdateSongOnline().execute(msg);
     }
 
+    @Override
+    public void onDataReception(Object data, DataProvider.RequestTypes requestTypes) {
+        Button button = (Button) findViewById(R.id.search_song_button);
+        button.setEnabled(true);
+        button.setText("Search");
+
+        tempSongs = (List<Song>) data;
+        openContextMenu(addNextSong);
+    }
+
     public enum REQUEST {
         ADD, REMOVE
     }
@@ -215,16 +226,6 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
         protected void onPostExecute(String result) {
             adapter.notifyDataSetChanged();
         }
-    }
-
-    @Override
-    public void onDataReception(Object data) {
-        Button button = (Button) findViewById(R.id.search_song_button);
-        button.setEnabled(true);
-        button.setText("Search");
-
-        tempSongs = (List<Song>) data;
-        openContextMenu(addNextSong);
     }
 
     public void playerClick(View v) {

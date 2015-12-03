@@ -12,5 +12,4 @@ import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 public interface Parser<T> {
 
     T parse(String JSONStringToParse) throws ParseException;
-    T parse(JSONObject json) throws ParseException;
 }

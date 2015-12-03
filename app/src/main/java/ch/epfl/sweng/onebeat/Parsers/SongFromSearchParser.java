@@ -37,7 +37,7 @@ public class SongFromSearchParser implements Parser<List<Song>> {
                 String artist = actualTrack.getJSONArray("artists").getJSONObject(0).getString("name");
                 String songName = actualTrack.getString("name");
                 String spotifyRef = actualTrack.getString("href");
-                String duration = "";
+                String duration = actualTrack.getString("length");
 
                 tracksFound.add(new Song(songName, artist, duration, spotifyRef));
 
@@ -46,10 +46,5 @@ public class SongFromSearchParser implements Parser<List<Song>> {
         } catch (JSONException e) {
             throw new ParseException(e);
         }
-    }
-
-    @Override
-    public List<Song> parse(JSONObject json) throws ParseException {
-        return null;
     }
 }

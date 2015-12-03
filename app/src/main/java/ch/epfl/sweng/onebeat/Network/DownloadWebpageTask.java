@@ -20,9 +20,9 @@ import ch.epfl.sweng.onebeat.Exceptions.ParserNotDefinedException;
  */
 public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
 
-    private WebPageDownloader callingProvider;
+    private DataProvider callingProvider;
 
-    public DownloadWebpageTask(WebPageDownloader callingProvider) {
+    public DownloadWebpageTask(DataProvider callingProvider) {
         this.callingProvider = callingProvider;
     }
 

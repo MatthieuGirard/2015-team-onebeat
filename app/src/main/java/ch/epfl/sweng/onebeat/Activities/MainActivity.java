@@ -1,56 +1,41 @@
-package ch.epfl.sweng.onebeat;
+package ch.epfl.sweng.onebeat.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
-import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.util.List;
+import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
+import ch.epfl.sweng.onebeat.Network.DataProvider;
+import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
+import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
+import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
+import ch.epfl.sweng.onebeat.R;
+import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
-public class MainActivity extends AppCompatActivity implements ConnectionStateCallback, PlayerNotificationCallback, WebPageDownloader {
+public class MainActivity extends AppCompatActivity implements ConnectionStateCallback, PlayerNotificationCallback, DataProviderObserver {
 
     private static final String CLIENT_ID = "eb868e0c8f33441b86de1904b3503f10";
     private static final String REDIRECT_URI = "onebeatapp://callback";
@@ -94,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
 
-                new DownloadWebpageTask(this).execute("https://api.spotify.com/v1/me", response.getAccessToken());
+                new SpotifyDataProvider(this).getUserInfos(response.getAccessToken());
 
 /*                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
                 Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
@@ -175,62 +160,45 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
     }
 
     @Override
-    public void onPageDataRetrieved(String result) throws JSONParserException {
+    public void onDataReception(Object data, DataProvider.RequestTypes requestTypes) {
 
-        JSONParser.parseFromUserJSON(result);
+        switch (requestTypes) {
+            case CREATE_ROOM:
+                //JSONObject json = (JSONObject) data;
+                Log.d("#NetworkDebug", (String) data);
 
-        TextView textView = (TextView) findViewById(R.id.textView);
-        textView.setText(result);
+                ((TextView) findViewById(R.id.textView)).setText((String) data);
+                /*try {
+                    String hasBeenCreated = json.getString("added");
+                    if (hasBeenCreated == "true") {
+                        Intent intent = new Intent(this, RoomActivity.class);
+                        startActivity(intent);
+                    } else {
+                        showError("Room already exists");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
+                break;
+            case GET_SPOTIFY_USER:
+                TextView textView = (TextView) findViewById(R.id.textView);
+                try {
+                    textView.setText(((SpotifyUser) data).getPseudo());
+                } catch (NotDefinedUserInfosException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
     }
 
-    private class GetUserJSONFromWeb extends AsyncTask<String, Void, String> {
+    private void showError(String s) {
+        ((TextView)findViewById(R.id.textView)).setText(s);
 
-        @Override
-        protected String doInBackground(String[] params) {
-            try {
-                return downloadUserJSON(params[0], params[1]);
-            } catch (IOException e) {
-                return "Error trying to get the WebData of user JSON";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            TextView textView = (TextView) findViewById(R.id.textView);
-            textView.setText(result);
-        }
-
-        private String downloadUserJSON(String myurl, String token) throws IOException {
-            InputStream is = null;
-
-            try {
-                URL url = new URL(myurl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestProperty("Authorization", "Bearer "+ token);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                // Starts the query
-                conn.connect();
-                int response = conn.getResponseCode();
-                Log.d("user JSON request", "The response is: " + response);
-                is = conn.getInputStream();
-
-                // Convert the InputStream into a string
-                String contentAsString = DownloadWebpageTask.readIt(is);
-                return contentAsString;
-
-                // Makes sure that the InputStream is closed after the app is
-                // finished using it.
-            } finally {
-                if (is != null) {
-                    is.close();
-                }
-            }
-        }
     }
 
     @SuppressLint("ValidFragment")
     private class RoomCreatorDialogFragment extends DialogFragment {
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -251,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
 
                             JSONObject jsonToSend = new JSONObject();
                             try {
-                                jsonToSend.put("creator", SpotifyUser.getInstance().getPseudo()); // TODO
+                                jsonToSend.put("creator", SpotifyUser.getInstance().getSpotifyID());
                                 jsonToSend.put("name", roomNameField.getText().toString());
                                 jsonToSend.put("password", roomPasswordField.getText().toString());
                             } catch (JSONException e) {
@@ -259,11 +227,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                             } catch (NotDefinedUserInfosException e) {
                                 e.printStackTrace();
                             }
-                            //String message = roomNameField.getText().toString();
-                            //intent.putExtra(EXTRA_MESSAGE, message);
 
-                            excutePost("http://onebeat.pythonanywhere.com/createRoom", jsonToSend.toString());
-                            startActivity(intent);
+                            new BackendDataProvider(MainActivity.this).createRoom(jsonToSend);
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -272,48 +237,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
                         }
                     });
             return builder.create();
-        }
-    }
-
-    public static String excutePost(String targetURL, String dataToSend)
-    {
-        URL url;
-        HttpURLConnection urlConnection = null;
-        try {
-            //Create urlConnection
-            url = new URL(targetURL);
-            urlConnection = (HttpURLConnection)url.openConnection();
-            urlConnection.setDoOutput(true);
-            urlConnection.setChunkedStreamingMode(0);
-
-            //Send request
-            DataOutputStream wr = new DataOutputStream (urlConnection.getOutputStream ());
-            wr.writeBytes (dataToSend);
-            wr.flush ();
-            wr.close ();
-
-            //Get Response
-            InputStream is = urlConnection.getInputStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            String line;
-            StringBuffer response = new StringBuffer();
-            while((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append('\r');
-            }
-            rd.close();
-            return response.toString();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            return null;
-
-        } finally {
-
-            if(urlConnection != null) {
-                urlConnection.disconnect();
-            }
         }
     }
 }

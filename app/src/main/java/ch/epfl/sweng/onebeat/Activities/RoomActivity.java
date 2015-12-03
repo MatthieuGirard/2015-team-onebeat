@@ -23,6 +23,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.spotify.sdk.android.player.Player;
+
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
@@ -42,6 +44,8 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
 
     private ArrayList<Song> currentSongs;
     private ArrayAdapter<Song> adapter;
+
+    private Player player;
 
     /*
      * Between the RoomActivity and the user selecting a song that they want to add to the queue, I
@@ -155,6 +159,7 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
 
     //TODO: Before adding a song, update the currentSong list from the database
     public void addSong(Song song) {
+        addNextSong.setText("");
         AsyncMsg msg = new AsyncMsg(song, REQUEST.ADD);
         new AsyncUpdateSongOnline().execute(msg);
     }

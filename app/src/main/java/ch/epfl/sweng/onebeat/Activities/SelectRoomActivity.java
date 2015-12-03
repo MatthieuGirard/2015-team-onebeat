@@ -26,10 +26,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
+import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
+import ch.epfl.sweng.onebeat.Network.DataProvider;
+import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
 import ch.epfl.sweng.onebeat.R;
 import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
-public class SelectRoomActivity extends AppCompatActivity {
+public class SelectRoomActivity extends AppCompatActivity implements DataProviderObserver {
     public final static String ROOM_NAME_MESSAGE = "ch.epfl.sweng.onebeat.ROOM_NAME_MESSAGE";
 
     private ArrayList roomsArray;
@@ -97,6 +100,18 @@ public class SelectRoomActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onDataReception(Object data, DataProvider.RequestTypes requestTypes) {
+        switch (requestTypes) {
+            case GET_SPOTIFY_USER:
+                break;
+            case GET_LIST_OF_SPOTIFY_SONGS:
+                break;
+            case CREATE_ROOM:
+                break;
+        }
+    }
+
 
     @SuppressLint("ValidFragment")
     private class RoomCreatorDialogFragment extends DialogFragment {
@@ -128,7 +143,7 @@ public class SelectRoomActivity extends AppCompatActivity {
                             //TODO: Figure out what to actually do in case of error
                             e.printStackTrace();
                         }
-                        //excutePost("http://onebeat.pythonanywhere.com/createRoom", jsonToSend.toString());
+                        new BackendDataProvider(SelectRoomActivity.this).createRoom(jsonToSend);
 
                         Intent intent = new Intent(RoomCreatorDialogFragment.this.getActivity(),
                                 RoomActivity.class);

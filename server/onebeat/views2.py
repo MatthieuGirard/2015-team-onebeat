@@ -18,7 +18,7 @@ def getRoom2(request):
 				'title' : Song.objects.get(id = songId).title,
 				'duration' : Song.objects.get(id = songId).duration,
 				'spotifyRef' : Song.objects.get(id = songId).spotifyRef
-			} songId in songsId],
+			} for songId in songsId],
 			'members' : [d['user'] for d in users]
 			})
 	

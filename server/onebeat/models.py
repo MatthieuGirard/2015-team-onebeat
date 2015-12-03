@@ -29,9 +29,6 @@ class Playlist(models.Model):
 	room = models.ForeignKey(Room)
 	song = models.ForeignKey(Song)
 	addedBy = models.ForeignKey(User)
-	
-	def __str__(self):
-		return self.song
 
 class Member(models.Model):
 	user = models.ForeignKey(User)

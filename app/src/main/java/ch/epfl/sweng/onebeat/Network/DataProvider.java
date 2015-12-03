@@ -43,7 +43,17 @@ public abstract class DataProvider {
             Object parsedResult = parser.parse(result);
             switch (requestType) {
                 case CREATE_ROOM:
-                    ((SelectRoomActivity) callingActivity).onNewRoomMessage((JSONObject) parsedResult);
+                    JSONObject response = (JSONObject) parsedResult;
+                    boolean hasCreated = response.getBoolean("added");
+                    SelectRoomActivity selectRoomActivity = (SelectRoomActivity) callingActivity;
+                    if (hasCreated) {
+                        int roomID = response.getInt("id");
+                        selectRoomActivity.onNewRoomMessage(roomID);
+                    }
+                    else {
+                        String error = response.getString("error");
+                        selectRoomActivity.errorOnCreatingRoom(error);
+                    }
                     break;
                 case GET_SPOTIFY_USER:
                     ((MainActivity) callingActivity).onUserLogged();

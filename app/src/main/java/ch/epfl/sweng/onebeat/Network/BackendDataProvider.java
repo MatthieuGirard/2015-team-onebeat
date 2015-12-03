@@ -18,28 +18,20 @@ import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
 public class BackendDataProvider extends DataProvider {
 
-
-
     public BackendDataProvider(Context callingActivity) {
         super(callingActivity);
-    }
-
-    public void createRoom(JSONObject jsonToSend) {
-        super.setParser(new CreateRoomParser());
-        super.setRequestType(RequestTypes.CREATE_ROOM);
-        new SendDataTask(this).execute(serverURL +"createRoom/", jsonToSend.toString());
     }
 
     public void getListOfRooms() throws NotDefinedUserInfosException {
         super.setParser(new ListOfRoomsParser());
         super.setRequestType(RequestTypes.GET_LIST_OF_ROOMS);
-        new DownloadWebpageTask(this).start(serverURL +"getUser?id=" + SpotifyUser.getInstance().getSpotifyID());
+        new DownloadWebpageTask(this).start(serverURL + "getUser?id=" + SpotifyUser.getInstance().getSpotifyID());
     }
 
     public void getRoom(int RoomId) {
         super.setParser(new RoomInfosParser());
         super.setRequestType(RequestTypes.GET_ROOM_INFOS);
-        new DownloadWebpageTask(this).start(serverURL +"getRoom?id="+ RoomId);
+        new DownloadWebpageTask(this).start(serverURL + "getRoom?id=" + RoomId);
     }
 
     public void addUser() throws NotDefinedUserInfosException, JSONException {
@@ -49,7 +41,22 @@ public class BackendDataProvider extends DataProvider {
         jsonToSend.put("id", SpotifyUser.getInstance().getSpotifyID());
         jsonToSend.put("name", SpotifyUser.getInstance().getPseudo());
 
-        new SendDataTask(this).execute(serverURL +"addUser/", jsonToSend.toString());
+        new SendDataTask(this).execute(serverURL + "addUser/", jsonToSend.toString());
+    }
+
+    public void createRoom(String roomName, String roomPassword) {
+        JSONObject jsonToSend = new JSONObject();
+        try {
+            jsonToSend.put("creator", SpotifyUser.getInstance().getPseudo());
+            jsonToSend.put("name", roomName);
+            jsonToSend.put("password", roomPassword);
+        } catch (JSONException | NotDefinedUserInfosException e) {
+            e.printStackTrace();
+        }
+
+        super.setParser(new CreateRoomParser());
+        super.setRequestType(RequestTypes.CREATE_ROOM);
+        new SendDataTask(this).execute(serverURL + "createRoom/", jsonToSend.toString());
     }
 }
 

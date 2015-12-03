@@ -5,32 +5,52 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.onebeat.Exceptions.NotDefinedRoomInfosException;
+
 /**
  * Created by Matthieu on 28.11.2015.
  */
 public class Room {
 
-    private final String name;
-    private final String creator;
+    private String name;
+    private String creator;
     private Map<Song, User> songs;
     private String password;
+    private int id;
 
-    public Room(String name, String creator, Map<Song, User> songs, String password ) {
+    public Room(String name, String creator, Map<Song, User> songs, String password) {
         this.name = name;
         this.creator = creator;
         this.songs = new HashMap<>(songs);
         this.password = password;
     }
 
-    public String getName() {
+    public Room(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public String getName() throws NotDefinedRoomInfosException {
+        if (name == null) {
+            throw new NotDefinedRoomInfosException("Name not defined");
+        }
         return name;
     }
 
-    public String getCreator() {
+    public int getId() {
+        return id; }
+
+    public String getCreator() throws NotDefinedRoomInfosException {
+        if (creator == null) {
+            throw new NotDefinedRoomInfosException("Creator not defined");
+        }
         return creator;
     }
 
-    public Map<Song, User> getSongs() {
+    public Map<Song, User> getSongs() throws NotDefinedRoomInfosException {
+        if (songs == null) {
+            throw new NotDefinedRoomInfosException("List of songs not defined");
+        }
         return songs;
     }
 

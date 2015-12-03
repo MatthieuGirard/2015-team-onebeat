@@ -34,6 +34,7 @@ import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
 public class SelectRoomActivity extends AppCompatActivity {
     public final static String ROOM_NAME_MESSAGE = "ch.epfl.sweng.onebeat.ROOM_NAME_MESSAGE";
+    private static final String ROOM_ID_MESSAGE = "ch.epfl.sweng.onebeat.ROOM_ID_MESSAGE";
 
     private ArrayList roomsArray;
     private ArrayAdapter<String> adapter; //TODO: Change to type room
@@ -65,7 +66,7 @@ public class SelectRoomActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(SelectRoomActivity.this, RoomActivity.class);
 
-                intent.putExtra(ROOM_NAME_MESSAGE, room);
+                intent.putExtra(ROOM_ID_MESSAGE, room);
                 startActivity(intent);
             }
         });
@@ -101,13 +102,18 @@ public class SelectRoomActivity extends AppCompatActivity {
     }
 
     public void setListOfRooms(List<Room> roomsList) {
-
+        // TODO
     }
 
-    public void onNewRoomMessage(JSONObject result) {
-
+    public void onNewRoomMessage(int roomID) {
+        Intent intent = new Intent(this, RoomActivity.class);
+        intent.putExtra(ROOM_ID_MESSAGE, roomID);
+        startActivity(intent);
     }
 
+    public void errorOnCreatingRoom(String error) {
+        //TODO: show the error :)
+    }
 
     @SuppressLint("ValidFragment")
     private class RoomCreatorDialogFragment extends DialogFragment {
@@ -128,24 +134,10 @@ public class SelectRoomActivity extends AppCompatActivity {
                         EditText roomNameField = (EditText) v.findViewById(R.id.roomName);
                         EditText roomPasswordField = (EditText) v.findViewById(R.id.roomPassword);
 
-                        String room = roomNameField.getText().toString().trim();
+                        String roomName = roomNameField.getText().toString().trim();
+                        String roomPassword = roomPasswordField.getText().toString().trim();
 
-                        JSONObject jsonToSend = new JSONObject();
-                        try {
-                            jsonToSend.put("creator", SpotifyUser.getInstance().getPseudo()); // TODO
-                            jsonToSend.put("name", room);
-                            jsonToSend.put("password", roomPasswordField.getText().toString());
-                        } catch (JSONException | NotDefinedUserInfosException e) {
-                            //TODO: Figure out what to actually do in case of error
-                            e.printStackTrace();
-                        }
-
-                        new BackendDataProvider(SelectRoomActivity.this).createRoom(jsonToSend);
-
-                        Intent intent = new Intent(RoomCreatorDialogFragment.this.getActivity(),
-                                RoomActivity.class);
-                        intent.putExtra(ROOM_NAME_MESSAGE, room);
-                        startActivity(intent);
+                        new BackendDataProvider(SelectRoomActivity.this).createRoom(roomName, roomPassword);
                     }
                 })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

@@ -1,5 +1,10 @@
 package ch.epfl.sweng.onebeat.RetrievedData;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
+
 public class Song {
 
     private String title;
@@ -27,5 +32,22 @@ public class Song {
 
     public boolean isEqual(Song song) {
         return spotifyRef.contentEquals(song.getSpotifyRef());
+    }
+
+    public String toSendFormat(int roomID) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("room", roomID);
+            json.put("artist", artist);
+            json.put("title", title);
+            json.put("duration", duration);
+            json.put("spotifyRef", spotifyRef);
+            json.put("addedBy", SpotifyUser.getInstance().getSpotifyID());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NotDefinedUserInfosException e) {
+            e.printStackTrace();
+        }
+        return json.toString();
     }
 }

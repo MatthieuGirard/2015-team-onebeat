@@ -35,11 +35,12 @@ import ch.epfl.sweng.onebeat.RetrievedData.Room;
 import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
 public class SelectRoomActivity extends AppCompatActivity {
-    public final static String ROOM_NAME_MESSAGE = "ch.epfl.sweng.onebeat.ROOM_NAME_MESSAGE";
     public static final String ROOM_ID_MESSAGE = "ch.epfl.sweng.onebeat.ROOM_ID_MESSAGE";
 
     private ArrayList roomsArray;
     private ArrayAdapter<String> adapter; //TODO: Change to type room
+
+    // TODO get List of rooms with: new BackendDataProvider(this).getListOfRooms()
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,18 +104,20 @@ public class SelectRoomActivity extends AppCompatActivity {
         });
     }
 
+    // when we get the list of rooms a user is in.
     public void setListOfRooms(List<Room> roomsList) {
         // TODO
     }
 
+    // when a room has been created
     public void onNewRoomMessage(int roomID) {
         Intent intent = new Intent(this, RoomActivity.class);
         intent.putExtra(ROOM_ID_MESSAGE, roomID);
         startActivity(intent);
     }
 
-    public void errorOnCreatingRoom(String error) {
-        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+    public void onJoinRoomSuccess(int roomId) {
+        onNewRoomMessage(roomId);
     }
 
     @SuppressLint("ValidFragment")

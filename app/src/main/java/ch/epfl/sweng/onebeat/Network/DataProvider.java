@@ -3,6 +3,7 @@ package ch.epfl.sweng.onebeat.Network;
 import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +33,7 @@ public abstract class DataProvider {
     private Parser parser = null;
     private RequestTypes requestType = RequestTypes.CREATE_ROOM;
 
-    public enum RequestTypes {GET_SPOTIFY_USER, GET_LIST_OF_SPOTIFY_SONGS, CREATE_ROOM, GET_LIST_OF_ROOMS, GET_ROOM_INFOS, ADD_USER };
+    public enum RequestTypes {GET_SPOTIFY_USER, GET_LIST_OF_SPOTIFY_SONGS, CREATE_ROOM, GET_LIST_OF_ROOMS, GET_ROOM_INFOS, ADD_USER, ADD_SONG, JOIN_ROOM };
 
     public DataProvider(Context callingActivity) {
         this.callingActivity = callingActivity;
@@ -43,16 +44,15 @@ public abstract class DataProvider {
             Object parsedResult = parser.parse(result);
             switch (requestType) {
                 case CREATE_ROOM:
-                    JSONObject response = (JSONObject) parsedResult;
-                    boolean hasCreated = response.getBoolean("added");
+                    JSONObject jsonCreateRoomResponse = (JSONObject) parsedResult;
+                    boolean hasCreated = jsonCreateRoomResponse.getBoolean("added");
                     SelectRoomActivity selectRoomActivity = (SelectRoomActivity) callingActivity;
                     if (hasCreated) {
-                        int roomID = response.getInt("id");
+                        int roomID = jsonCreateRoomResponse.getInt("id");
                         selectRoomActivity.onNewRoomMessage(roomID);
                     }
                     else {
-                        String error = response.getString("error");
-                        selectRoomActivity.errorOnCreatingRoom(error);
+                        showErrorOnActivity(jsonCreateRoomResponse.getString("error"));
                     }
                     break;
                 case GET_SPOTIFY_USER:
@@ -71,11 +71,51 @@ public abstract class DataProvider {
                     break;
 
                 case ADD_USER:
-                    ((MainActivity) callingActivity).onUserRegistered();
+                    JSONObject jsonAddUserResponse = (JSONObject) parsedResult;
+                    boolean hasAddedUser = jsonAddUserResponse.getBoolean("added");
+                    MainActivity mainActivity = (MainActivity) callingActivity;
+                    if (hasAddedUser) {
+                        mainActivity.onUserRegistered();
+                    }
+                    else {
+                        showErrorOnActivity(jsonAddUserResponse.getString("error"));
+                    }
+                    break;
+
+                case ADD_SONG:
+                    JSONObject jsonAddSongResponse = (JSONObject) parsedResult;
+                    boolean hasAddedSong = jsonAddSongResponse.getBoolean("added");
+                    RoomActivity roomActivity = (RoomActivity) callingActivity;
+                    if (hasAddedSong) {
+                        roomActivity.onSongAdded();
+                    }
+                    else {
+                        showErrorOnActivity(jsonAddSongResponse.getString("error"));
+                    }
+                    break;
+
+                case JOIN_ROOM:
+
+                    JSONObject jsonJoinRoomResponse = (JSONObject) parsedResult;
+                    boolean hasJoinedRoom = jsonJoinRoomResponse.getBoolean("added");
+                    SelectRoomActivity selectRoomActivity1 = (SelectRoomActivity) callingActivity;
+                    if (hasJoinedRoom) {
+                        selectRoomActivity1.onJoinRoomSuccess(jsonJoinRoomResponse.getInt("roomId"));
+                    }
+                    else {
+                        showErrorOnActivity(jsonJoinRoomResponse.getString("error"));
+                    }
+                    break;
+
+
             }
         } else {
             throw new ParserNotDefinedException();
         }
+    }
+
+    private void showErrorOnActivity(String error) {
+        Toast.makeText(callingActivity, "", Toast.LENGTH_SHORT).show();
     }
 
     public void setParser(Parser parser) { this.parser = parser; }

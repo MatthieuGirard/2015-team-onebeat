@@ -71,7 +71,7 @@ def addSong(request):
 
 			#add the song to the DB
 			addedBy = received_json_data['addedBy']
-			if ( not(Song.objects.filter(songId = addedBy).exists()) ):
+			if ( not(Song.objects.filter(id = addedBy).exists()) ):
 				title = received_json_data['title']
 				artist = received_json_data['artist']
 				duration = received_json_data['duration']

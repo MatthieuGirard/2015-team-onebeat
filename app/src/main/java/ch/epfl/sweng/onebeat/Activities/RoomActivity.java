@@ -1,9 +1,6 @@
 package ch.epfl.sweng.onebeat.Activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.spotify.sdk.android.player.Config;
-import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
@@ -35,8 +31,6 @@ import java.util.List;
 
 import ch.epfl.sweng.onebeat.GeneralConstants;
 import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
-import ch.epfl.sweng.onebeat.Network.DataProvider;
-import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.R;
 import ch.epfl.sweng.onebeat.RetrievedData.Room;
@@ -74,12 +68,8 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
         listViewSongs = (ListView) findViewById(R.id.currentSongsList);
         addNextSong = (EditText) findViewById(R.id.addSongTextBox);
 
+        initPlayer();
 
-        // Assign the room name by getting it from the intent which opened this room
-        Intent intent = getIntent();
-        new BackendDataProvider(this).getRoom(intent.getIntExtra(SelectRoomActivity.ROOM_ID_MESSAGE, 0));
-
-        //TODO: Make currentSongs call a method which checks database if there was a list of songs
         currentSongs = new ArrayList<>();
 
         adapter = new SongListAdapter(this, currentSongs);
@@ -87,6 +77,11 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
         registerForContextMenu(listViewSongs);
         registerForContextMenu(addNextSong);
+
+        // Assign the room name by getting it from the intent which opened this room
+        Intent intent = getIntent();
+        // fetch room infos from backend
+        new BackendDataProvider(this).getRoom(intent.getIntExtra(SelectRoomActivity.ROOM_ID_MESSAGE, 0));
 
         addNextSong.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -150,31 +145,14 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
             button.setEnabled(false);
             button.setText("Searching...");
 
-            ConnectivityManager connMgr = (ConnectivityManager)
-                    getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-            if (networkInfo != null && networkInfo.isConnected()) {
-
-                new SpotifyDataProvider(this).getListOfSongs(searchInput);
-
-            } else {
-                // TODO: Show Toast if no connection, maybe also inside DownloadWebpageTask ?
-                Context context = getApplicationContext();
-                int dur = Toast.LENGTH_SHORT;
-                CharSequence error_msg = "Connection error while searching for song. Please try again";
-
-                Toast.makeText(context, error_msg, dur).show();
-
-                // Enable the user to search again
-                button.setEnabled(true);
-                button.setText("Search");
-            }
+            new SpotifyDataProvider(this).getListOfSongs(searchInput);
         }
     }
 
     //TODO: Before adding a song, update the currentSong list from the database
 
     public void addSong(Song song) {
+        new BackendDataProvider(this).addSong(song, actualRoom.getId());
         currentSongs.add(song);
         adapter.notifyDataSetChanged();
     }
@@ -218,6 +196,12 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
     // when we have spotify suggestions after search request
     public void setListOfSongsFromSearch(List<Song> parsedResult) {
+
+        // Enable the user to search again
+        Button button = (Button) findViewById(R.id.search_song_button);
+        button.setEnabled(true);
+        button.setText("Search");
+
         tempSongs = parsedResult;
         openContextMenu(addNextSong);
         // TODO call 'new BackendDataProvider(this).addSong(Song aSong) when user chose the song to add.
@@ -228,6 +212,9 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
         // TODO What do to when I get the room information. Room's list of songs may be empty (new room).
         //TODO think about if this method is called after a refresh, not to interrupt song that is currently playing.
         //TODO well it shouldnt happen because of asynctask
+
+        this.actualRoom = actualRoom;
+        adapter.notifyDataSetChanged();
     }
 
     // TODO to be called in method onCreate I suppose.
@@ -265,6 +252,6 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
     // when server is done adding the song
     public void onSongAdded() {
-        // TODO refresh list?
+        refreshListOfSongs();
     }
 }

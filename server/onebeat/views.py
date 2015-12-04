@@ -63,6 +63,9 @@ def addSong(request):
 	userId = received_json_data['addedBy']
 	roomId = received_json_data['room']
 	
+	spotifyRef = received_json_data['spotifyRef']
+
+	
 	if ( User.objects.filter(userId = userId).exists() ):
 		addedBy = User.objects.get(userId = userId)
 		

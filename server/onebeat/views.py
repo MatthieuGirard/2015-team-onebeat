@@ -70,7 +70,7 @@ def addSong(request):
 			room = Room.objects.get(id = roomId)
 
 			#add the song to the DB
-			songId = received_json_data['id']
+			songId = received_json_data['addedBy']
 			if ( not(Song.objects.filter(songId = songId).exists()) ):
 				title = received_json_data['title']
 				artist = received_json_data['artist']

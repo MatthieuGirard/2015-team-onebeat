@@ -74,7 +74,7 @@ public class BackendDataProvider extends DataProvider {
         try {
             jsonToSend.put("user", SpotifyUser.getInstance().getSpotifyID());
             jsonToSend.put("name", roomName);
-            jsonToSend.put("password", password);
+            jsonToSend.put("password", String.valueOf(password));
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (NotDefinedUserInfosException e) {

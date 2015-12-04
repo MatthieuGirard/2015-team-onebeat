@@ -1,7 +1,7 @@
 from django.db import models
 
 class User(models.Model):
-	userId = models.IntegerField()
+	userId = models.CharField(max_length=200)
 	userId.primary_key = True
 	name = models.CharField(max_length=100)
 
@@ -11,7 +11,7 @@ class User(models.Model):
 class Song(models.Model):
 	artist = models.CharField(max_length=100)
 	title = models.CharField(max_length=200)
-	duration = models.CharField(max_length=20)
+	duration = models.FloatField()
 	spotifyRef = models.CharField(max_length=100)
 
 	def __str__(self):

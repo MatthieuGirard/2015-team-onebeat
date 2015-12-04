@@ -12,71 +12,113 @@ def addUser(request):
 	received_json_data = json.loads(request.POST['request'])
 	userId = received_json_data['id']
 	name = received_json_data['name']
+	
 	if (User.objects.filter(userId = userId).exists()):
 		return JsonResponse({
 			'added' : False,
 			'error' : 'user already exists',
 			'id' : userId
 			})
+	
 	else:
 		User.objects.create(
 			userId = userId,
 			name = name
 			)
+		
 		return JsonResponse({
 			'added' : True,
-			'user' : userId
+			'id' : userId
 			})
+
 
 def getUser(request):
 	userId = request.GET['id']
+	
 	if (User.objects.filter(userId = userId).exists()):
 		user = User.objects.get(userId = userId)
-		rooms = Member.objects.filter(user = userId)
+		rooms = Member.objects.filter(user = userId).values('room')
+		roomsId = [r['room'] for r in rooms]
+		
 		return JsonResponse({
 			'info' : 'user',
-			'id' : userId,
+			'id' : user.userId,
 			'name' : user.name,
-			'rooms' : rooms.room
+			'rooms' : [ { 
+				'id' : roomId,
+				'name' : Room.objects.get(id = roomId).name
+				} for roomId in roomsId]
 			})
+	
 	else:
 		return JsonResponse({
 			'error' : 'user does not exist',
 			'id' : userId
 			})
 
+
 def addSong(request):
 	received_json_data = json.loads(request.POST['request'])
-	songId = received_json_data['id']
-	#if we don't have the song, we add it to our database
-	if ( not(Song.objects.filter(songId = songId).exists()) ):
-		title = received_json_data['title']
-		artist = received_json_data['artist']
-		duration = received_json_data['duration']
-		spotifyRef = received_json_data['spotifyRef']
-		Song.objects.create(
-			songId = songId,
-			artist = artist,
-			title = title,
-			duration = duration,
-			spotifyRef = spotifyRef,
-			)
-	addedBy = received_json_data['addedBy']
-	room = received_json_data['room']
-	Playlist.objects.create(
-		room = room,
-		song = songId,
-		addedBy = addedBy
-		)
-	return JsonResponse({
-		'added' : True,
-		'song' : songId
-		})
+	
+	userId = received_json_data['addedBy']
+	roomId = received_json_data['room']
+	
+	if ( User.objects.filter(userId = addedBy).exists() ):
+		addedBy = User.objects.get(userId = userId)
+		
+		if ( Room.objects.filter(id = roomId).exists() ):
+			room = Room.objects.get(id = roomId)
+
+			#add the song to the DB
+			songId = received_json_data['id']
+			if ( not(Song.objects.filter(songId = songId).exists()) ):
+				title = received_json_data['title']
+				artist = received_json_data['artist']
+				duration = received_json_data['duration']
+				spotifyRef = received_json_data['spotifyRef']
+				
+				song = Song.objects.create(
+					songId = songId,
+					artist = artist,
+					title = title,
+					duration = duration,
+					spotifyRef = spotifyRef,
+				)
+
+			Playlist.objects.create(
+				room = room,
+				song = song,
+				addedBy = addedBy
+				)
+			
+			return JsonResponse({
+				'added' : True,
+				'song' : song.id,
+				'room' : room.id,
+				'addedBy' : addedBy.id
+				})
+		
+		else:
+			return JsonResponse({
+				'added' : False,
+				'error' : 'room does not exist',
+				'id' : roomId
+				})
+	
+	else:
+		return JsonResponse({
+			'added' : False,
+			'error' : 'user does not exist',
+			'id' : userId
+			})
+
 
 def getSong(request):
 	songId = request.GET['id']
-	if (Song.objects.filter(songId = songId).exists()):
-		song = Song.objects.get(songId = songId)
+	
+	if (Song.objects.filter(ic = songId).exists()):
+		song = Song.objects.get(id = songId)
+		
 		return JsonResponse({
 			'info' : 'song', 
 			'id' : song.songId,
@@ -85,77 +127,120 @@ def getSong(request):
 			'duration' : song.duration, 
 			'spotifyRef' : song.spotifyRef
 			})
+	
 	else:
 		return JsonResponse({
 			'error' : 'song does not exist',
 			'id' : songId
 			})
 
+
 def createRoom(request):
 	received_json_data = json.loads(request.POST['request'])
 	name = received_json_data['name']
-	roomId = received_json_data['id']
+	creatorId = received_json_data['creator']
+	
 	if (Room.objects.filter(name = name).exists()):
+		room = Room.objects.get(name = name)
+		
 		return JsonResponse({
-			'error':'room already exists',
-			'id' : roomId
+			'added' : False,
+			'error' : 'room already exists',
+			'id' : room.id
 			})
-	else:
-		creator = received_json_data['creator']
+	
+	elif (User.objects.filter(userId = creatorId).exists()):
+		creator = User.objects.get(userId = creatorId)
 		password = received_json_data['password']
+		
 		newRoom = Room.objects.create(
 			name = name,
 			creator = creator,
 			password = password
 			)
+		
 		Member.objects.create(
 			user = creator,
-			room = newRoom.id
+			room = newRoom
 			)
+		
 		return JsonResponse({
 			'added':True,
-			'room' : newRoom.id
+			'id' : newRoom.id
 			})
+	
+	else:
+		return JsonResponse({
+			'added' : False,
+			'error':'creator does not exist',
+			'id' : creatorId
+			})
+
 
 def getRoom(request):
 	roomId = request.GET['id']
-	if (Room.objects.filter(roomId = roomId).exists()):
-		room = Room.objects.get(roomId = roomId)
-		playlist = Playlist.objects.filter(room = roomId)
-		members = Member.objects.filter(room = roomId)
+	
+	if (Room.objects.filter(id = roomId).exists()):
+		room = Room.objects.get(id = roomId)
+		playlist = Playlist.objects.filter(room = room).values()
+		members = Member.objects.filter(room = room).values('user')
+		
 		return JsonResponse({
 			'info' : 'room',
 			'id' : room.id,
-			'creator' : room.creator,
+			'creator' : room.creator.userId,
 			'name' : room.name,
-			'password' : room.password,
-			'playlist' : playlist.song,
-			'addedBy' : playlist.addedBy,
-			'members' : members.user
+			'playlist' : [p['song_id'] for p in playlist],
+			'addedBy' : [p['addedBy_id'] for p in playlist],
+			'members' : [m['user'] for m in members]
 			})
+	
 	else:
 		return JsonResponse({
 			'error':'room does not exist',
 			'id' : roomId
 			})
 
+
 def joinRoom(request):
 	received_json_data = json.loads(request.POST['request'])
 	roomName = received_json_data['name']
 	userId = received_json_data['user']
+	
 	if (Room.objects.filter(roomName = roomName).exists()):
-		room = Room.objects.get(roomName = roomName)
-		password = received_json_data['password']
-		if (password == room.password):
-			Member.objects.create(
-				user = userId,
-				room = room.id
-				)
+		
+		if (User.objects.filter(userId = userId).exists()):
+			user = User.objects.get(userId = userId)
+			room = Room.objects.get(roomName = roomName)
+			password = received_json_data['password']
+			
+			if (password == room.password):
+				Member.objects.create(
+					user = user,
+					room = room
+					)
+				
+				return JsonResponse({
+					'added' : True,
+					'roomId' : room.id,
+					'userId' : user.id,
+					})
+			
+			else:
+				return JsonResponse({
+					'added' : False,
+					'error' : 'wrong password',
+					'room' : room.id,
+					'password' : password
+					})
+		
+		else:
 			return JsonResponse({
-				'added' : True,
-				'roomId' : room.id,
-				'userId' : userId,
+				'added' : False,
+				'error' : 'user does not exist',
+				'id' : userId
 				})
+	
 	else:
 		return JsonResponse({
 			'added' : False,

@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
+import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 import ch.epfl.sweng.onebeat.Exceptions.ParserNotDefinedException;
 
@@ -47,6 +47,10 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         } catch (ParserNotDefinedException e) {
             e.printStackTrace();
+        } catch (NotDefinedUserInfosException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -56,7 +60,7 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         try {
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            if (token != "") {
+            if (!token.equals("")) {
                 conn.setRequestProperty("Authorization", "Bearer " + token);
             }
             conn.setRequestMethod("GET");
@@ -98,5 +102,13 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
             }
         }
         return sb.toString();
+    }
+
+    public void start(String url) {
+        this.execute(url, "");
+    }
+
+    public void start(String url, String token) {
+        this.execute(url, token);
     }
 }

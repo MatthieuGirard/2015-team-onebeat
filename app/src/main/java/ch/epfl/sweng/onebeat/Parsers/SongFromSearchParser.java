@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 import ch.epfl.sweng.onebeat.RetrievedData.Song;
 
@@ -37,7 +36,7 @@ public class SongFromSearchParser implements Parser<List<Song>> {
                 String artist = actualTrack.getJSONArray("artists").getJSONObject(0).getString("name");
                 String songName = actualTrack.getString("name");
                 String spotifyRef = actualTrack.getString("href");
-                String duration = actualTrack.getString("length");
+                double duration = actualTrack.getDouble("length");
 
                 tracksFound.add(new Song(songName, artist, duration, spotifyRef));
 

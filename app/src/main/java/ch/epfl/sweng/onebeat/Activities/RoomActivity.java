@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,21 +22,27 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.Player;
-
-import org.json.JSONObject;
+import com.spotify.sdk.android.player.PlayerNotificationCallback;
+import com.spotify.sdk.android.player.PlayerState;
+import com.spotify.sdk.android.player.Spotify;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.onebeat.Network.DataProvider;
-import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
+import ch.epfl.sweng.onebeat.Exceptions.NotDefinedRoomInfosException;
+import ch.epfl.sweng.onebeat.GeneralConstants;
+import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.R;
+import ch.epfl.sweng.onebeat.RetrievedData.Room;
 import ch.epfl.sweng.onebeat.RetrievedData.Song;
+import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
-public class RoomActivity extends AppCompatActivity implements DataProviderObserver {
+public class RoomActivity extends AppCompatActivity implements PlayerNotificationCallback {
+
     private ListView listViewSongs;
     private EditText addNextSong;
     private ImageView prevPlayerButton;
@@ -45,7 +50,9 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
     private ArrayList<Song> currentSongs;
     private ArrayAdapter<Song> adapter;
 
-    private Player player;
+    private Player mPlayer;
+
+    private Room actualRoom;
 
     /*
      * Between the RoomActivity and the user selecting a song that they want to add to the queue, I
@@ -63,16 +70,14 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
 
         // Assign the room name by getting it from the intent which opened this room
         Intent intent = getIntent();
-        setTitle(intent.getStringExtra(SelectRoomActivity.ROOM_NAME_MESSAGE));
+        new BackendDataProvider(this).getRoom(intent.getIntExtra(SelectRoomActivity.ROOM_ID_MESSAGE, 0));
 
-        //TODO: Make currentSongs call a method which checks database if there was a list of songs
         currentSongs = new ArrayList<>();
 
         adapter = new SongListAdapter(this, currentSongs);
         listViewSongs.setAdapter(adapter);
 
         registerForContextMenu(listViewSongs);
-        registerForContextMenu(addNextSong);
 
         addNextSong.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -85,6 +90,8 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
                 return handled;
             }
         });
+
+        initPlayer();
     }
 
     @Override
@@ -157,103 +164,110 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
         }
     }
 
-    //TODO: Before adding a song, update the currentSong list from the database
     public void addSong(Song song) {
         addNextSong.setText("");
-        AsyncMsg msg = new AsyncMsg(song, REQUEST.ADD);
-        new AsyncUpdateSongOnline().execute(msg);
+        currentSongs.add(song);
+        new BackendDataProvider(this).addSong(song, actualRoom.getId());
     }
 
-    //TODO: Before removing a song, update the currentSong list from the database
     public void removeSong(int index) {
-        // We need to delete a song from the currentSongs list
-        Song songToRemove = currentSongs.get(index);
-        // TODO: Now that we know which song we want to remove, update the list from the database
-        // then check to see if the song is still in the list at which point we delete it and post
-        // the changes
-
-        AsyncMsg msg = new AsyncMsg(songToRemove, REQUEST.REMOVE);
-        new AsyncUpdateSongOnline().execute(msg);
-    }
-
-    @Override
-    public void onDataReception(Object data, DataProvider.RequestTypes requestTypes) {
-        Button button = (Button) findViewById(R.id.search_song_button);
-        button.setEnabled(true);
-        button.setText("Search");
-
-        tempSongs = (List<Song>) data;
-        openContextMenu(addNextSong);
-    }
-
-    public enum REQUEST {
-        ADD, REMOVE
-    }
-    private class AsyncMsg {
-        private Song song;
-        private REQUEST message;
-
-        public AsyncMsg(Song song, REQUEST message) {
-            this.message = message;
-            this.song = song;
-        }
-        public Song getSong() {
-            return this.song;
-        }
-        public REQUEST getMessage() {
-            return this.message;
-        }
-    }
-
-    //TODO: Choose an appropriate input type whether it be a JSONObject or Song
-    private class AsyncUpdateSongOnline extends AsyncTask<AsyncMsg, Void, String> {
-        @Override
-        protected String doInBackground(AsyncMsg... params) {
-            AsyncMsg msg = params[0];
-            switch (msg.getMessage()) {
-                case ADD:
-                    //TODO: Communicate with server to add this song to the room
-
-                    currentSongs.add(msg.getSong());
-                    break;
-                case REMOVE:
-                    //TODO: Communicate with server to try and remove this song
-
-                    currentSongs.remove(msg.getSong());
-                    break;
-            }
-
-            //TODO: After talking to the server, we either add or remove a song from currentSongs
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            adapter.notifyDataSetChanged();
-        }
+        Song songToRemove = currentSongs.remove(index);
+        new BackendDataProvider(this).removeSong(songToRemove, actualRoom.getId());
+        adapter.notifyDataSetChanged();
     }
 
     public void playerClick(View v) {
         ImageView currPlayerButton = (ImageView) v.findViewById(R.id.list_image);
+        int position = (int) currPlayerButton.getTag(SongListAdapter.BUTTON_POSITION);
 
         // Was there a song playing?
-        if (prevPlayerButton != null && (boolean)prevPlayerButton.getTag()) {
-            prevPlayerButton.setTag(false);
+        if (prevPlayerButton != null && (boolean)prevPlayerButton.getTag(0)) {
+            prevPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, false);
             prevPlayerButton.setImageResource(R.drawable.player_play);
+            mPlayer.pause();
 
             if (prevPlayerButton == currPlayerButton) {
                 // Were we the ones who were playing? If so, we already stopped playing
                 prevPlayerButton = null;
             } else {
                 // Someone else was playing, now we play
-                currPlayerButton.setTag(true);
+                currPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, true);
                 currPlayerButton.setImageResource(R.drawable.player_pause);
                 prevPlayerButton = currPlayerButton;
+                mPlayer.play(currentSongs.get(position).getSpotifyRef());
             }
         } else {
-            currPlayerButton.setTag(true);
+            currPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, true);
             currPlayerButton.setImageResource(R.drawable.player_pause);
             prevPlayerButton = currPlayerButton;
+            mPlayer.play(currentSongs.get(position).getSpotifyRef());
         }
+    }
+
+    // when we have spotify suggestions after search request
+    public void setListOfSongsFromSearch(List<Song> parsedResult) {
+        Button button = (Button) findViewById(R.id.search_song_button);
+        button.setEnabled(true);
+        button.setText("Search");
+
+        tempSongs = parsedResult;
+        openContextMenu(addNextSong);
+    }
+
+    // when room informations are retrieved from backend
+    public void setRoomInformations(Room room) {
+        actualRoom = room;
+        try {
+            setTitle(actualRoom.getName());
+        } catch (NotDefinedRoomInfosException e) {
+            //No Room Title Set
+            setTitle("");
+        }
+        try {
+            currentSongs.addAll(actualRoom.getSongs().keySet());
+            adapter.notifyDataSetChanged();
+            onPlaybackError(null, "We just added some of your previous songs");
+        } catch (NotDefinedRoomInfosException e) {
+            //There was no previous list of songs, carry on.
+        }
+        onPlaybackError(null, "You're all set to party!");
+        registerForContextMenu(addNextSong);
+    }
+
+    public void initPlayer() {
+        Config playerConfig = new Config(this, SpotifyUser.getInstance().getToken(), GeneralConstants.CLIENT_ID);
+
+        mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+            @Override
+            public void onInitialized(Player player) {
+                mPlayer = player;
+                mPlayer.addPlayerNotificationCallback(RoomActivity.this);
+            }
+            @Override
+            public void onError(Throwable throwable) {
+                Log.e("RoomActivity", "Could not initialize player: " + throwable.getMessage());
+            }
+        });
+    }
+
+    public void refreshListOfSongs() {
+        new BackendDataProvider(this).getRoom(actualRoom.getId());
+    }
+
+    // method from Spotify Player. Probably here we're going to manage playing the next song when one is over.
+    @Override
+    public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
+        // TODO
+    }
+
+    // let's show error on a Toast
+    @Override
+    public void onPlaybackError(ErrorType errorType, String s) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+    }
+
+    // when server is done adding the song
+    public void onSongAdded() {
+        adapter.notifyDataSetChanged();
     }
 }

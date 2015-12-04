@@ -20,6 +20,9 @@ import ch.epfl.sweng.onebeat.RetrievedData.Song;
  * This custom class will specify to ListView objects how to properly display a Song class object
  */
 public class SongListAdapter extends ArrayAdapter<Song> {
+    public final static int PLAYING_STATUS = 0;
+    public final static int BUTTON_POSITION = 1;
+
     public SongListAdapter(Context context, ArrayList<Song> songs) {
         super(context, R.layout.song_item_list_view, songs);
     }
@@ -61,9 +64,11 @@ public class SongListAdapter extends ArrayAdapter<Song> {
 
         viewHolder.title.setText(song.getTitle());
         viewHolder.artist.setText(song.getArtist());
-        viewHolder.duration.setText(song.getDuration());
+        viewHolder.duration.setText(String.valueOf(song.getDuration()));
         viewHolder.player.setImageResource(R.drawable.player_play);
         viewHolder.player.setTag(false);
+        viewHolder.player.setTag(PLAYING_STATUS, false);
+        viewHolder.player.setTag(BUTTON_POSITION, position);
 
         return convertView;
         //return super.getView(position, convertView, parent);

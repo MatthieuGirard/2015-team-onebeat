@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from . import views
+from. import views2
 from django.contrib import admin
 
 urlpatterns = [
@@ -12,4 +13,5 @@ urlpatterns = [
     url(r'^getRoom/', views.getRoom, name='getRoom'),
     url(r'^createRoom/', views.createRoom, name='createRoom'),
     url(r'^joinRoom/', views.joinRoom, name='joinRoom'),
+	url(r'^getRoom2/', views2.getRoom2, name='getRoom2'),
 ]

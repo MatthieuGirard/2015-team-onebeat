@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 import ch.epfl.sweng.onebeat.RetrievedData.Song;
 

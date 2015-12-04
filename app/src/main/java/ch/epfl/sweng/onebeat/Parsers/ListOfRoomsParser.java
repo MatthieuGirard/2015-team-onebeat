@@ -25,7 +25,7 @@ public class ListOfRoomsParser implements Parser {
                 JSONObject oneJSONRoom = JSONRooms.getJSONObject(i);
                 rooms.add(new Room(oneJSONRoom.getInt("id"), oneJSONRoom.getString("name")));
             }
-            return null;
+            return rooms;
         } catch (JSONException e) {
             throw new ParseException(e);
         }

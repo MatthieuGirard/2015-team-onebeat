@@ -38,5 +38,6 @@
         android:id="@+id/currentSongsList"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/search_song_button" />
+        android:layout_above="@+id/search_song_button"
+        android:layout_alignParentTop="true" />
 </RelativeLayout>

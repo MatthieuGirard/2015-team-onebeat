@@ -1,7 +1,5 @@
 package ch.epfl.sweng.onebeat.Parsers;
 
-import org.json.JSONObject;
-
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 
 

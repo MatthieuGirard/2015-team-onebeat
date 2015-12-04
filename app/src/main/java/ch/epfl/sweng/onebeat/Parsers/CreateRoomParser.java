@@ -1,7 +1,5 @@
 package ch.epfl.sweng.onebeat.Parsers;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

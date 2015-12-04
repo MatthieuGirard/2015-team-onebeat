@@ -4,16 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
-import com.spotify.sdk.android.player.ConnectionStateCallback;
-import com.spotify.sdk.android.player.Player;
-import com.spotify.sdk.android.player.PlayerNotificationCallback;
-import com.spotify.sdk.android.player.PlayerState;
-import com.spotify.sdk.android.player.Spotify;
 
 import org.json.JSONException;
 
@@ -64,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     public void onUserRegistered() {
         Log.d("#Loggin", "User registered in backend");
         Intent intent = new Intent(this, SelectRoomActivity.class);
+        Log.d("KEINFO", "Launching Select room");
         startActivity(intent);
     }
 }

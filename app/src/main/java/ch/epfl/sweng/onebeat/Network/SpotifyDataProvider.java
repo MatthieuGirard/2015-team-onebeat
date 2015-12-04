@@ -2,9 +2,6 @@ package ch.epfl.sweng.onebeat.Network;
 
 import android.content.Context;
 
-import ch.epfl.sweng.onebeat.Exceptions.ParseException;
-import ch.epfl.sweng.onebeat.Exceptions.ParserNotDefinedException;
-import ch.epfl.sweng.onebeat.Parsers.Parser;
 import ch.epfl.sweng.onebeat.Parsers.SongFromSearchParser;
 import ch.epfl.sweng.onebeat.Parsers.SpotifyUserInfosParser;
 

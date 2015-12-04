@@ -62,7 +62,7 @@ def addSong(request):
 	
 	userId = received_json_data['addedBy']
 	roomId = received_json_data['room']
-	
+
 	if ( User.objects.filter(userId = userId).exists() ):
 		addedBy = User.objects.get(userId = userId)
 		
@@ -70,15 +70,14 @@ def addSong(request):
 			room = Room.objects.get(id = roomId)
 
 			#add the song to the DB
-			songId = received_json_data['id']
-			if ( not(Song.objects.filter(songId = songId).exists()) ):
+			addedBy = received_json_data['addedBy']
+			if ( not(Song.objects.filter(spotifyRef = spotifyRef).exists()) ):
 				title = received_json_data['title']
 				artist = received_json_data['artist']
 				duration = received_json_data['duration']
 				spotifyRef = received_json_data['spotifyRef']
 				
 				song = Song.objects.create(
-					songId = songId,
 					artist = artist,
 					title = title,
 					duration = duration,

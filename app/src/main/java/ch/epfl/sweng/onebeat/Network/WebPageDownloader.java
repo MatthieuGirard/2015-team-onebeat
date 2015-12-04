@@ -1,8 +1,5 @@
 package ch.epfl.sweng.onebeat.Network;
 
-import org.json.JSONException;
-
-import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 import ch.epfl.sweng.onebeat.Exceptions.ParserNotDefinedException;
 

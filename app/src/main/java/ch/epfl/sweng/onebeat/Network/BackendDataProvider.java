@@ -1,14 +1,11 @@
 package ch.epfl.sweng.onebeat.Network;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
-import ch.epfl.sweng.onebeat.Parsers.AfterAddingSongParser;
-import ch.epfl.sweng.onebeat.Parsers.AfterAddingUserParser;
 import ch.epfl.sweng.onebeat.Parsers.CreateRoomParser;
 import ch.epfl.sweng.onebeat.Parsers.ListOfRoomsParser;
 import ch.epfl.sweng.onebeat.Parsers.RoomInfosParser;
@@ -69,12 +66,19 @@ public class BackendDataProvider extends DataProvider {
         new SendDataTask(this).execute(serverURL + "addSong/", aSong.toSendFormat(roomID));
     }
 
+    public void removeSong(Song song, int roomID) {
+        //TODO: Implement delete on server side
+        super.setParser(new StringToJsonParser());
+        //super.setRequestType(RequestTypes.REMOVE_SONG);
+        //new SendDataTask(this).execute(serverURL + "removeSong/", song.toSendFormat(roomID));
+    }
+
     public void joinRoom(String roomName, int password) {
         JSONObject jsonToSend = new JSONObject();
         try {
             jsonToSend.put("user", SpotifyUser.getInstance().getSpotifyID());
             jsonToSend.put("name", roomName);
-            jsonToSend.put("password", password);
+            jsonToSend.put("password", String.valueOf(password));
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (NotDefinedUserInfosException e) {

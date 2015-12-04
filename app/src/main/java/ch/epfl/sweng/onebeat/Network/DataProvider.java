@@ -1,13 +1,12 @@
 package ch.epfl.sweng.onebeat.Network;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.onebeat.Activities.MainActivity;
@@ -17,10 +16,8 @@ import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 import ch.epfl.sweng.onebeat.Exceptions.ParserNotDefinedException;
 import ch.epfl.sweng.onebeat.Parsers.Parser;
-import ch.epfl.sweng.onebeat.R;
 import ch.epfl.sweng.onebeat.RetrievedData.Room;
 import ch.epfl.sweng.onebeat.RetrievedData.Song;
-import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
 /**
  * Created by Matthieu on 02.12.2015.
@@ -33,7 +30,8 @@ public abstract class DataProvider {
     private Parser parser = null;
     private RequestTypes requestType = RequestTypes.CREATE_ROOM;
 
-    public enum RequestTypes {GET_SPOTIFY_USER, GET_LIST_OF_SPOTIFY_SONGS, CREATE_ROOM, GET_LIST_OF_ROOMS, GET_ROOM_INFOS, ADD_USER, ADD_SONG, JOIN_ROOM };
+    public enum RequestTypes {GET_SPOTIFY_USER, GET_LIST_OF_SPOTIFY_SONGS, CREATE_ROOM,
+        GET_LIST_OF_ROOMS, GET_ROOM_INFOS, ADD_USER, ADD_SONG, JOIN_ROOM }
 
     public DataProvider(Context callingActivity) {
         this.callingActivity = callingActivity;

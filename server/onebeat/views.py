@@ -63,7 +63,7 @@ def addSong(request):
 	userId = received_json_data['addedBy']
 	roomId = received_json_data['room']
 	
-	if ( User.objects.filter(userId = addedBy).exists() ):
+	if ( User.objects.filter(userId = userId).exists() ):
 		addedBy = User.objects.get(userId = userId)
 		
 		if ( Room.objects.filter(id = roomId).exists() ):

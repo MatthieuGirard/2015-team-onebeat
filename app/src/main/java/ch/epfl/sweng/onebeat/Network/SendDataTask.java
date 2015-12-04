@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.renderscript.ScriptGroup;
 import android.util.Log;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
@@ -16,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 import ch.epfl.sweng.onebeat.Exceptions.ParserNotDefinedException;
 
@@ -103,6 +106,10 @@ public class SendDataTask extends AsyncTask<String, Void, String> {
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (ParserNotDefinedException e) {
+            e.printStackTrace();
+        } catch (NotDefinedUserInfosException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

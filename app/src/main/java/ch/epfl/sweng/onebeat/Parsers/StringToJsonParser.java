@@ -1,17 +1,14 @@
 package ch.epfl.sweng.onebeat.Parsers;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 
 /**
- * Created by Matthieu on 02.12.2015.
+ * Created by M4ttou on 04.12.2015.
  */
-public class CreateRoomParser implements Parser {
-
+public class StringToJsonParser implements Parser {
     @Override
     public JSONObject parse(String JSONStringToParse) throws ParseException {
         try {

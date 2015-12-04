@@ -1,26 +1,46 @@
 package ch.epfl.sweng.onebeat.Activities;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
+import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
 import ch.epfl.sweng.onebeat.R;
+import ch.epfl.sweng.onebeat.RetrievedData.Room;
+import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
 public class SelectRoomActivity extends AppCompatActivity {
-    public final static String ROOM_NAME_MESSAGE = "ch.epfl.sweng.onebeat.MESSAGE";
+    public static final String ROOM_ID_MESSAGE = "ch.epfl.sweng.onebeat.ROOM_ID_MESSAGE";
 
     private ArrayList roomsArray;
     private ArrayAdapter<String> adapter; //TODO: Change to type room
+
+    // TODO get List of rooms with: new BackendDataProvider(this).getListOfRooms()
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +69,12 @@ public class SelectRoomActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(SelectRoomActivity.this, RoomActivity.class);
 
-                intent.putExtra(ROOM_NAME_MESSAGE, room);
+                intent.putExtra(ROOM_ID_MESSAGE, room);
                 startActivity(intent);
             }
         });
 
+        // This next bit of code allows the "live" filtering feature to work
         EditText roomSearch = (EditText) findViewById(R.id.searchRoomTextView);
         roomSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -71,6 +92,65 @@ public class SelectRoomActivity extends AppCompatActivity {
 
             }
         });
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO:
+                RoomCreatorDialogFragment dialog = new RoomCreatorDialogFragment();
+                dialog.show(getSupportFragmentManager(), "Room Creator");
+            }
+        });
     }
 
+    // when we get the list of rooms a user is in.
+    public void setListOfRooms(List<Room> roomsList) {
+        // TODO
+    }
+
+    // when a room has been created
+    public void onNewRoomMessage(int roomID) {
+        Intent intent = new Intent(this, RoomActivity.class);
+        intent.putExtra(ROOM_ID_MESSAGE, roomID);
+        startActivity(intent);
+    }
+
+    public void onJoinRoomSuccess(int roomId) {
+        onNewRoomMessage(roomId);
+    }
+
+    @SuppressLint("ValidFragment")
+    private class RoomCreatorDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(SelectRoomActivity.this);
+            // Get the layout inflater
+            final LayoutInflater inflater = SelectRoomActivity.this.getLayoutInflater();
+
+            // Inflate and set the layout for the dialog
+            // Pass null as the parent view because its going in the dialog layout
+            final View v = inflater.inflate(R.layout.dialog_create_room, null);
+            builder.setView(v)
+                // Add action buttons
+                .setPositiveButton(R.string.partyOn, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        EditText roomNameField = (EditText) v.findViewById(R.id.roomName);
+                        EditText roomPasswordField = (EditText) v.findViewById(R.id.roomPassword);
+
+                        String roomName = roomNameField.getText().toString().trim();
+                        String roomPassword = roomPasswordField.getText().toString().trim();
+
+                        new BackendDataProvider(SelectRoomActivity.this).createRoom(roomName, roomPassword);
+                    }
+                })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            RoomCreatorDialogFragment.this.getDialog().cancel();
+                        }
+                    });
+            return builder.create();
+        }
+    }
 }

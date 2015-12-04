@@ -38,7 +38,7 @@ def getUser(request):
 	if (User.objects.filter(userId = userId).exists()):
 		user = User.objects.get(userId = userId)
 		rooms = Member.objects.filter(user = userId).values('room')
-		roomsId = [d['room'] for d in rooms]
+		roomsId = [r['room'] for r in rooms]
 		
 		return JsonResponse({
 			'info' : 'user',
@@ -116,8 +116,8 @@ def addSong(request):
 def getSong(request):
 	songId = request.GET['id']
 	
-	if (Song.objects.filter(songId = songId).exists()):
-		song = Song.objects.get(songId = songId)
+	if (Song.objects.filter(ic = songId).exists()):
+		song = Song.objects.get(id = songId)
 		
 		return JsonResponse({
 			'info' : 'song', 
@@ -180,20 +180,19 @@ def createRoom(request):
 def getRoom(request):
 	roomId = request.GET['id']
 	
-	if (Room.objects.filter(roomId = roomId).exists()):
-		room = Room.objects.get(roomId = roomId)
-		playlist = Playlist.objects.filter(room = roomId)
-		members = Member.objects.filter(room = roomId).values('user')
+	if (Room.objects.filter(id = roomId).exists()):
+		room = Room.objects.get(id = roomId)
+		playlist = Playlist.objects.filter(room = room).values()
+		members = Member.objects.filter(room = room).values('user')
 		
 		return JsonResponse({
 			'info' : 'room',
 			'id' : room.id,
-			'creator' : room.creator,
+			'creator' : room.creator.userId,
 			'name' : room.name,
-			'password' : room.password,
-			'playlist' : [d['song'] for d in playlist],
-			'addedBy' : [d['addedBy'] for d in playlist],
-			'members' : [d['user'] for d in users]
+			'playlist' : [p['song_id'] for p in playlist],
+			'addedBy' : [p['addedBy_id'] for p in playlist],
+			'members' : [m['user'] for m in members]
 			})
 	
 	else:
@@ -246,5 +245,5 @@ def joinRoom(request):
 		return JsonResponse({
 			'added' : False,
 			'error' : 'room does not exist',
-			'name' : roomName
+			'room' : roomName
 			})

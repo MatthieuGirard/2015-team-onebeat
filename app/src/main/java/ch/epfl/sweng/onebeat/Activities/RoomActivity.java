@@ -22,23 +22,43 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.spotify.sdk.android.player.Config;
+import com.spotify.sdk.android.player.ConnectionStateCallback;
+import com.spotify.sdk.android.player.Player;
+import com.spotify.sdk.android.player.PlayerNotificationCallback;
+import com.spotify.sdk.android.player.PlayerState;
+import com.spotify.sdk.android.player.Spotify;
+
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.onebeat.GeneralConstants;
+import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
 import ch.epfl.sweng.onebeat.Network.DataProvider;
 import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.R;
+import ch.epfl.sweng.onebeat.RetrievedData.Room;
 import ch.epfl.sweng.onebeat.RetrievedData.Song;
+import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
-public class RoomActivity extends AppCompatActivity implements DataProviderObserver {
+public class RoomActivity extends AppCompatActivity implements PlayerNotificationCallback {
+
     private ListView listViewSongs;
     private EditText addNextSong;
     private ImageView prevPlayerButton;
 
     private ArrayList<Song> currentSongs;
     private ArrayAdapter<Song> adapter;
+
+    private Player mPlayer;
+
+    //TODO try to play and pause a song with methods mPlayer.play(spotifytrack), mPlayer.pause()
+
+    //TODO You can add a song with: new BackendDataProvider(this).addSong(Song, roomID)
+
+    private Room actualRoom;
 
     /*
      * Between the RoomActivity and the user selecting a song that they want to add to the queue, I
@@ -53,15 +73,13 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
 
         listViewSongs = (ListView) findViewById(R.id.currentSongsList);
         addNextSong = (EditText) findViewById(R.id.addSongTextBox);
-        TextView roomName = (TextView) findViewById(R.id.currentRoomName);
+
 
         // Assign the room name by getting it from the intent which opened this room
         Intent intent = getIntent();
-        roomName.setText(intent.getStringExtra(SelectRoomActivity.ROOM_NAME_MESSAGE));
-
+        new BackendDataProvider(this).getRoom(intent.getIntExtra(SelectRoomActivity.ROOM_ID_MESSAGE, 0));
 
         //TODO: Make currentSongs call a method which checks database if there was a list of songs
-
         currentSongs = new ArrayList<>();
 
         adapter = new SongListAdapter(this, currentSongs);
@@ -174,17 +192,6 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onDataReception(Object data, DataProvider.RequestTypes requestTypes) {
-
-        Button button = (Button) findViewById(R.id.search_song_button);
-        button.setEnabled(true);
-        button.setText("Search");
-
-        tempSongs = (List<Song>) data;
-        openContextMenu(addNextSong);
-    }
-
     public void playerClick(View v) {
         ImageView currPlayerButton = (ImageView) v.findViewById(R.id.list_image);
 
@@ -207,5 +214,57 @@ public class RoomActivity extends AppCompatActivity implements DataProviderObser
             currPlayerButton.setImageResource(R.drawable.player_pause);
             prevPlayerButton = currPlayerButton;
         }
+    }
+
+    // when we have spotify suggestions after search request
+    public void setListOfSongsFromSearch(List<Song> parsedResult) {
+        tempSongs = parsedResult;
+        openContextMenu(addNextSong);
+        // TODO call 'new BackendDataProvider(this).addSong(Song aSong) when user chose the song to add.
+    }
+
+    // when room informations are retrieved from backend
+    public void setRoomInformations(Room actualRoom) {
+        // TODO What do to when I get the room information. Room's list of songs may be empty (new room).
+        //TODO think about if this method is called after a refresh, not to interrupt song that is currently playing.
+        //TODO well it shouldnt happen because of asynctask
+    }
+
+    // TODO to be called in method onCreate I suppose.
+    public void initPlayer() {
+        Config playerConfig = new Config(this, SpotifyUser.getInstance().getToken(), GeneralConstants.CLIENT_ID);
+
+        mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+            @Override
+            public void onInitialized(Player player) {
+                mPlayer = player;
+                mPlayer.addPlayerNotificationCallback(RoomActivity.this);
+            }
+            @Override
+            public void onError(Throwable throwable) {
+                Log.e("RoomActivity", "Could not initialize player: " + throwable.getMessage());
+            }
+        });
+    }
+
+    public void refreshListOfSongs() {
+        new BackendDataProvider(this).getRoom(actualRoom.getId());
+    }
+
+    // method from Spotify Player. Probably here we're going to manage playing the next song when one is over.
+    @Override
+    public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
+        // TODO
+    }
+
+    // let's show error on a Toast
+    @Override
+    public void onPlaybackError(ErrorType errorType, String s) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+    }
+
+    // when server is done adding the song
+    public void onSongAdded() {
+        // TODO refresh list?
     }
 }

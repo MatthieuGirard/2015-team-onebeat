@@ -1,18 +1,8 @@
 package ch.epfl.sweng.onebeat.Activities;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -25,49 +15,29 @@ import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
-import ch.epfl.sweng.onebeat.Network.DataProvider;
-import ch.epfl.sweng.onebeat.Network.DataProviderObserver;
-import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
+import ch.epfl.sweng.onebeat.GeneralConstants;
+import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
+import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.R;
-import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
-public class MainActivity extends AppCompatActivity implements ConnectionStateCallback, PlayerNotificationCallback, DataProviderObserver {
-
-    private static final String CLIENT_ID = "eb868e0c8f33441b86de1904b3503f10";
-    private static final String REDIRECT_URI = "onebeatapp://callback";
+public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1337;
-
-    public final static String EXTRA_MESSAGE = "ch.epfl.sweng.onebeat.CREATING_ROOM_MESSAGE";
-
-
-    private Player mPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
+        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(GeneralConstants.CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN,
-                REDIRECT_URI);
+                GeneralConstants.REDIRECT_URI);
         builder.setScopes(new String[]{"user-read-private", "streaming"});
         AuthenticationRequest request = builder.build();
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
-
-        FloatingActionButton FAB = (FloatingActionButton) findViewById(R.id.fab);
-        FAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RoomCreatorDialogFragment dialog = new RoomCreatorDialogFragment();
-                dialog.show(getSupportFragmentManager(), "Room Creator");
-            }
-        });
     }
 
     @Override
@@ -80,163 +50,17 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
 
                 new SpotifyDataProvider(this).getUserInfos(response.getAccessToken());
-
-/*                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
-                Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
-                    @Override
-                    public void onInitialized(Player player) {
-                        mPlayer = player;
-                        mPlayer.addConnectionStateCallback(MainActivity.this);
-                        mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                        mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
-                    }
-                });*/
             }
         }
     }
 
-/*   public void searchSong(View view) {
-
-        Button goButton = (Button) findViewById(R.id.goButton);
-        goButton.setEnabled(false);
-        goButton.setText("Wait...");
-
-        String searchInput = ((EditText) findViewById(R.id.searchField)).getText().toString();
-
-        String stringUrl = "http://ws.spotify.com/search/1/track.json?q="+ searchInput.replace(" ", "%20");
-
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            new DownloadWebpageTask(this).execute(stringUrl);
-        }
-    }*/
-
-    @Override
-    protected void onDestroy() {
-        Spotify.destroyPlayer(this);
-        super.onDestroy();
+    // When user is logged from Spotify api
+    public void onUserLogged() throws NotDefinedUserInfosException, JSONException {
+        new BackendDataProvider(this).addUser();
     }
-
-    @Override
-    public void onLoggedIn() {
-
-    }
-
-    @Override
-    public void onLoggedOut() {
-
-    }
-
-    @Override
-    public void onLoginFailed(Throwable throwable) {
-
-    }
-
-    @Override
-    public void onTemporaryError() {
-
-    }
-
-    @Override
-    public void onConnectionMessage(String s) {
-
-    }
-
-    @Override
-    public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
-
-    }
-
-    @Override
-    public void onPlaybackError(ErrorType errorType, String s) {
-
-    }
-
-    @Override
-    public void onDataReception(Object data, DataProvider.RequestTypes requestTypes) {
-
-        switch (requestTypes) {
-            case CREATE_ROOM:
-                //JSONObject json = (JSONObject) data;
-                Log.d("#NetworkDebug", (String) data);
-
-                ((TextView) findViewById(R.id.textView)).setText((String) data);
-                /*try {
-                    String hasBeenCreated = json.getString("added");
-                    if (hasBeenCreated == "true") {
-                        Intent intent = new Intent(this, RoomActivity.class);
-                        startActivity(intent);
-                    } else {
-                        showError("Room already exists");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
-                break;
-            case GET_SPOTIFY_USER:
-                TextView textView = (TextView) findViewById(R.id.textView);
-                try {
-                    textView.setText(((SpotifyUser) data).getPseudo());
-                } catch (NotDefinedUserInfosException e) {
-                    e.printStackTrace();
-                }
-                break;
-        }
-    }
-
-    private void showError(String s) {
-        ((TextView)findViewById(R.id.textView)).setText(s);
-
-    }
-
-    @SuppressLint("ValidFragment")
-    private class RoomCreatorDialogFragment extends DialogFragment {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            // Get the layout inflater
-            final LayoutInflater inflater = getActivity().getLayoutInflater();
-
-            // Inflate and set the layout for the dialog
-            // Pass null as the parent view because its going in the dialog layout
-            final View v = inflater.inflate(R.layout.dialog_create_room, null);
-            builder.setView(v)
-                    // Add action buttons
-                    .setPositiveButton(R.string.partyOn, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            Intent intent = new Intent(RoomCreatorDialogFragment.this.getActivity(), RoomActivity.class);
-                            EditText roomNameField = (EditText) v.findViewById(R.id.roomName);
-                            EditText roomPasswordField = (EditText) v.findViewById(R.id.roomPassword);
-
-                            JSONObject jsonToSend = new JSONObject();
-                            try {
-                                jsonToSend.put("creator", SpotifyUser.getInstance().getSpotifyID());
-                                jsonToSend.put("name", roomNameField.getText().toString());
-                                jsonToSend.put("password", roomPasswordField.getText().toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (NotDefinedUserInfosException e) {
-                                e.printStackTrace();
-                            }
-
-                            new BackendDataProvider(MainActivity.this).createRoom(jsonToSend);
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            RoomCreatorDialogFragment.this.getDialog().cancel();
-                        }
-                    });
-            return builder.create();
-        }
+    // When user is saved inside backend
+    public void onUserRegistered() {
+        Intent intent = new Intent(this, SelectRoomActivity.class);
+        startActivity(intent);
     }
 }

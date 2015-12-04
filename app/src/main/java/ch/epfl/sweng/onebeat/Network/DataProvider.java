@@ -71,15 +71,7 @@ public abstract class DataProvider {
                     break;
 
                 case ADD_USER:
-                    JSONObject jsonAddUserResponse = (JSONObject) parsedResult;
-                    boolean hasAddedUser = jsonAddUserResponse.getBoolean("added");
-                    MainActivity mainActivity = (MainActivity) callingActivity;
-                    if (hasAddedUser) {
-                        mainActivity.onUserRegistered();
-                    }
-                    else {
-                        showErrorOnActivity(jsonAddUserResponse.getString("error"));
-                    }
+                    ((MainActivity) callingActivity).onUserRegistered();
                     break;
 
                 case ADD_SONG:

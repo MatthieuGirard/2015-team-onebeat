@@ -3,6 +3,7 @@ package ch.epfl.sweng.onebeat.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -56,10 +57,12 @@ public class MainActivity extends AppCompatActivity {
 
     // When user is logged from Spotify api
     public void onUserLogged() throws NotDefinedUserInfosException, JSONException {
+        Log.d("#Loggin", "Logged from Spotify");
         new BackendDataProvider(this).addUser();
     }
     // When user is saved inside backend
     public void onUserRegistered() {
+        Log.d("#Loggin", "User registered in backend");
         Intent intent = new Intent(this, SelectRoomActivity.class);
         startActivity(intent);
     }

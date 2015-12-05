@@ -162,11 +162,11 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
     public void playerClick(View v) {
         ImageView currPlayerButton = (ImageView) v.findViewById(R.id.list_image);
-        int position = (int) currPlayerButton.getTag(SongListAdapter.BUTTON_POSITION);
+        int position = (int) currPlayerButton.getTag(R.string.playing_button_position);
 
         // Was there a song playing?
         if (prevPlayerButton != null && (boolean)prevPlayerButton.getTag(0)) {
-            prevPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, false);
+            prevPlayerButton.setTag(R.string.playing_button_status, false);
             prevPlayerButton.setImageResource(R.drawable.player_play);
             player.pause();
 
@@ -175,13 +175,13 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
                 prevPlayerButton = null;
             } else {
                 // Someone else was playing, now we play
-                currPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, true);
+                currPlayerButton.setTag(R.string.playing_button_status, true);
                 currPlayerButton.setImageResource(R.drawable.player_pause);
                 prevPlayerButton = currPlayerButton;
                 player.play(currentSongs.get(position).getSpotifyRef());
             }
         } else {
-            currPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, true);
+            currPlayerButton.setTag(R.string.playing_button_status, true);
             currPlayerButton.setImageResource(R.drawable.player_pause);
             prevPlayerButton = currPlayerButton;
             player.play(currentSongs.get(position).getSpotifyRef());

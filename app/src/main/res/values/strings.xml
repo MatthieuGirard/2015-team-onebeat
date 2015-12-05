@@ -13,4 +13,6 @@
     <string name="select_room_text">Please select a room or \n create one below!</string>
     <string name="roomSearchWaitingText">Please wait as we search for your rooms…</string>
     <string name="play_Button_description">Play Button</string>
+    <string name="playing_button_status">Playing Status</string>
+    <string name="playing_button_position">Button Position</string>
 </resources>

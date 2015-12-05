@@ -76,7 +76,6 @@ def addSong(request):
 				title = received_json_data['title']
 				artist = received_json_data['artist']
 				duration = received_json_data['duration']
-				spotifyRef = received_json_data['spotifyRef']
 				
 				song = Song.objects.create(
 					artist = artist,
@@ -85,6 +84,7 @@ def addSong(request):
 					spotifyRef = spotifyRef,
 				)
 
+			song = Song.objects.get(spotifyRef = spotifyRef)
 			Playlist.objects.create(
 				room = room,
 				song = song,

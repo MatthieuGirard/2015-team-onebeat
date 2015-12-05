@@ -42,7 +42,7 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
     private ListView listViewSongs;
     private EditText addNextSong;
-    private ImageView prevPlayerButton;
+    private ImageView prevPlayerButton =  null;
 
     private ArrayList<Song> currentSongs;
     private ArrayAdapter<Song> adapter;

@@ -95,7 +95,7 @@ def addSong(request):
 				'added' : True,
 				'song' : song.id,
 				'room' : room.id,
-				'addedBy' : addedBy.id
+				'addedBy' : addedBy.userId
 				})
 		
 		else:

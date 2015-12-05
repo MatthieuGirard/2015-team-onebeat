@@ -116,7 +116,7 @@ def addSong(request):
 def getSong(request):
 	songId = request.GET['id']
 	
-	if (Song.objects.filter(ic = songId).exists()):
+	if (Song.objects.filter(id = songId).exists()):
 		song = Song.objects.get(id = songId)
 		
 		return JsonResponse({

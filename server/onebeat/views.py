@@ -72,7 +72,6 @@ def addSong(request):
 
 
 			#add the song to the DB
-			addedBy = received_json_data['addedBy']
 			if ( not(Song.objects.filter(spotifyRef = spotifyRef).exists()) ):
 				title = received_json_data['title']
 				artist = received_json_data['artist']

@@ -68,7 +68,7 @@ def addSong(request):
 		
 		if ( Room.objects.filter(id = roomId).exists() ):
 			room = Room.objects.get(id = roomId)
-							spotifyRef = received_json_data['spotifyRef']
+			spotifyRef = received_json_data['spotifyRef']
 
 
 			#add the song to the DB

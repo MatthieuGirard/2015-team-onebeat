@@ -49,6 +49,8 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
     private Player mPlayer;
 
+    private SpotifyPlayer player;
+
     private Room actualRoom;
 
     /*
@@ -65,7 +67,8 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
         listViewSongs = (ListView) findViewById(R.id.currentSongsList);
         addNextSong = (EditText) findViewById(R.id.addSongTextBox);
 
-        initPlayer();
+        //initPlayer();
+        player = new SpotifyPlayer(this);
 
         currentSongs = new ArrayList<>();
 
@@ -165,7 +168,7 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
         if (prevPlayerButton != null && (boolean)prevPlayerButton.getTag(0)) {
             prevPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, false);
             prevPlayerButton.setImageResource(R.drawable.player_play);
-            mPlayer.pause();
+            player.pause();
 
             if (prevPlayerButton == currPlayerButton) {
                 // Were we the ones who were playing? If so, we already stopped playing
@@ -175,13 +178,13 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
                 currPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, true);
                 currPlayerButton.setImageResource(R.drawable.player_pause);
                 prevPlayerButton = currPlayerButton;
-                mPlayer.play(currentSongs.get(position).getSpotifyRef());
+                player.play(currentSongs.get(position).getSpotifyRef());
             }
         } else {
             currPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, true);
             currPlayerButton.setImageResource(R.drawable.player_pause);
             prevPlayerButton = currPlayerButton;
-            mPlayer.play(currentSongs.get(position).getSpotifyRef());
+            player.play(currentSongs.get(position).getSpotifyRef());
         }
     }
 

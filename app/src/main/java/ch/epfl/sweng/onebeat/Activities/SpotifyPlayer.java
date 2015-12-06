@@ -7,6 +7,7 @@ import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.Spotify;
 
+import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
 import ch.epfl.sweng.onebeat.GeneralConstants;
 import ch.epfl.sweng.onebeat.RetrievedData.Room;
 import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
@@ -22,16 +23,16 @@ public class SpotifyPlayer {
 
     Player mPlayer;
 
-    public SpotifyPlayer(Context callingActivity) {
+    public SpotifyPlayer(Context callingActivity) throws NotDefinedUserInfosException {
         this.callingActivity = callingActivity;
         playerConfig = new Config(callingActivity, SpotifyUser.getInstance().getToken(), GeneralConstants.CLIENT_ID);
     }
 
-    public void play(final String spotifyRef) {
+    public void init(final String spotifyRef) {
         mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
             @Override
             public void onInitialized(Player player) {
-                mPlayer.play(spotifyRef);
+                mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V"); // TODO Change
             }
 
             @Override
@@ -42,16 +43,6 @@ public class SpotifyPlayer {
     }
 
     public void pause() {
-        mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
-            @Override
-            public void onInitialized(Player player) {
-                mPlayer.pause();
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Log.e("RoomActivity", "Could not initialize player: " + throwable.getMessage());
-            }
-        });
+        mPlayer.pause();
     }
 }

@@ -6,7 +6,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.onebeat.Activities.MainActivity;

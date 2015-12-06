@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="PLAYING_STATUS" />
+    <item type="id" name="BUTTON_POSITION" />
+</resources>

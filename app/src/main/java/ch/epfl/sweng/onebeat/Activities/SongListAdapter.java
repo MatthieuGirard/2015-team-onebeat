@@ -72,6 +72,7 @@ public class SongListAdapter extends ArrayAdapter<Song> {
         viewHolder.player.setImageResource(R.drawable.player_play);
         viewHolder.player.setTag(R.id.PLAYING_STATUS, false);
         viewHolder.player.setTag(R.id.BUTTON_POSITION, position);
+        viewHolder.player.setTag(R.id.IS_ON_PAUSE, false);
 
         return convertView;
         //return super.getView(position, convertView, parent);

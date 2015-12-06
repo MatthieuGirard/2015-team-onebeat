@@ -111,7 +111,7 @@ public abstract class DataProvider {
     }
 
     private void showErrorOnActivity(String error) {
-        Toast.makeText(callingActivity, "", Toast.LENGTH_SHORT).show();
+        Toast.makeText(callingActivity, error, Toast.LENGTH_SHORT).show();
     }
 
     public void setParser(Parser parser) { this.parser = parser; }

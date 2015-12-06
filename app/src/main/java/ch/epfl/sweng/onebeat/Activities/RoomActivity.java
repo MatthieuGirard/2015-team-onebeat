@@ -165,11 +165,7 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
     }
 
     public void addSong(Song song) {
-
-        addNextSong.setText("");
         new BackendDataProvider(this).addSong(song, actualRoom.getId());
-        currentSongs.add(song);
-        adapter.notifyDataSetChanged();
     }
 
     public void removeSong(int index) {
@@ -230,7 +226,9 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
             setTitle("");
         }
         try {
+            currentSongs.clear();
             currentSongs.addAll(actualRoom.getSongs().keySet());
+            //currentSongs = new ArrayList<>(actualRoom.getSongs().keySet());
             adapter.notifyDataSetChanged();
         } catch (NotDefinedRoomInfosException e) {
             //There was no previous list of songs, carry on.
@@ -240,7 +238,6 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
     public void refreshListOfSongs() {
         new BackendDataProvider(this).getRoom(actualRoom.getId());
-        adapter.notifyDataSetChanged();
     }
 
     // method from Spotify Player. Probably here we're going to manage playing the next song when one is over.

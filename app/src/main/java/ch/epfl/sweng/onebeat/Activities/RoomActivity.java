@@ -148,7 +148,9 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
     public void addSong(Song song) {
 
         addNextSong.setText("");
-        new BackendDataProvider(this).addSong(song, actualRoom.getId());
+        //new BackendDataProvider(this).addSong(song, actualRoom.getId());
+        currentSongs.add(song);
+        adapter.notifyDataSetChanged();
     }
 
     public void removeSong(int index) {
@@ -159,11 +161,11 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
     public void playerClick(View v) {
         ImageView currPlayerButton = (ImageView) v.findViewById(R.id.list_image);
-        int position = (int) currPlayerButton.getTag(SongListAdapter.BUTTON_POSITION);
+        int position = (int) currPlayerButton.getTag(R.id.BUTTON_POSITION);
 
         // Was there a song playing?
-        if (prevPlayerButton != null && (boolean)prevPlayerButton.getTag(0)) {
-            prevPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, false);
+        if (prevPlayerButton != null && (boolean)prevPlayerButton.getTag(R.id.PLAYING_STATUS)) {
+            prevPlayerButton.setTag(R.id.PLAYING_STATUS, false);
             prevPlayerButton.setImageResource(R.drawable.player_play);
             mPlayer.pause();
 
@@ -172,16 +174,17 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
                 prevPlayerButton = null;
             } else {
                 // Someone else was playing, now we play
-                currPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, true);
+                currPlayerButton.setTag(R.id.PLAYING_STATUS, true);
                 currPlayerButton.setImageResource(R.drawable.player_pause);
                 prevPlayerButton = currPlayerButton;
                 mPlayer.play(currentSongs.get(position).getSpotifyRef());
             }
         } else {
-            currPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, true);
+            currPlayerButton.setTag(R.id.PLAYING_STATUS, true);
             currPlayerButton.setImageResource(R.drawable.player_pause);
             prevPlayerButton = currPlayerButton;
             mPlayer.play(currentSongs.get(position).getSpotifyRef());
+            Log.d("KEINFO", "Song Playing: " + currentSongs.get(position).getSpotifyRef());
         }
     }
 
@@ -241,7 +244,7 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
     // method from Spotify Player. Probably here we're going to manage playing the next song when one is over.
     @Override
     public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
-        // TODO
+        Toast.makeText(this, String.valueOf(playerState.playing), Toast.LENGTH_SHORT).show();
     }
 
     // let's show error on a Toast

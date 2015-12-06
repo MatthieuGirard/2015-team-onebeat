@@ -20,7 +20,7 @@
         android:layout_toStartOf="@+id/search_song_button"
         android:layout_below="@+id/currentSongsList"
         android:inputType="text"
-        android:imeOptions="actionSearch"/>/>
+        android:imeOptions="actionSearch"/>
 
     <Button
         android:layout_width="wrap_content"

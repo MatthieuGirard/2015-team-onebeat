@@ -9,7 +9,7 @@ import ch.epfl.sweng.onebeat.Exceptions.ParseException;
  * Created by M4ttou on 06.12.2015.
  */
 public class JoinRoomParser implements Parser {
-    private final String roomName;
+    private String roomName = "";
 
     public JoinRoomParser(String roomName) {
         this.roomName = roomName;

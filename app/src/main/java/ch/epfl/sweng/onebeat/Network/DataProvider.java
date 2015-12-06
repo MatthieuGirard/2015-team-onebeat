@@ -1,6 +1,7 @@
 package ch.epfl.sweng.onebeat.Network;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -86,16 +87,19 @@ public abstract class DataProvider {
                 case JOIN_ROOM:
 
                     JSONObject jsonJoinRoomResponse = (JSONObject) parsedResult;
+                    Log.d("#Matt", jsonJoinRoomResponse.toString());
                     boolean hasJoinedRoom = jsonJoinRoomResponse.getBoolean("added");
                     SelectRoomActivity selectRoomActivity1 = (SelectRoomActivity) callingActivity;
                     if (hasJoinedRoom) {
                         selectRoomActivity1.onJoinRoomSuccess(jsonJoinRoomResponse.getInt("roomId"));
                     }
                     else {
-                        if (jsonJoinRoomResponse.getString("error") == "wrong password") {
+                        if (jsonJoinRoomResponse.getString("error").equals("wrong password")) {
                             selectRoomActivity1.askPassword(jsonJoinRoomResponse.getString("roomName"));
                         }
-                        showErrorOnActivity(jsonJoinRoomResponse.getString("error"));
+                        else {
+                            showErrorOnActivity(jsonJoinRoomResponse.getString("error"));
+                        }
                     }
                     break;
 

@@ -232,11 +232,9 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
         try {
             currentSongs.addAll(actualRoom.getSongs().keySet());
             adapter.notifyDataSetChanged();
-            onPlaybackError(null, "We just added some of your previous songs");
         } catch (NotDefinedRoomInfosException e) {
             //There was no previous list of songs, carry on.
         }
-        onPlaybackError(null, "You're all set to party!");
         registerForContextMenu(addNextSong);
     }
 

@@ -137,13 +137,12 @@ public class SelectRoomActivity extends AppCompatActivity {
     }
 
     public void askPassword(String roomName) {
-
+        Log.d("#Matt", "Before opening fill password Fragment");
         FillPasswordFragment dialog = new FillPasswordFragment(roomName);
         dialog.show(getSupportFragmentManager(), "Password Filler");
 
     }
 
-    @SuppressLint("ValidFragment")
     private class RoomCreatorDialogFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -177,7 +176,6 @@ public class SelectRoomActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("ValidFragment")
     private class FillPasswordFragment extends DialogFragment {
         private final String roomName;
 

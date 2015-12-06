@@ -8,6 +8,12 @@ import android.util.Log;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
+import com.spotify.sdk.android.player.Config;
+import com.spotify.sdk.android.player.ConnectionStateCallback;
+import com.spotify.sdk.android.player.Player;
+import com.spotify.sdk.android.player.PlayerNotificationCallback;
+import com.spotify.sdk.android.player.PlayerState;
+import com.spotify.sdk.android.player.Spotify;
 
 import org.json.JSONException;
 
@@ -16,10 +22,12 @@ import ch.epfl.sweng.onebeat.GeneralConstants;
 import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
 import ch.epfl.sweng.onebeat.R;
+import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ConnectionStateCallback, PlayerNotificationCallback {
 
     private static final int REQUEST_CODE = 1337;
+    private Player mPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
-
+                SpotifyUser.getInstance().setToken(response.getAccessToken());
                 new SpotifyDataProvider(this).getUserInfos(response.getAccessToken());
             }
         }
@@ -60,5 +68,45 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SelectRoomActivity.class);
         Log.d("KEINFO", "Launching Select room");
         startActivity(intent);
+    }
+
+    @Override
+    public void onLoggedIn() {
+
+    }
+
+    @Override
+    public void onLoggedOut() {
+
+    }
+
+    @Override
+    public void onLoginFailed(Throwable throwable) {
+
+    }
+
+    @Override
+    public void onTemporaryError() {
+
+    }
+
+    @Override
+    public void onConnectionMessage(String s) {
+
+    }
+
+    @Override
+    public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
+
+    }
+    @Override
+    protected void onDestroy() {
+        Spotify.destroyPlayer(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onPlaybackError(ErrorType errorType, String s) {
+
     }
 }

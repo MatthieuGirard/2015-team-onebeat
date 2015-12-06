@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
 import ch.epfl.sweng.onebeat.Parsers.CreateRoomParser;
+import ch.epfl.sweng.onebeat.Parsers.JoinRoomParser;
 import ch.epfl.sweng.onebeat.Parsers.ListOfRoomsParser;
 import ch.epfl.sweng.onebeat.Parsers.RoomInfosParser;
 import ch.epfl.sweng.onebeat.Parsers.StringToJsonParser;
@@ -73,18 +74,18 @@ public class BackendDataProvider extends DataProvider {
         //new SendDataTask(this).execute(serverURL + "removeSong/", song.toSendFormat(roomID));
     }
 
-    public void joinRoom(String roomName, int password) {
+    public void joinRoom(String roomName, String password) {
         JSONObject jsonToSend = new JSONObject();
         try {
             jsonToSend.put("user", SpotifyUser.getInstance().getSpotifyID());
             jsonToSend.put("name", roomName);
-            jsonToSend.put("password", String.valueOf(password));
+            jsonToSend.put("password", password);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (NotDefinedUserInfosException e) {
             e.printStackTrace();
         }
-        super.setParser(new StringToJsonParser());
+        super.setParser(new JoinRoomParser(roomName));
         super.setRequestType(RequestTypes.JOIN_ROOM);
         new SendDataTask(this).execute(serverURL + "joinRoom/", jsonToSend.toString());
     }

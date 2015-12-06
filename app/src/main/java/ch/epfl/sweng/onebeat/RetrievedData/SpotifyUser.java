@@ -21,7 +21,12 @@ public class SpotifyUser {
 
     public static SpotifyUser getInstance() { return instance; }
 
-    public String getToken() { return this.token; }
+    public String getToken() throws NotDefinedUserInfosException {
+        if (this.token == null) {
+            throw new NotDefinedUserInfosException("Token not registered yet.");
+        }
+        return this.token;
+    }
     public String getPseudo() throws NotDefinedUserInfosException {
         if (this.pseudo == null) {
             throw new NotDefinedUserInfosException("Pseudo not registered yet.");
@@ -42,5 +47,9 @@ public class SpotifyUser {
         if (this.spotifyID == null) {
             this.spotifyID = spotifyID;
         }
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

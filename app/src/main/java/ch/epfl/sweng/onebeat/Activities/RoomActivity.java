@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedRoomInfosException;
+import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
 import ch.epfl.sweng.onebeat.GeneralConstants;
 import ch.epfl.sweng.onebeat.Network.BackendDataProvider;
 import ch.epfl.sweng.onebeat.Network.SpotifyDataProvider;
@@ -42,12 +43,14 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
     private ListView listViewSongs;
     private EditText addNextSong;
-    private ImageView prevPlayerButton;
+    private ImageView prevPlayerButton =  null;
 
     private ArrayList<Song> currentSongs;
     private ArrayAdapter<Song> adapter;
 
     private Player mPlayer;
+
+    private SpotifyPlayer player;
 
     private Room actualRoom;
 
@@ -64,8 +67,6 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
         listViewSongs = (ListView) findViewById(R.id.currentSongsList);
         addNextSong = (EditText) findViewById(R.id.addSongTextBox);
-
-        initPlayer();
 
         currentSongs = new ArrayList<>();
 
@@ -88,6 +89,24 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
                     handled = true;
                 }
                 return handled;
+            }
+        });
+
+        Config playerConfig = null;
+        try {
+            playerConfig = new Config(this, SpotifyUser.getInstance().getToken(), GeneralConstants.CLIENT_ID);
+        } catch (NotDefinedUserInfosException e) {
+            e.printStackTrace();
+        }
+        Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+            @Override
+            public void onInitialized(Player player) {
+                mPlayer = player;
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
             }
         });
     }
@@ -149,6 +168,8 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
         addNextSong.setText("");
         new BackendDataProvider(this).addSong(song, actualRoom.getId());
+        currentSongs.add(song);
+        adapter.notifyDataSetChanged();
     }
 
     public void removeSong(int index) {
@@ -159,11 +180,12 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
     public void playerClick(View v) {
         ImageView currPlayerButton = (ImageView) v.findViewById(R.id.list_image);
-        int position = (int) currPlayerButton.getTag(SongListAdapter.BUTTON_POSITION);
+
+        int position = (int) currPlayerButton.getTag(R.id.BUTTON_POSITION);
 
         // Was there a song playing?
-        if (prevPlayerButton != null && (boolean)prevPlayerButton.getTag(0)) {
-            prevPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, false);
+        if (prevPlayerButton != null && (boolean)prevPlayerButton.getTag(R.id.PLAYING_STATUS)) {
+            prevPlayerButton.setTag(R.id.PLAYING_STATUS, false);
             prevPlayerButton.setImageResource(R.drawable.player_play);
             mPlayer.pause();
 
@@ -172,16 +194,17 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
                 prevPlayerButton = null;
             } else {
                 // Someone else was playing, now we play
-                currPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, true);
+                currPlayerButton.setTag(R.id.PLAYING_STATUS, true);
                 currPlayerButton.setImageResource(R.drawable.player_pause);
                 prevPlayerButton = currPlayerButton;
                 mPlayer.play(currentSongs.get(position).getSpotifyRef());
             }
         } else {
-            currPlayerButton.setTag(SongListAdapter.PLAYING_STATUS, true);
+            currPlayerButton.setTag(R.id.PLAYING_STATUS, true);
             currPlayerButton.setImageResource(R.drawable.player_pause);
             prevPlayerButton = currPlayerButton;
             mPlayer.play(currentSongs.get(position).getSpotifyRef());
+            Log.d("KEINFO", "Song Playing: " + currentSongs.get(position).getSpotifyRef());
         }
     }
 
@@ -217,22 +240,6 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
         registerForContextMenu(addNextSong);
     }
 
-    public void initPlayer() {
-        Config playerConfig = new Config(this, SpotifyUser.getInstance().getToken(), GeneralConstants.CLIENT_ID);
-
-        mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
-            @Override
-            public void onInitialized(Player player) {
-                mPlayer = player;
-                mPlayer.addPlayerNotificationCallback(RoomActivity.this);
-            }
-            @Override
-            public void onError(Throwable throwable) {
-                Log.e("RoomActivity", "Could not initialize player: " + throwable.getMessage());
-            }
-        });
-    }
-
     public void refreshListOfSongs() {
         new BackendDataProvider(this).getRoom(actualRoom.getId());
         adapter.notifyDataSetChanged();
@@ -241,7 +248,7 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
     // method from Spotify Player. Probably here we're going to manage playing the next song when one is over.
     @Override
     public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
-        // TODO
+        Toast.makeText(this, String.valueOf(playerState.playing), Toast.LENGTH_SHORT).show();
     }
 
     // let's show error on a Toast

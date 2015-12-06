@@ -7,9 +7,12 @@ import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.Spotify;
 
+import java.util.List;
+
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
 import ch.epfl.sweng.onebeat.GeneralConstants;
 import ch.epfl.sweng.onebeat.RetrievedData.Room;
+import ch.epfl.sweng.onebeat.RetrievedData.Song;
 import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 
 /**
@@ -21,9 +24,12 @@ public class SpotifyPlayer {
 
     private Config playerConfig = null;
 
+    private List<Song> currentSongs;
+
     Player mPlayer;
 
-    public SpotifyPlayer(Context callingActivity) {
+    public SpotifyPlayer(Context callingActivity, List<Song> currentSongs) {
+        this.currentSongs = currentSongs;
         this.callingActivity = callingActivity;
         try {
             playerConfig = new Config(callingActivity, SpotifyUser.getInstance().getToken(), GeneralConstants.CLIENT_ID);
@@ -48,5 +54,11 @@ public class SpotifyPlayer {
 
     public void pause() {
         mPlayer.pause();
+    }
+
+    public void play(String track, int position) {
+        mPlayer.play(track);
+
+
     }
 }

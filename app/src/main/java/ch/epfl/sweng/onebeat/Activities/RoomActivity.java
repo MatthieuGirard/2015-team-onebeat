@@ -68,13 +68,6 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
         listViewSongs = (ListView) findViewById(R.id.currentSongsList);
         addNextSong = (EditText) findViewById(R.id.addSongTextBox);
 
-        //initPlayer();
-        try {
-            player = new SpotifyPlayer(this);
-        } catch (NotDefinedUserInfosException e) {
-            e.printStackTrace();
-        }
-
         currentSongs = new ArrayList<>();
 
         adapter = new SongListAdapter(this, currentSongs);

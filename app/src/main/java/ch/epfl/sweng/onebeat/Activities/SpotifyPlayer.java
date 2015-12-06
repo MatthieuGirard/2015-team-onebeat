@@ -19,13 +19,17 @@ public class SpotifyPlayer {
 
     private Context callingActivity;
 
-    final private Config playerConfig;
+    private Config playerConfig = null;
 
     Player mPlayer;
 
-    public SpotifyPlayer(Context callingActivity) throws NotDefinedUserInfosException {
+    public SpotifyPlayer(Context callingActivity) {
         this.callingActivity = callingActivity;
-        playerConfig = new Config(callingActivity, SpotifyUser.getInstance().getToken(), GeneralConstants.CLIENT_ID);
+        try {
+            playerConfig = new Config(callingActivity, SpotifyUser.getInstance().getToken(), GeneralConstants.CLIENT_ID);
+        } catch (NotDefinedUserInfosException e) {
+            e.printStackTrace();
+        }
     }
 
     public void init(final String spotifyRef) {

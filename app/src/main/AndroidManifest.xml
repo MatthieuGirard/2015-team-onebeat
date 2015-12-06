@@ -42,7 +42,7 @@
             android:name=".Activities.SelectRoomActivity"
             android:label="@string/title_activity_select_room"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".Activities.MainActivity" >
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.MainActivity" />

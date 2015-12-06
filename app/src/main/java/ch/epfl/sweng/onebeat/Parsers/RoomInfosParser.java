@@ -30,7 +30,7 @@ public class RoomInfosParser implements Parser {
                 songs.put(new Song(aSong.getString("title"),
                         aSong.getString("artist"),
                         aSong.getDouble("duration"),
-                        aSong.getString("spotifyRef")), new User(addedBy.getString(i)));
+                        aSong.getString("spotifyRef"), addedBy.getString(i)), new User(addedBy.getString(i)));
             }
 
             String password = json.getString("password");

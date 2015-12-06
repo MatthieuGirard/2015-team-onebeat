@@ -12,12 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +73,7 @@ public class SelectRoomActivity extends AppCompatActivity {
 
         // This next bit of code allows the "live" filtering feature to work
         EditText roomSearch = (EditText) findViewById(R.id.searchRoomTextView);
-        roomSearch.setText(R.string.roomSearchWaitingText);
+/*        roomSearch.setText(R.string.roomSearchWaitingText);
         roomSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -85,6 +88,18 @@ public class SelectRoomActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });*/
+
+        roomSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    new BackendDataProvider(SelectRoomActivity.this).joinRoom(v.getText().toString().trim(), "");
+                    handled = true;
+                }
+                return handled;
             }
         });
 
@@ -121,7 +136,13 @@ public class SelectRoomActivity extends AppCompatActivity {
         onNewRoomMessage(roomId);
     }
 
-    @SuppressLint("ValidFragment")
+    public void askPassword(String roomName) {
+        Log.d("#Matt", "Before opening fill password Fragment");
+        FillPasswordFragment dialog = new FillPasswordFragment(roomName);
+        dialog.show(getSupportFragmentManager(), "Password Filler");
+
+    }
+
     private class RoomCreatorDialogFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -149,6 +170,42 @@ public class SelectRoomActivity extends AppCompatActivity {
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             RoomCreatorDialogFragment.this.getDialog().cancel();
+                        }
+                    });
+            return builder.create();
+        }
+    }
+
+    private class FillPasswordFragment extends DialogFragment {
+        private final String roomName;
+
+        public FillPasswordFragment(String roomName) {
+            this.roomName = roomName;
+        }
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(SelectRoomActivity.this);
+            // Get the layout inflater
+            final LayoutInflater inflater = SelectRoomActivity.this.getLayoutInflater();
+
+            // Inflate and set the layout for the dialog
+            // Pass null as the parent view because its going in the dialog layout
+            @SuppressLint("InflateParams") final View v = inflater.inflate(R.layout.dialog_fill_password, null);
+            builder.setView(v)
+                    // Add action buttons
+                    .setPositiveButton(R.string.joinRoom, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            EditText roomPasswordField = (EditText) v.findViewById(R.id.roomPasswordJoin);
+
+                            String roomPassword = roomPasswordField.getText().toString();
+
+                            new BackendDataProvider(SelectRoomActivity.this).joinRoom(roomName, roomPassword);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            FillPasswordFragment.this.getDialog().cancel();
                         }
                     });
             return builder.create();

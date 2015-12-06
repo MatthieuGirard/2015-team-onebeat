@@ -8,10 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import ch.epfl.sweng.onebeat.R;
 import ch.epfl.sweng.onebeat.RetrievedData.Song;
+import ch.epfl.sweng.onebeat.RetrievedData.User;
 
 
 /**
@@ -35,6 +38,7 @@ public class SongListAdapter extends ArrayAdapter<Song> {
         TextView artist;
         TextView duration;
         ImageView player;
+        TextView addedBy;
     }
 
     @Override
@@ -54,6 +58,7 @@ public class SongListAdapter extends ArrayAdapter<Song> {
             viewHolder.artist = (TextView) convertView.findViewById(R.id.artist);
             viewHolder.duration = (TextView) convertView.findViewById(R.id.duration);
             viewHolder.player = (ImageView) convertView.findViewById(R.id.list_image);
+            viewHolder.addedBy = (TextView) convertView.findViewById(R.id.addedByInfo);
 
             convertView.setTag(viewHolder);
         } else {
@@ -62,10 +67,12 @@ public class SongListAdapter extends ArrayAdapter<Song> {
 
         viewHolder.title.setText(song.getTitle());
         viewHolder.artist.setText(song.getArtist());
-        viewHolder.duration.setText(String.valueOf(song.getDuration()));
+        viewHolder.duration.setText(String.valueOf(song.getFormattedDuration()));
+        viewHolder.addedBy.setText(song.getAddedBy());
         viewHolder.player.setImageResource(R.drawable.player_play);
         viewHolder.player.setTag(R.id.PLAYING_STATUS, false);
         viewHolder.player.setTag(R.id.BUTTON_POSITION, position);
+        viewHolder.player.setTag(R.id.IS_ON_PAUSE, false);
 
         return convertView;
         //return super.getView(position, convertView, parent);

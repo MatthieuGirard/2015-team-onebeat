@@ -165,11 +165,7 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
     }
 
     public void addSong(Song song) {
-
-        addNextSong.setText("");
         new BackendDataProvider(this).addSong(song, actualRoom.getId());
-        currentSongs.add(song);
-        adapter.notifyDataSetChanged();
     }
 
     public void removeSong(int index) {
@@ -191,9 +187,10 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
             if (prevPlayerButton == currPlayerButton) {
                 // Were we the ones who were playing? If so, we already stopped playing
+                currPlayerButton.setTag(R.id.IS_ON_PAUSE, true);
                 prevPlayerButton = null;
             } else {
-                // Someone else was playing, now we play
+                // Another song was playing, now we play
                 currPlayerButton.setTag(R.id.PLAYING_STATUS, true);
                 currPlayerButton.setImageResource(R.drawable.player_pause);
                 prevPlayerButton = currPlayerButton;
@@ -203,7 +200,12 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
             currPlayerButton.setTag(R.id.PLAYING_STATUS, true);
             currPlayerButton.setImageResource(R.drawable.player_pause);
             prevPlayerButton = currPlayerButton;
-            mPlayer.play(currentSongs.get(position).getSpotifyRef());
+            if ((boolean)currPlayerButton.getTag(R.id.IS_ON_PAUSE)) {
+                currPlayerButton.setTag(R.id.IS_ON_PAUSE, false);
+                mPlayer.resume();
+            } else {
+                mPlayer.play(currentSongs.get(position).getSpotifyRef());
+            }
             Log.d("KEINFO", "Song Playing: " + currentSongs.get(position).getSpotifyRef());
         }
     }
@@ -230,19 +232,18 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
             setTitle("");
         }
         try {
+            currentSongs.clear();
             currentSongs.addAll(actualRoom.getSongs().keySet());
+            //currentSongs = new ArrayList<>(actualRoom.getSongs().keySet());
             adapter.notifyDataSetChanged();
-            onPlaybackError(null, "We just added some of your previous songs");
         } catch (NotDefinedRoomInfosException e) {
             //There was no previous list of songs, carry on.
         }
-        onPlaybackError(null, "You're all set to party!");
         registerForContextMenu(addNextSong);
     }
 
     public void refreshListOfSongs() {
         new BackendDataProvider(this).getRoom(actualRoom.getId());
-        adapter.notifyDataSetChanged();
     }
 
     // method from Spotify Player. Probably here we're going to manage playing the next song when one is over.

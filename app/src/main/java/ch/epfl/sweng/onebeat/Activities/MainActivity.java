@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionStateCa
         Intent intent = new Intent(this, SelectRoomActivity.class);
         Log.d("KEINFO", "Launching Select room");
         startActivity(intent);
+        finish();
     }
 
     @Override

@@ -223,7 +223,7 @@ def joinRoom(request):
 				return JsonResponse({
 					'added' : True,
 					'roomId' : room.id,
-					'userId' : user.id,
+					'userId' : user.userId,
 					})
 			
 			else:

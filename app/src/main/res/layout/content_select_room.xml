@@ -20,10 +20,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/roomListView"
-        android:layout_centerHorizontal="true"
         android:clickable="true"
-        android:layout_below="@+id/searchRoomTextView"
-        android:layout_alignParentBottom="true" />
+        android:layout_below="@+id/textView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="fill_parent"
@@ -31,7 +31,9 @@
         android:id="@+id/searchRoomTextView"
         android:hint="@string/searchRoomTextViewHint"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/oneBeatLogoIm" />
+        android:layout_below="@+id/oneBeatLogoIm"
+        android:inputType="text"
+        android:imeOptions="actionSearch" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -43,5 +45,15 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/yourRooms"
+        android:id="@+id/textView"
+        android:layout_below="@+id/searchRoomTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
 
 </RelativeLayout>

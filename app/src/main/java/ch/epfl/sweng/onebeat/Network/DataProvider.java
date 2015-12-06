@@ -92,6 +92,9 @@ public abstract class DataProvider {
                         selectRoomActivity1.onJoinRoomSuccess(jsonJoinRoomResponse.getInt("roomId"));
                     }
                     else {
+                        if (jsonJoinRoomResponse.getString("error") == "wrong password") {
+                            selectRoomActivity1.askPassword(jsonJoinRoomResponse.getString("roomName"));
+                        }
                         showErrorOnActivity(jsonJoinRoomResponse.getString("error"));
                     }
                     break;

@@ -3,7 +3,6 @@ package ch.epfl.sweng.onebeat.Parsers;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ch.epfl.sweng.onebeat.Exceptions.JSONParserException;
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
 import ch.epfl.sweng.onebeat.RetrievedData.SpotifyUser;
 

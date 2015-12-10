@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^getRoom/', views.getRoom, name='getRoom'),
     url(r'^createRoom/', views.createRoom, name='createRoom'),
     url(r'^joinRoom/', views.joinRoom, name='joinRoom'),
+    url(r'^searchRoom/', views.searchRoom, name='searchRoom'),
 	url(r'^getRoom2/', views2.getRoom2, name='getRoom2'),
 ]

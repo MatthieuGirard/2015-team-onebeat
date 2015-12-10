@@ -248,3 +248,11 @@ def joinRoom(request):
 			'error' : 'room does not exist',
 			'room' : roomName
 			})
+
+def searchRoom(request):
+	received_json_data = json.loads(request.POST['request'])
+	nameSearch = received_json_data['name']
+
+	rooms = Rooms.objects.filter(name__contains = nameSearch).values('name')
+
+	return JsonResponse({ 'rooms' : [r['name'] for r in rooms] })

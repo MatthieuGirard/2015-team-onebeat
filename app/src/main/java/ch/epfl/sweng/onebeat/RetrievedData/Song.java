@@ -41,7 +41,7 @@ public class Song {
 
     public String getFormattedDuration() {
         long upperTime = Math.round(duration);
-        return upperTime +":"+ upperTime % 60;
+        return upperTime / 60 +":"+ upperTime % 60;
     }
 
     public boolean equals(Song song) {

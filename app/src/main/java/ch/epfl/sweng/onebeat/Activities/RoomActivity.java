@@ -2,6 +2,7 @@ package ch.epfl.sweng.onebeat.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -60,6 +61,17 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
      */
     private List<Song> tempSongs;
 
+    private int mInterval = 5000; // 5 seconds by default, can be changed later
+    private Handler mHandler = new Handler();
+
+    final Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            refreshListOfSongs();
+            mHandler.postDelayed(mStatusChecker, mInterval);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +121,8 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
                 Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
             }
         });
+
+        mStatusChecker.run();
     }
 
     @Override
@@ -243,7 +257,9 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
     }
 
     public void refreshListOfSongs() {
-        new BackendDataProvider(this).getRoom(actualRoom.getId());
+        if (actualRoom != null) {
+            new BackendDataProvider(this).getRoom(actualRoom.getId());
+        }
     }
 
     // method from Spotify Player. Probably here we're going to manage playing the next song when one is over.

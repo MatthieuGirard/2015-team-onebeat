@@ -62,23 +62,20 @@ def addSong(request):
 	
 	userId = received_json_data['addedBy']
 	roomId = received_json_data['room']
-	
-	spotifyRef = received_json_data['spotifyRef']
 
-	
 	if ( User.objects.filter(userId = userId).exists() ):
 		addedBy = User.objects.get(userId = userId)
 		
 		if ( Room.objects.filter(id = roomId).exists() ):
 			room = Room.objects.get(id = roomId)
+			spotifyRef = received_json_data['spotifyRef']
+
 
 			#add the song to the DB
-			addedBy = received_json_data['addedBy']
 			if ( not(Song.objects.filter(spotifyRef = spotifyRef).exists()) ):
 				title = received_json_data['title']
 				artist = received_json_data['artist']
 				duration = received_json_data['duration']
-				spotifyRef = received_json_data['spotifyRef']
 				
 				song = Song.objects.create(
 					artist = artist,
@@ -87,6 +84,7 @@ def addSong(request):
 					spotifyRef = spotifyRef,
 				)
 
+			song = Song.objects.get(spotifyRef = spotifyRef)
 			Playlist.objects.create(
 				room = room,
 				song = song,
@@ -97,7 +95,7 @@ def addSong(request):
 				'added' : True,
 				'song' : song.id,
 				'room' : room.id,
-				'addedBy' : addedBy.id
+				'addedBy' : addedBy.userId
 				})
 		
 		else:
@@ -118,7 +116,7 @@ def addSong(request):
 def getSong(request):
 	songId = request.GET['id']
 	
-	if (Song.objects.filter(ic = songId).exists()):
+	if (Song.objects.filter(id = songId).exists()):
 		song = Song.objects.get(id = songId)
 		
 		return JsonResponse({
@@ -184,7 +182,7 @@ def getRoom(request):
 	
 	if (Room.objects.filter(id = roomId).exists()):
 		room = Room.objects.get(id = roomId)
-		playlist = Playlist.objects.filter(room = room).values()
+		playlist = Playlist.objects.filter(room = room).order_by('id')
 		members = Member.objects.filter(room = room).values('user')
 		
 		return JsonResponse({
@@ -192,8 +190,8 @@ def getRoom(request):
 			'id' : room.id,
 			'creator' : room.creator.userId,
 			'name' : room.name,
-			'playlist' : [p['song_id'] for p in playlist],
-			'addedBy' : [p['addedBy_id'] for p in playlist],
+			'playlist' : [p.song.id for p in playlist],
+			'addedBy' : [p.addedBy.name for p in playlist],
 			'members' : [m['user'] for m in members]
 			})
 	
@@ -250,3 +248,11 @@ def joinRoom(request):
 			'error' : 'room does not exist',
 			'room' : roomName
 			})
+
+def searchRoom(request):
+	received_json_data = json.loads(request.POST['request'])
+	nameSearch = received_json_data['name']
+
+	rooms = Rooms.objects.filter(name__contains = nameSearch).values('name')
+
+	return JsonResponse({ 'rooms' : [r['name'] for r in rooms] })

@@ -34,14 +34,24 @@ public class Song {
         this.addedBy = addedBy;
     }
 
+    public Song(String title, String artist, double duration, String spotifyRef, String addedBy, int id) {
+        this.title = title;
+        this.artist = artist;
+        this.duration = duration;
+        this.spotifyRef = spotifyRef;
+        this.addedBy = addedBy;
+        this.localID = id;
+    }
+
     public String getArtist() { return artist; }
     public String getSpotifyRef() { return spotifyRef; }
     public String getTitle() { return title; }
     public double getDuration() { return duration; }
+    public int getLocalID() { return localID; }
 
     public String getFormattedDuration() {
         long upperTime = Math.round(duration);
-        return upperTime +":"+ upperTime % 60;
+        return upperTime / 60 +":"+ upperTime % 60;
     }
 
     public boolean equals(Song song) {

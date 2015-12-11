@@ -4,7 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.onebeat.Exceptions.ParseException;
@@ -24,19 +26,23 @@ public class RoomInfosParser implements Parser {
             String creator = json.getString("creator");
             JSONArray JSONsongs = json.getJSONArray("songs");
             JSONArray addedBy = json.getJSONArray("addedBy");
-            Map<Song, User> songs = new HashMap<>();
+            List<Song> songs = new ArrayList<>();
+            List<User> users = new ArrayList<>();
             for (int i = 0; i < JSONsongs.length(); i++) {
                 JSONObject aSong = JSONsongs.getJSONObject(i);
-                songs.put(new Song(aSong.getString("title"),
+                songs.add(new Song(aSong.getString("title"),
                         aSong.getString("artist"),
                         aSong.getDouble("duration"),
-                        aSong.getString("spotifyRef"), addedBy.getString(i)), new User(addedBy.getString(i)));
+                        aSong.getString("spotifyRef"),
+                        addedBy.getString(i),
+                        aSong.getInt("id")));
+                users.add(new User(addedBy.getString(i)));
             }
 
             String password = json.getString("password");
             int id = json.getInt("id");
 
-            return new Room(name, creator, songs, password, id);
+            return new Room(name, creator, songs, users, password, id);
 
         } catch (JSONException e) {
             throw new ParseException(e);

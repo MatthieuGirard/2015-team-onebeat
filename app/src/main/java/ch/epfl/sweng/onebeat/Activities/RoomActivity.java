@@ -2,6 +2,7 @@ package ch.epfl.sweng.onebeat.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -27,7 +28,9 @@ import com.spotify.sdk.android.player.Spotify;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedRoomInfosException;
 import ch.epfl.sweng.onebeat.Exceptions.NotDefinedUserInfosException;
@@ -54,11 +57,24 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
     private Room actualRoom;
 
+    private View rButton = null;
+
     /*
      * Between the RoomActivity and the user selecting a song that they want to add to the queue, I
      * will use tempSongs to keep a reference to the songs found on Spotify.
      */
     private List<Song> tempSongs;
+
+    private int mInterval = 5000; // 5 seconds by default, can be changed later
+    private Handler mHandler = new Handler();
+
+    final Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            refreshListOfSongs();
+            mHandler.postDelayed(mStatusChecker, mInterval);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +86,10 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
 
         currentSongs = new ArrayList<>();
 
-        adapter = new SongListAdapter(this, currentSongs);
+        player = new SpotifyPlayer(this, currentSongs);
+        player.init();
+
+        adapter = new SongListAdapter(this, currentSongs, player);
         listViewSongs.setAdapter(adapter);
 
         registerForContextMenu(listViewSongs);
@@ -92,23 +111,7 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
             }
         });
 
-        Config playerConfig = null;
-        try {
-            playerConfig = new Config(this, SpotifyUser.getInstance().getToken(), GeneralConstants.CLIENT_ID);
-        } catch (NotDefinedUserInfosException e) {
-            e.printStackTrace();
-        }
-        Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
-            @Override
-            public void onInitialized(Player player) {
-                mPlayer = player;
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
-            }
-        });
+        mStatusChecker.run();
     }
 
     @Override
@@ -175,15 +178,17 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
     }
 
     public void playerClick(View v) {
+
         ImageView currPlayerButton = (ImageView) v.findViewById(R.id.list_image);
+
 
         int position = (int) currPlayerButton.getTag(R.id.BUTTON_POSITION);
 
         // Was there a song playing?
-        if (prevPlayerButton != null && (boolean)prevPlayerButton.getTag(R.id.PLAYING_STATUS)) {
+        if (prevPlayerButton != null && (boolean) prevPlayerButton.getTag(R.id.PLAYING_STATUS)) {
             prevPlayerButton.setTag(R.id.PLAYING_STATUS, false);
             prevPlayerButton.setImageResource(R.drawable.player_play);
-            mPlayer.pause();
+            player.pause();
 
             if (prevPlayerButton == currPlayerButton) {
                 // Were we the ones who were playing? If so, we already stopped playing
@@ -194,20 +199,21 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
                 currPlayerButton.setTag(R.id.PLAYING_STATUS, true);
                 currPlayerButton.setImageResource(R.drawable.player_pause);
                 prevPlayerButton = currPlayerButton;
-                mPlayer.play(currentSongs.get(position).getSpotifyRef());
+                player.play(position);
             }
         } else {
             currPlayerButton.setTag(R.id.PLAYING_STATUS, true);
             currPlayerButton.setImageResource(R.drawable.player_pause);
             prevPlayerButton = currPlayerButton;
-            if ((boolean)currPlayerButton.getTag(R.id.IS_ON_PAUSE)) {
+            if ((boolean) currPlayerButton.getTag(R.id.IS_ON_PAUSE)) {
                 currPlayerButton.setTag(R.id.IS_ON_PAUSE, false);
-                mPlayer.resume();
+                player.resume();
             } else {
-                mPlayer.play(currentSongs.get(position).getSpotifyRef());
+                player.play(position);
             }
             Log.d("KEINFO", "Song Playing: " + currentSongs.get(position).getSpotifyRef());
         }
+
     }
 
     // when we have spotify suggestions after search request
@@ -233,23 +239,29 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
         }
         try {
             currentSongs.clear();
-            currentSongs.addAll(actualRoom.getSongs().keySet());
+            currentSongs.addAll(actualRoom.getSongs());
             //currentSongs = new ArrayList<>(actualRoom.getSongs().keySet());
             adapter.notifyDataSetChanged();
         } catch (NotDefinedRoomInfosException e) {
             //There was no previous list of songs, carry on.
         }
+
+        player.updateQueue();
         registerForContextMenu(addNextSong);
     }
 
     public void refreshListOfSongs() {
-        new BackendDataProvider(this).getRoom(actualRoom.getId());
+        if (actualRoom != null) {
+            new BackendDataProvider(this).getRoom(actualRoom.getId());
+        }
     }
 
     // method from Spotify Player. Probably here we're going to manage playing the next song when one is over.
     @Override
     public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
-        Toast.makeText(this, String.valueOf(playerState.playing), Toast.LENGTH_SHORT).show();
+        if (eventType == EventType.TRACK_CHANGED) {
+            // TODO update icons play/pause when next song is playing
+        }
     }
 
     // let's show error on a Toast

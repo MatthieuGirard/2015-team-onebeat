@@ -21,7 +21,7 @@ public class ListOfRoomsParser implements Parser {
             JSONArray JSONRooms = json.getJSONArray("rooms");
             List<Room> rooms = new ArrayList<>();
 
-            for (int i = 0; i < JSONRooms.length(); i++) {
+            for (int i = (JSONRooms.length()-1); i >= 0; i--) {
                 JSONObject oneJSONRoom = JSONRooms.getJSONObject(i);
                 rooms.add(new Room(oneJSONRoom.getInt("id"), oneJSONRoom.getString("name")));
             }

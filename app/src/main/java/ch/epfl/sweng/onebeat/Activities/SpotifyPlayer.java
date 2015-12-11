@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.Player;
+import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.Spotify;
 
 import java.util.List;
@@ -26,7 +27,13 @@ public class SpotifyPlayer {
 
     private List<Song> currentSongs;
 
-    Player mPlayer;
+    private int currentPosition = 0;
+
+    public enum PlayerState { IDLE, ON_PAUSE, PLAYING };
+
+    private PlayerState playerState = PlayerState.IDLE;
+
+    private Player mPlayer;
 
     public SpotifyPlayer(Context callingActivity, List<Song> currentSongs) {
         this.currentSongs = currentSongs;
@@ -38,13 +45,23 @@ public class SpotifyPlayer {
         }
     }
 
-    public void init(final String spotifyRef) {
-        mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+    public SpotifyPlayer(List<Song> currentSongs) {
+        this.currentSongs = currentSongs;
+        try {
+            playerConfig = new Config(callingActivity, SpotifyUser.getInstance().getToken(), GeneralConstants.CLIENT_ID);
+        } catch (NotDefinedUserInfosException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void init() {
+        Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
             @Override
             public void onInitialized(Player player) {
-                mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V"); // TODO Change
+                mPlayer = player;
+                mPlayer.addPlayerNotificationCallback((PlayerNotificationCallback) callingActivity);
             }
-
             @Override
             public void onError(Throwable throwable) {
                 Log.e("RoomActivity", "Could not initialize player: " + throwable.getMessage());
@@ -54,11 +71,33 @@ public class SpotifyPlayer {
 
     public void pause() {
         mPlayer.pause();
+        playerState = PlayerState.ON_PAUSE;
     }
 
-    public void play(String track, int position) {
-        mPlayer.play(track);
+    public void play(int position) {
+        this.currentPosition = position;
+        playerState = PlayerState.PLAYING;
+        mPlayer.play(currentSongs.get(position).getSpotifyRef());
+        updateQueue();
+    }
+    public void resume() {
+        mPlayer.resume();
+        playerState = PlayerState.PLAYING;
+    }
 
+    public PlayerState getPlayerState() { return playerState; }
 
+    public int getCurrentPosition() { return currentPosition; }
+
+    public void updateQueue() {
+        if (playerState != PlayerState.IDLE) {
+            mPlayer.clearQueue();
+
+            if (currentPosition == currentSongs.size() - 1) {
+                mPlayer.queue(currentSongs.get(0).getSpotifyRef());
+            } else {
+                mPlayer.queue(currentSongs.get(currentPosition + 1).getSpotifyRef());
+            }
+        }
     }
 }

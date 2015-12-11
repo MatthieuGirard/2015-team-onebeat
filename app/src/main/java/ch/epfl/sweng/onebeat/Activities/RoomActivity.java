@@ -259,7 +259,9 @@ public class RoomActivity extends AppCompatActivity implements PlayerNotificatio
     // method from Spotify Player. Probably here we're going to manage playing the next song when one is over.
     @Override
     public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
-        Toast.makeText(this, String.valueOf(playerState.playing), Toast.LENGTH_SHORT).show();
+        if (eventType == EventType.TRACK_CHANGED) {
+            // TODO update icons play/pause when next song is playing
+        }
     }
 
     // let's show error on a Toast

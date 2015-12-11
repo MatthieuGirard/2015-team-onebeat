@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.Player;
+import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.Spotify;
 
 import java.util.List;
@@ -59,6 +60,7 @@ public class SpotifyPlayer {
             @Override
             public void onInitialized(Player player) {
                 mPlayer = player;
+                mPlayer.addPlayerNotificationCallback((PlayerNotificationCallback) callingActivity);
             }
             @Override
             public void onError(Throwable throwable) {

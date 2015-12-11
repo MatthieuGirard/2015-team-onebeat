@@ -27,7 +27,7 @@ def getRoom2(request):
 				'artist' : Song.objects.get(id = songId).artist,
 				'title' : Song.objects.get(id = songId).title,
 				'duration' : Song.objects.get(id = songId).duration,
-				'spotifyRef' : Song.objects.get(id = songId).spotifyRef
+				'spotifyRef' : Song.objects.get(id = songId).spotifyRef,
 				'id' : Song.objects.get(id = songId).id
 			} for songId in songsId],
 			'addedBy' : [User.objects.get(userId = p['addedBy_id']).name for p in playlist],

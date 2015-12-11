@@ -24,8 +24,11 @@ import ch.epfl.sweng.onebeat.RetrievedData.User;
  */
 public class SongListAdapter extends ArrayAdapter<Song> {
 
-    public SongListAdapter(Context context, ArrayList<Song> songs) {
+    private final SpotifyPlayer player;
+
+    public SongListAdapter(Context context, ArrayList<Song> songs, SpotifyPlayer player) {
         super(context, R.layout.song_item_list_view, songs);
+        this.player = player;
     }
 
     /**
@@ -69,10 +72,24 @@ public class SongListAdapter extends ArrayAdapter<Song> {
         viewHolder.artist.setText(song.getArtist());
         viewHolder.duration.setText(String.valueOf(song.getFormattedDuration()));
         viewHolder.addedBy.setText(song.getAddedBy());
-        viewHolder.player.setImageResource(R.drawable.player_play);
-        viewHolder.player.setTag(R.id.PLAYING_STATUS, false);
+
+        if (player.getCurrentPosition() == position && player.getPlayerState() == SpotifyPlayer.PlayerState.PLAYING) {
+            viewHolder.player.setImageResource(R.drawable.player_pause);
+            viewHolder.player.setTag(R.id.PLAYING_STATUS, true);
+            viewHolder.player.setTag(R.id.IS_ON_PAUSE, false);
+        }
+            else if (player.getCurrentPosition() == position && player.getPlayerState() == SpotifyPlayer.PlayerState.ON_PAUSE) {
+            viewHolder.player.setImageResource(R.drawable.player_play);
+            viewHolder.player.setTag(R.id.PLAYING_STATUS, false);
+            viewHolder.player.setTag(R.id.IS_ON_PAUSE, true);
+        }
+        else {
+            viewHolder.player.setImageResource(R.drawable.player_play);
+            viewHolder.player.setTag(R.id.PLAYING_STATUS, false);
+            viewHolder.player.setTag(R.id.IS_ON_PAUSE, false);
+        }
+
         viewHolder.player.setTag(R.id.BUTTON_POSITION, position);
-        viewHolder.player.setTag(R.id.IS_ON_PAUSE, false);
 
         return convertView;
         //return super.getView(position, convertView, parent);
